@@ -1,0 +1,36 @@
+digraph G {
+    node [fontname=Helvetica, fontsize=18, label="", shape=point];
+    edge [fontname=Helvetica, fontsize=16];
+
+    nodesep = 1;
+    rankdir = TB;
+
+		zorroFIN[label="zorro$", shape=ellipse]
+		orroFIN[label="orro$", shape=ellipse]
+		rroFIN[label="rro$", shape=ellipse]
+		roFIN[label="ro$", shape=ellipse]
+		oFIN[label="o$", shape=ellipse]
+#		FIN[label="$", shape=ellipse]
+
+
+#		root -> FIN[label="$"]        
+		root -> z[label="z"]
+				z -> zo[label="o"]
+				zo -> zor[label="r"]
+				zor -> zorr[label="r"]
+				zorr -> zorro[label="o"]
+				zorro -> zorroFIN[label="$"]
+		root -> o[label="o"]
+				o -> oFIN[label="$"]
+				o -> or[label="r"]
+				or -> orr[label="r"]
+				orr -> orro[label="o"]
+				orro -> orroFIN[label="$"]
+		root -> r[label="r"]
+				r -> ro[label="o"]
+					ro -> roFIN[label="$"]
+				r -> rr[label="r"]
+					rr -> rro[label="o"]
+					rro -> rroFIN[label="$"]
+					
+}

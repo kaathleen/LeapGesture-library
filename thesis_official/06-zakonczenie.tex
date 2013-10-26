@@ -1,0 +1,29 @@
+\chapter{Podsumowanie i kierunki dalszego rozwoju}
+
+Nadrzędnym celem niniejszej pracy było napisanie (w formie biblioteki) implementacji wybranych
+algorytmów tworzenia tablic sufiksów w celu analizy ich efektywności i zachowania w języku wysokiego
+poziomu, jakim jest język \texttt{Java}. Zadanie to obejmowało zapoznanie się z~dostępną literaturą
+poświęconą tematyce tablic sufiksów, wybór najciekawszych algorytmów oraz ich opisanie. Dodatkowo,
+w~wyniku pracy powinna była powstać klasyfikacja algorytmów tworzenia tablic sufiksów.
+
+Największym wyzwaniem podczas tworzenia pracy było znalezienie najlepszych spośród algorytmów
+tworzenia tablic sufiksów. Bardzo pomocne były w~tym opracowania zawierające zestawienia algorytmów
+\cite{taxonomy, schurmann-phd} oraz publikowane w~internecie wyniki testów wydajnościowych
+[\ref{msufsort}, \ref{mori-benchmark}]. Pewnym problemem podczas implementacji algorytmów było tłumaczenie
+do języka \texttt{Java} takich konstrukcji języka \texttt{C++}, jak instrukcje \texttt{define},
+wskaźniki oraz inne polecenia preprocesora.
+
+Podsumowując, należy stwierdzić, że wszystkie zakładane cele zostały zrealizowane. Przegląd
+literatury, opisy algorytmów oraz ich klasyfikacja znalazły się w~tekście tej pracy, podobnie jak
+wyniki testów wydajnościowych powstałej implementacji. Według naszej wiedzy niniejsza praca jest
+pierwszą publikacją w~języku polskim poświęconą w całości tematyce algorytmów tworzenia tablic
+sufiksów. Zaimplementowana biblioteka programowa jest zaś na dzień dzisiejszy jedyną taką pozycją
+dedykowaną algorytmom tworzenia tablic sufiksów napisaną w~języku \texttt{Java}. Kod źródłowy
+biblioteki jest udostępniony na licencji BSD, można go pobrać ze strony projektu:
+\url{http://www.jsuffixarrays.org}.
+
+Przewidywany dalszy rozwój biblioteki zakłada opracowanie algorytmu dobierającego najlepszą metodę
+tworzenia tablic sufiksów na podstawie charakterystyki danych wejściowych (rozmiaru alfabetu i
+rozkładu symboli w danych wejściowych). Interesującym kierunkiem rozwoju biblioteki jest również
+stworzenie własnej implementacji algorytmu \emph{improved two-stage}, dostosowanej do specyfiki
+języka \texttt{Java}.

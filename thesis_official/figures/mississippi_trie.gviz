@@ -1,0 +1,84 @@
+digraph G {
+graph[page="8.5,11",size="7.5,7",ratio=fill,center=1];
+	node [fontname=Helvetica, fontsize=12. label="", shape=point];
+
+        rankdir=TD;
+        compound=true;
+        pack=1;
+
+		mississippi[label="mississippi", shape=ellipse]
+		ississippi[label="ississippi", shape=ellipse]
+		ssissippi[label="ssissippi", shape=ellipse]
+		sissippi[label="sissippi", shape=ellipse]		
+		issippi[label="issippi", shape=ellipse]		
+		ssippi[label="ssippi", shape=ellipse]		
+		sippi[label="sippi", shape=ellipse]		
+		ippi[label="ippi", shape=ellipse]		
+		ppi[label="ppi", shape=ellipse]		
+		pi[label="pi", shape=ellipse]		
+		i[label="i", shape=ellipse]		
+
+		
+		
+
+
+
+        root -> m[label="m"]
+				m -> mi[label="i"]
+				mi -> mis[label="s"]
+				mis -> miss[label="s"]
+				miss -> missi[label="i"]
+				missi -> missis[label="s"]
+				missis -> mississ[label="s"]
+				mississ -> mississi[label="i"]
+				mississi -> mississip[label="p"]
+				mississip -> mississipp[label="p"]
+				mississipp -> mississippi[label="i"]
+				
+		root -> i[label="i"]
+				i -> ip[label="p"]
+				ip -> ipp[label="p"]
+				ipp -> ippi[label="i"]
+				
+				i -> is[label="s"]
+				is -> iss[label="s"]
+				iss -> issi[label="i"]
+				issi -> issip[label="p"]
+					issip -> issipp[label="p"]
+					issipp -> issippi[label="i"]
+				issi -> issis[label="s"]
+					issis -> ississ[label="s"]
+					ississ -> ississi[label="i"]
+					ississi -> ississip[label="p"]
+					ississip -> ississipp[label="p"]
+					ississipp -> ississippi[label="i"]
+				
+		root -> s[label="s"]
+				s -> ss[label="s"]
+					 ss -> ssi[label="i"]
+					 ssi -> ssip[label="p"]
+						 ssip -> ssipp[label="p"]
+						 ssipp -> ssippi[label="i"]
+					 ssi -> ssis[label="s"]
+					     ssis -> ssiss[label="s"]
+						 ssiss -> ssissi[label="i"]
+						 ssissi -> ssissip[label="p"]
+						 ssissip -> ssissipp[label="p"]
+						 ssissipp -> ssissippi[label="i"]
+				s -> si[label="i"]
+					 si -> sip[label="p"]
+						sip -> sipp[label="p"]
+						sipp -> sippi[label="i"]
+					 si -> sis[label="s"]
+						sis -> siss[label="s"]
+						siss -> sissi[label="i"]
+						sissi -> sissip[label="p"]
+						sissip -> sissipp[label="p"]
+						sissipp -> sissippi[label="ssippi"]
+        root -> p[label="p"]
+				p -> pi[label="i"]
+				p -> pp[label="p"]					 
+				pp -> ppi[label="i"]					 
+				
+
+}

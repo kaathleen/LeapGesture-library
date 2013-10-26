@@ -1,0 +1,70 @@
+\documentclass[10pt,polish,a4paper,oneside]{ppfcmthesis}
+
+\usepackage[utf8]{inputenc}
+\usepackage[OT4]{fontenc}
+
+
+
+\usepackage[widespace]{fourier}   % Use Utopia font set
+\usepackage[scaled=0.875]{helvet} % Use Helvetica for sans-serif
+\renewcommand{\ttdefault}{lmtt}   % Use Lucida Mono for monotype
+\usepackage{booktabs}             % Booktabs for tables
+\usepackage{multirow}
+\usepackage{algorithm2e}
+\usepackage{placeins}
+\renewcommand{\listalgorithmcfname}{Lista algorytmów}
+\renewcommand{\algorithmcfname}{Algorytm}
+
+\newcommand{\SA}[1]{$\mathit{SA}_{#1}$}
+\newcommand{\ISA}[1]{$\mathit{ISA}_{#1}$}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\newcommand{\bigO}[0]{\mathcal{O}}
+\newcommand{\dollar}[0]{\$}
+
+\author{Michał Nowak}
+
+\title{Przegląd i~porównanie metod tworzenia tablic sufiksów oraz~ich~efektywna~implementacja~w~języku~Java}
+
+\ppsupervisor{dr~inż.~Dawid Weiss}
+\ppyear{2009}      % Year of final submission (not graduation!)
+
+\begin{document}
+% Front matter starts here
+\frontmatter\pagestyle{empty}%
+\maketitle\cleardoublepage%
+
+% Blank info page for "karta dyplomowa"
+\thispagestyle{empty}\vspace*{\fill}%
+\begin{center}Tutaj przychodzi karta pracy dyplomowej;\\oryginał wstawiamy do wersji dla archiwum PP, w pozostałych kopiach wstawiamy ksero.\end{center}%
+\vfill\cleardoublepage%
+
+% Table of contents.
+\pagenumbering{Roman}\pagestyle{ppfcmthesis}%
+\tableofcontents* \cleardoublepage%
+
+% Main content of your thesis starts here.
+\mainmatter%
+\input{01-wstep.tex}
+\input{02-podstawy.tex}
+\input{03-przeglad.tex}
+\input{04-algorytmy.tex}
+\input{05-testy.tex}
+\input{06-zakonczenie.tex}
+
+
+
+% All appendices and extra material, if you have any.
+\cleardoublepage\appendix%
+\input{a1-vm.tex}
+
+% Bibliography (books, articles) starts here.
+\bibliographystyle{plalpha}{\raggedright\sloppy\small\bibliography{bibliography}}
+
+% Web resources
+\input{a2-web-resources.tex}
+
+% Colophon is a place where you should let others know about copyrights etc.
+\ppcolophon
+
+
+\end{document}
