@@ -1,0 +1,217 @@
+
+\chapter{Składanie dokumentu w systemie \LaTeX}
+
+Po pierwsze to gratulacje --- dobry wybór. W tym rozdziale znajduje się
+garść informacji o tym, jak poprawnie składać tekst pracy w systemie \LaTeX{} wraz z 
+przykładami, które mają służyć do przeklejania do własnych dokumentów.
+
+\section{Narzędzia}
+Pracując pod systemem Windows, polecam:
+\begin{itemize}
+    \item MikTeX, \url{http://www.miktex.org/},
+    \item JEdit, \url{http://www.jedit.org/},
+    \item TeXlipse, \url{http://texlipse.sourceforge.net/},
+    \item Kile, \url{http://kile.sourceforge.net/},
+    \item Ghostview, Ghostscript (podgląd dokumentów PDF bez blokowania pliku):\\
+        \url{http://www.cs.wisc.edu/~ghost/}. 
+\end{itemize}
+
+Po zainstalowaniu tych narzędzi wystarczy wykonać polecenie \texttt{compile.bat} (który
+jest skryptem wsadowym dla Windows). Dla tych, którzy wolą nieco automatyzacji --- skrypt
+\texttt{latexmk}, który jest w MikTeXu (a który potrzebuje zainstalowanego Perla) jest
+również bardzo wygodny: \texttt{latexmk -pdf -pvc main.tex}.
+
+\section{Edycja tekstu}
+\chaptermark{Tytuł rozdziału, jeśli pełen się nie mieści\ldots{}}{}
+
+\subsection{Struktura dokumentu}
+
+Praca składa się z rozdziałów (\texttt{chapter}) i podrozdziałów (\texttt{section}).
+Ewentualnie można również rozdziały zagnieżdzać (\texttt{subsection}, \texttt{subsubsection}),
+jednak nie powinno się wykraczać poza drugi poziom hierarchii (czyli \texttt{subsubsection}).
+
+\subsection{Akapity i znaki specjalne}
+
+Każdy akapit to po prostu blok tekstu. Nieważne jak sformatowany --- to zrobi już
+system $\LaTeX$.
+
+Akapity rozdziela się od siebie przynajmniej jedną pustą linią. Podstawowe
+instrukcje, które się przydają to \emph{wyróżnienie pewnych słów}. Można również
+stosować \textbf{styl pogrubiony}, choć nie jest to generalnie zalecane.
+
+Należy pamiętać o zasadach polskiej interpunkcji i ortografii. Po spójnikach 
+jednoliterowych warto wstawić znak tyldy ($\sim$), który jest tak zwaną
+,,twardą spacją'' i powoduje, że wyrazy nią połączone nie będą rozdzielane
+na dwie linie tekstu.
+
+Polskie znaki interpunkcyjne różnią się nieco od angielskich: to jest ,,polski'', a to jest
+``angielski''. W kodzie źródłowym tego tekstu będzie widać różnicę.
+
+Proszę również zwrócić uwagę na znak myślnika, który może być pauzą ,,---'' lub
+półpauzą: ,,--''. Należy stosować je konsekwentnie. Do łączenia wyrazów używamy
+zwykłego ,,-'' (\emph{północno-wschodni}), do myślników --- pauzy lub półpauzy.
+Inne zasady interpunkcji i typografii można znaleźć w słownikach.
+
+\subsection{Wypunktowania}
+
+Wypunktowanie z cyframi:
+\begin{enumerate}
+    \item to jest punkt,
+    \item i to jest punkt,
+    \item a to jest ostatni punkt.
+\end{enumerate}
+
+\noindent
+Po wypunktowaniach czasem nie warto wstawiać wcięcia akapitowego. Wtedy przydatne jest
+polecenie \texttt{noindent}. Wypunktowanie z kropkami (tzw.~\emph{bullet list}) wygląda tak:
+\begin{itemize}
+    \item to jest punkt,
+    \item i to jest punkt,
+    \item a to jest ostatni punkt.
+\end{itemize}
+
+\noindent
+Wypunktowania opisowe właściwie niewiele się różnią:
+\begin{description}
+    \item[elementA] to jest opis,
+    \item[elementB] i to jest opis,
+    \item[elementC] a to jest ostatni opis.
+\end{description}
+
+
+\subsection{Polecenia pakietu \texttt{ppfcmthesis}}
+
+Parę poleceń zostało zdefiniowanych aby uspójnić styl pracy. Są one przedstawione poniżej
+(oczywiście nie trzeba się do nich stosować).
+
+\paragraph{Makra zdefiniowane dla języka angielskiego.} Są nimi: \texttt{termdef} oraz \texttt{acronym}.
+Przykłady poniżej obrazują ich przewidywane użycie w tekście.
+\begin{center}\footnotesize%
+\begin{tabular}{l >{\rightskip\fill}p{12cm}}
+\toprule
+źródło   & \texttt{we call this a $\backslash$termdef\{Database Management System\} ($\backslash$acronym\{DBMS\})} \\ \cmidrule(lr){2-2}
+docelowo & we call this a \termdef{Database Management System} (\acronym{DBMS}) \\ 
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Makra zdefiniowane dla języka polskiego.} Podobnie jak dla języka angielskiego zdefiniowano
+odpowiedniki polskie: \texttt{defini\-cja}, \texttt{akronim} oraz \texttt{english} dla tłumaczeń angielskich
+terminów. Przykłady poniżej obrazują ich przewidywane użycie w tekście.
+\begin{center}\footnotesize%
+\begin{tabular}{l >{\rightskip\fill}p{12cm}}
+\toprule
+źródło   & \texttt{nazywamy go $\backslash$definicja\{systemem zarządzania bazą danych\} ($\backslash$akronim\{DBMS\}, $\backslash$english\{Database Management System\})} \\ \cmidrule(lr){2-2}
+docelowo & nazywamy go \definicja{systemem zarządzania bazą danych} (\akronim{DBMS}, \english{Database Management System}) \\ \bottomrule
+\end{tabular}
+\end{center}
+
+
+\subsection{Rysunki}
+
+Format wstawianych rysunków zależy od tego czy używa się do kompilacji polecenia
+\texttt{latex}, czy też \texttt{pdflatex}. Oba powinny dać dokładnie ten sam wynik końcowy,
+ale praca z nimi jest nieco inna.
+
+\begin{description}
+    \item[latex] To polecenie kompiluje źródła \LaTeX{}owe do pliku 
+        z rozszerzeniem \texttt{dvi}. Ten plik można przeglądać przy pomocy specjalizowanych programów
+        takich jak przykładowo Yap obecny z dystrybucją Mik\TeX{}a. Aby uzyskać docelowy plik \akronim{PDF}
+        należy przekonwertować plik \texttt{dvi} przy pomocy programu \texttt{dvipdfm}. 
+        
+        \textbf{UWAGA:} korzystając z programu \texttt{latex}, wszystkie rysunki muszą być w formacie \akronim{EPS}
+        (\english{encapsulated postscript}).
+
+    \item[pdflatex] To polecenie kompiluje źródła \LaTeX{}owe bezpośrednio do pliku \akronim{PDF}.
+    
+        \textbf{UWAGA:} korzystając z programu \texttt{pdflatex}, wszystkie rysunki muszą być w formacie \akronim{PDF},
+        \akronim{JPG} lub \akronim{PNG}.
+\end{description}
+
+Można oczywiście używać obu systemów --- wtedy pliki rysunków muszą po prostu być dostępne w obu formatach.
+
+Wszystkie rysunki (w tym również diagramy, szkice i inne) osadzamy w środowisku 
+\texttt{figure} i umieszczamy podpis \emph{pod} rysunkiem, w formie elementu \texttt{caption}. Rysunki powinny
+zostać umieszczone u góry strony (osadzone bezpośrednio w treści strony zwykle utrudniają czytanie tekstu).
+Rysunek~\ref{rys:plama} zawiera przykład pełnego osadzenia rysunku na stronie.
+
+\begin{figure}[t] % możliwe opcje to 't' - top, 'b' - bottom, 'h' - 'here', ale zaleca się 't'
+\centering\includegraphics[width=5cm]{figures/template/logo-pp}
+\caption{Logo Politechniki Poznańskiej.}\label{rys:plama}
+\end{figure}
+
+\begin{figure}[t]
+\centering\includegraphics[width=5cm]{figures/template/logo-pp}
+\fcmfcaption{Logo Politechniki Poznańskiej. Formatowanie zgodne z wytycznymi FCMu.}\label{rys:plama2}
+\end{figure}
+
+Zasady FCMu sugerują nieco inne nagłówki rysunków. Dostepne są one poleceniem \texttt{fcmfcaption} (zob.~rysunek
+\ref{rys:plama2}), jeśli ktoś woli mieć podpisy niespójne z rysunkami\ldots
+
+\subsection{Tablice}
+
+Tablice to piękna rzecz, choć akurat ich umiejętne tworzenie w \LaTeX{}u nie jest łatwe. 
+Jeśli tablica jest skomplikowana, to pewnie łatwiej będzie ją wykonać w programie
+OpenOffice, a następnie wyeksportować jako plik \akronim{PDF}. W każdym przypadku tablice wstawia się podobnie
+jak rysunki, tylko że w środowisko \texttt{table}. Tradycja typograficzna sugeruje umieszczenie opisu tablicy, a więc
+elementu \texttt{caption} ponad jej treścią (inaczej niż przy rysunkach).  
+
+Tablica~\ref{tab:tabela} pokazuje pełen przykład.
+
+\begin{table}[h]
+\caption{Przykładowa tabela. Styl opisu jest zgodny z rysunkami.}\label{tab:tabela}
+\centering\footnotesize%
+\begin{tabular}{l c}
+\toprule
+artykuł & cena [zł] \\
+\midrule
+bułka   & $0,4$ \\
+masło   & $2,5$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Zasady FCMu sugerują nieco inne nagłówki tablic. Dostepne są one poleceniem \texttt{fcmtcaption} (zob.~tablicę
+\ref{tab:tabela2}), jeśli ktoś woli mieć podpisy niespójne z rysunkami\ldots
+
+\begin{table}[h]
+\fcmtcaption{Przykładowa tabela. Styl opisu jest zgodny z wytycznymi FCMu.}\label{tab:tabela2}
+\centering\footnotesize%
+\begin{tabular}{l c}
+\toprule
+artykuł & cena [zł] \\
+\midrule
+bułka   & $0,4$ \\
+masło   & $2,5$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Checklista}
+
+W katalogu źródeł stylu \texttt{ppfcmthesis} znajduje się plik \texttt{CHECKLIST} --- należy
+sprawdzić, czy nie popełniło się któregoś z wymienionych tam błędów.
+
+
+\section{Literatura i materiały dodatkowe}
+
+Materiałów jest mnóstwo. Oto parę z nich:
+\begin{itemize}
+    \item \emph{The Not So Short Introduction\ldots}, która posiada również tłumaczenie 
+    w języku polskim.\\
+    \url{http://www.ctan.org/tex-archive/info/lshort/english/lshort.pdf}
+
+    \item Klasy stylu \texttt{memoir} posiadają bardzo wiele informacji o składzie tekstów
+    anglosaskich oraz sposoby dostosowania \LaTeX{}a do własnych potrzeb.\\
+    \url{http://www.ctan.org/tex-archive/macros/latex/contrib/memoir/memman.pdf}
+    
+    \item Nasza grupa dyskusyjna i repozytorium SVN są również dobrym miejscem aby zapytać
+    (lub sprawdzić czy pytanie nie zostało już zadane).\\
+    \url{https://ophelia.cs.put.poznan.pl/svn/put-latex/trunk}
+
+    \item Dla łaknących więcej wiedzy o systemie \LaTeX{} podstawowym źródłem informacji
+    jest książka Lamporta~\cite{Lamport:LDP85}. Prawdziwy \emph{hardcore} to oczywiście
+    \emph{The \TeX{}book} profesora Knutha~\cite{Knuth:ct-a}.
+\end{itemize}
+

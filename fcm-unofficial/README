@@ -1,0 +1,36 @@
+
+WSTÊP
+-----
+
+
+Niniejszy katalog zawiera LaTeX-owy style, który odpowiadaj¹ wytycznym
+formatowania prac in¿ynierskich i magisterskich 
+Wydzia³u Informatyki i Zarz¹dzania Politechniki Poznañskiej.
+
+Pytania proszê kierowaæ na grupê u¿ytkowników systemu LaTeX
+(po uprzednim zapisaniu siê):
+
+put-latex@yahoogroups.com
+
+Zawsze aktualne wersje stylu PPFCM oraz przyk³ady pe³nych prac
+formatowanych w tym stylu s¹ dostêpne w repozytorium SVN.
+
+https://ophelia.cs.put.poznan.pl/svn/put-latex/trunk
+
+
+
+KOMPILACJA
+----------
+
+Zaleca siê u¿ywanie kompilatora pdflatex, choæ jest mo¿liwe (i powinno dzia³aæ)
+kompilowanie równie¿ przy pomocy latex (do pliku DVI).
+
+U¿yteczne zapewne bêd¹ nastêpuj¹ce narzêdzia:
+
+- TeXlipse (http://texlipse.sourceforge.net/)
+
+- LED (http://www.latexeditor.org/)
+
+- KILE (http://kile.sourceforge.net/)
+
+- JEdit + latexmk (skrypt do kompilacji z linii poleceñ)

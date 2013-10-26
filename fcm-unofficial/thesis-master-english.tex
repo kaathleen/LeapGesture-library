@@ -1,0 +1,43 @@
+% Szkielet dla pracy pisanej w języku angielskim.
+
+\documentclass[english,a4paper,oneside]{ppfcmthesis}
+
+\usepackage[utf8]{inputenc}
+\usepackage[OT4]{fontenc}
+
+\authortitle{}                                        % Do not change.
+\author{Ignacy Iksiński}                              % Your name comes here
+\title{A Few Words About the Nature~of~Things}        % Note how we protect the final title phrase from breaking
+\ppsupervisor{prof.~dr hab.~inż.~Alojzy Wołodyjowski} % Your supervisor comes here.
+\ppyear{2006}                                         % Year of final submission (not graduation!)
+
+\begin{document}
+
+% Front matter starts here
+\frontmatter\pagestyle{empty}%
+\maketitle\cleardoublepage%
+
+% Blank info page for "karta dyplomowa"
+\thispagestyle{empty}\vspace*{\fill}%
+\begin{center}Tutaj przychodzi karta pracy dyplomowej;\\oryginał wstawiamy do wersji dla archiwum PP, w pozostałych kopiach wstawiamy ksero.\end{center}%
+\vfill\cleardoublepage%
+
+% Table of contents.
+\pagenumbering{Roman}\pagestyle{ppfcmthesis}%
+\tableofcontents* \cleardoublepage%
+
+% Main content of your thesis starts here.
+\mainmatter%
+\input{0x-lorem-ipsum.tex}
+
+% All appendices and extra material, if you have any.
+\cleardoublepage\appendix%
+%\input{0a-appendix.tex}
+
+% Bibliography (books, articles) starts here.
+\bibliographystyle{alpha}{\raggedright\sloppy\small\bibliography{bibliography}}
+
+% Colophon is a place where you should let others know about copyrights etc.
+\ppcolophon
+
+\end{document}

@@ -1,0 +1,51 @@
+
+% Szkielet dla pracy pisanej w języku polskim.
+
+\documentclass[polish,a4paper,oneside]{ppfcmthesis}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[OT4]{fontenc}
+
+
+\authortitle{}                                        % You can place "inż.~" here, if you really want to.
+\author{Ignacy Iksiński}                              % Your name comes here
+\title{W zdrowym ciele zdrowy~duch}                   % Note how we protect the final title phrase from breaking
+\ppsupervisor{prof.~dr hab.~inż.~Alojzy Wołodyjowski} % Your supervisor comes here.
+\ppyear{2006}                                         % Year of final submission (not graduation!)
+
+
+\begin{document}
+
+% Front matter starts here
+\frontmatter\pagestyle{empty}%
+\maketitle\cleardoublepage%
+
+% Blank info page for "karta dyplomowa"
+\thispagestyle{empty}\vspace*{\fill}%
+\begin{center}Tutaj przychodzi karta pracy dyplomowej;\\oryginał wstawiamy do wersji dla archiwum PP, w pozostałych kopiach wstawiamy ksero.\end{center}%
+\vfill\cleardoublepage%
+
+% Table of contents.
+\pagenumbering{Roman}\pagestyle{ppfcmthesis}%
+\tableofcontents* \cleardoublepage%
+
+% Main content of your thesis starts here.
+\mainmatter%
+\input{01-wstep.tex}
+\input{02-teoria.tex}
+\input{03-praca-wlasna.tex}
+\input{04-zakonczenie.tex}
+
+% All appendices and extra material, if you have any.
+\cleardoublepage\appendix%
+\input{0a-zalacznik.tex}
+\input{0b-pisanie-w-latexu.tex}
+
+% Bibliography (books, articles) starts here.
+\bibliographystyle{plalpha}{\raggedright\sloppy\small\bibliography{bibliography}}
+
+% Colophon is a place where you should let others know about copyrights etc.
+\ppcolophon
+
+\end{document}
