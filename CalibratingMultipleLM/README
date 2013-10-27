@@ -1,0 +1,30 @@
+Program used to calibrate multiple Leap Motion devices
+The program's input is the file calib.txt containing information about calibration points.
+The calib.txt has a structure:
+
+	numberOfCalibrationPairs
+	x y z x2 y2 z2
+	x y z x2 y2 z2
+	...
+	x y z x2 y2 z2
+
+where the first line contains the number of corresponding points. In the 
+next line the correspondences are listed. The first 3 values are the
+position in the coordinate system of 1st Leap Motion, while the remaining
+3 values are the position in CS of the 2nd Leap Motion.
+
+The program returns the transformation matrix between CS of Leap Motions.
+The program also returns the RMS informing about the precision of the calibration.
+
+To run the program go to the build directory:
+
+	cd build
+
+Then call the cmake:
+
+	cmake ..
+	
+And then you can build the program and run it:
+	
+	make -j2
+	./calib
