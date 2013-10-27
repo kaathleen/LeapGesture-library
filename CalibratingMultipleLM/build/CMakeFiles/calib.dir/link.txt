@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/calib.dir/calib.cpp.o CMakeFiles/calib.dir/main.cpp.o  -o calib -rdynamic 
