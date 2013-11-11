@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="oVldZn" name="GesturesVisualizer" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.GesturesVisualizer" includeBinaryInAppConfig="1"
+              jucerVersion="3.1.0">
+  <MAINGROUP id="RTAE8x" name="GesturesVisualizer">
+    <GROUP id="{E59EEAA0-6480-D272-B275-587162115D49}" name="LeapUtil">
+      <FILE id="Hh9zU3" name="LeapUtil.cpp" compile="1" resource="0" file="LeapSDK/util/LeapUtil.cpp"/>
+      <FILE id="ax56jg" name="LeapUtil.h" compile="0" resource="0" file="LeapSDK/util/LeapUtil.h"/>
+      <FILE id="GOQezY" name="LeapUtilGL.cpp" compile="1" resource="0" file="LeapSDK/util/LeapUtilGL.cpp"/>
+      <FILE id="wkrK7n" name="LeapUtilGL.h" compile="0" resource="0" file="LeapSDK/util/LeapUtilGL.h"/>
+    </GROUP>
+    <GROUP id="{C925EA35-2919-2376-B355-FF29F0DABB4F}" name="Source">
+      <GROUP id="{A9968C45-204F-4A07-609B-B5EB9F4F3F8A}" name="Util">
+        <FILE id="b4Qy0F" name="StringHelper.h" compile="0" resource="0" file="Source/Util/StringHelper.h"/>
+        <FILE id="ttDAFw" name="GLColor.h" compile="0" resource="0" file="Source/Util/GLColor.h"/>
+        <FILE id="ChrWyK" name="Position.h" compile="0" resource="0" file="Source/Util/Position.h"/>
+      </GROUP>
+      <FILE id="u875Re" name="DefaultWindow.cpp" compile="1" resource="0"
+            file="Source/DefaultWindow.cpp"/>
+      <FILE id="cR1l4t" name="DefaultWindow.h" compile="0" resource="0" file="Source/DefaultWindow.h"/>
+      <FILE id="xkNjs6" name="GestureFrame.cpp" compile="1" resource="0"
+            file="Source/GestureFrame.cpp"/>
+      <FILE id="N8seeN" name="GestureFrame.h" compile="0" resource="0" file="Source/GestureFrame.h"/>
+      <FILE id="V2kKPI" name="MainToolbarItemFactory.cpp" compile="1" resource="0"
+            file="Source/MainToolbarItemFactory.cpp"/>
+      <FILE id="VF5Aad" name="MainToolbarItemFactory.h" compile="0" resource="0"
+            file="Source/MainToolbarItemFactory.h"/>
+      <FILE id="XjPynT" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="FxoSao" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="raUYej" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="scyZjk" name="Header.h" compile="0" resource="0" file="Source/Header.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2010 targetFolder="Builds/VisualStudio2010" externalLibraries="leap.lib">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="GesturesVisualizer"
+                       headerPath="..\..\LeapSDK\include;..\..\LeapSDK\util" libraryPath="$(TargetDir)"
+                       postbuildCommand="copy /Y ..\..\LeapSDK\lib\x86\Leap.dll &quot;$(TargetDir)&quot;"
+                       prebuildCommand="copy /Y ..\..\LeapSDK\lib\x86\leapd.lib &quot;$(TargetDir)leap.lib&quot;"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="GesturesVisualizer"
+                       headerPath="..\..\LeapSDK\include;..\..\LeapSDK\util" libraryPath="$(TargetDir)"
+                       postbuildCommand="copy /Y ..\..\LeapSDK\lib\x86\Leap.dll &quot;$(TargetDir)&quot;"
+                       prebuildCommand="copy /Y ..\..\LeapSDK\lib\x86\leap.lib &quot;$(TargetDir)leap.lib&quot;"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_events" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_cryptography" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_opengl" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+        <MODULEPATH id="juce_audio_devices"/>
+        <MODULEPATH id="juce_audio_formats"/>
+        <MODULEPATH id="juce_core" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
+      </MODULEPATHS>
+    </VS2010>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
