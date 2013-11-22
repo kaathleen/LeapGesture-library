@@ -7,6 +7,7 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+
 	// create Reader object and read given file
 	LMReader *r = new LMReader(argv[1]);
 
