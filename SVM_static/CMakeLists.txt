@@ -5,5 +5,5 @@ project(SVMstatic)
 set(LibSVM_LIBRARIES svm)
 
 
-add_executable (SVMstatic LMReader.cpp static.cpp)
+add_executable (SVMstatic LMReader.cpp SVMclassificator.cpp static.cpp)
 target_link_libraries(SVMstatic ${LibSVM_LIBRARIES})

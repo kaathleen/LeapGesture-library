@@ -1,0 +1,13 @@
+SVM_static needs libsvm library, which can be downloaded from:
+http://www.csie.ntu.edu.tw/~cjlin/libsvm/
+
+For ubuntu or archlinux there is "libsvm" package to install
+
+Right now the program classifies data into n clusters and is run by:
+./SVMstatic file.lmr file2.lmr file3.lmr ...
+where file.lmr contains data for 1 set of gestures
+
+50% of data is used for learning, 50% of data is used to validate the computed model
+
+After defining the features, the learning takes ~20min. In the end program returns the recognition rate in %.
+
