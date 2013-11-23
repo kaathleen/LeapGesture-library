@@ -1,0 +1,3 @@
+D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/ALL_BUILD.dir
+D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/SVMstatic.dir
+D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/ZERO_CHECK.dir
