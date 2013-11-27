@@ -57,13 +57,13 @@ class SampleListener : Listener
                     + ", tools: " + frame.Tools.Count
                     + ", gestures: " + frame.Gestures ().Count);
 
-		if (!frame.Hands.IsEmpty) {
+		if (!frame.Hands.Empty) {
 			// Get the first hand
 			Hand hand = frame.Hands [0];
 
 			// Check if the hand has any fingers
 			FingerList fingers = hand.Fingers;
-			if (!fingers.IsEmpty) {
+			if (!fingers.Empty) {
 				// Calculate the hand's average finger tip position
 				Vector avgPos = Vector.Zero;
 				foreach (Finger finger in fingers) {
@@ -149,7 +149,7 @@ class SampleListener : Listener
 			}
 		}
 
-		if (!frame.Hands.IsEmpty || !frame.Gestures ().IsEmpty) {
+		if (!frame.Hands.Empty || !frame.Gestures ().Empty) {
 			SafeWriteLine ("");
 		}
 	}

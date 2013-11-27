@@ -19,12 +19,17 @@ MainComponent::MainComponent(vector<string>& commands) : Component( "Main compon
 void MainComponent::init()
 {
 	setSize (500, 400);
+	
+	lmRecorder.addListener(this);
 
 	addAndMakeVisible (&toolbar);
 
 	factory = new MainToolbarItemFactory(this, this);
 	toolbar.addDefaultItems (*factory);
 	toolbar.setBounds (getLocalBounds().removeFromTop(50));
+
+	isVisualizerMode = true;
+	factory->changeWorkMode(isVisualizerMode);
 
 	frameSlider.setBounds (getLocalBounds().removeFromBottom(50).removeFromRight(this->getWidth()-100));
 	frameSlider.setEnabled(false);
@@ -41,7 +46,8 @@ void MainComponent::init()
 	playing = false;
 	addAndMakeVisible(&playButton);
 	
-	m_bPaused = false;
+	recording = false;
+	
 	m_bShowHelp = false;
 	m_strHelp = "ESC - quit\n"
                 "h - Toggle help and frame rate display\n"
@@ -52,6 +58,8 @@ void MainComponent::init()
                 "Space       - Reset camera";
 
     m_strPrompt = "Press 'h' for help";
+    m_recorderStartStr = "Press 'Space' for start recording";
+    m_recorderStopStr = "Press 'Space' for stop recording";
 
 	//OpenGl init
 	m_openGLContext.setRenderer (this);
@@ -161,7 +169,7 @@ void MainComponent::renderOpenGL()
         }
     }
 
-	drawPointables((int)frameSlider.getValue() - 1);
+    drawFrame((int)frameSlider.getValue() - 1);
     renderOpenGL2D();
 }
 
@@ -176,83 +184,112 @@ void MainComponent::renderOpenGL2D()
 
     if (glRenderer != nullptr)
     {
-        Graphics g(*glRenderer.get());
+	Graphics g(*glRenderer.get());
 
-        int iMargin   = 10;
-        int iFontSize = static_cast<int>(m_fixedFont.getHeight());
-        int iLineStep = iFontSize + (iFontSize >> 2);
-        int iBaseLine = 20;
-        Font origFont = g.getCurrentFont();
+	int iMargin   = 10;
+	int iFontSize = static_cast<int>(m_fixedFont.getHeight());
+	int iLineStep = iFontSize + (iFontSize >> 2);
+	int iBaseLine = 20;
+	Font origFont = g.getCurrentFont();
 
-        const Rectangle<int>& rectBounds = getBounds();
+	const Rectangle<int>& rectBounds = getBounds();
 
-        if ( m_bShowHelp )
-        {
-            g.setColour( Colours::seagreen );
-            g.setFont( static_cast<float>(iFontSize) );
+	if ( m_bShowHelp )
+	{
+	    g.setColour( Colours::seagreen );
+	    g.setFont( static_cast<float>(iFontSize) );
 
-           /* if ( !m_bPaused )
-            {
-                g.drawSingleLineText( m_strUpdateFPS, iMargin, iBaseLine );
-            }
+	    g.setFont( m_fixedFont );
+	    g.setColour( Colours::slateblue );
 
-            g.drawSingleLineText( m_strRenderFPS, iMargin, iBaseLine + iLineStep );*/
+	    g.drawMultiLineText(  m_strHelp,
+				    iMargin,
+				    iBaseLine + iLineStep * 2,
+				    rectBounds.getWidth() - iMargin*2 );
+	}
 
-            g.setFont( m_fixedFont );
-            g.setColour( Colours::slateblue );
+	g.setFont( origFont );
+	g.setFont( static_cast<float>(iFontSize) );
 
-            g.drawMultiLineText(  m_strHelp,
-                                    iMargin,
-                                    iBaseLine + iLineStep * 2,
-                                    rectBounds.getWidth() - iMargin*2 );
-        }
-
-        g.setFont( origFont );
-        g.setFont( static_cast<float>(iFontSize) );
-
-        g.setColour( Colours::salmon );
-        g.drawMultiLineText(  m_strPrompt,
-                                iMargin,
-                                rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
-                                rectBounds.getWidth()/4 );
+	if(isVisualizerMode)
+	{
+		g.setColour( Colours::salmon );
+		g.drawMultiLineText(  m_strPrompt,
+				iMargin,
+				rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
+				rectBounds.getWidth()/4 );
+	}
+	else
+	{
+		if (recording)
+		{
+			g.setColour( Colours::red );
+			g.drawMultiLineText(  m_recorderStopStr,
+				iMargin,
+				rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
+				rectBounds.getWidth()/4 );			
+		}
+		else
+		{
+			g.setColour( Colours::white );
+			g.drawMultiLineText(  m_recorderStartStr,
+				iMargin,
+				rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
+				rectBounds.getWidth()/4 );
+		}
+	}
     }
 }
 
-void MainComponent::drawPointables( int frameIndex )
-{
-    LeapUtilGL::GLAttribScope colorScope( GL_CURRENT_BIT | GL_LINE_BIT );
-
-    const float fScale = m_fPointableRadius;
-
-    glLineWidth( 3.0f );
-
-	if (frameIndex < frameList.size())
+void MainComponent::drawFrame( int frameIndex )
+{	
+	GestureFrame currentFrame;
+	
+	if (isVisualizerMode && frameIndex < frameList.size())
 	{
-		GestureFrame currentFrame = frameList.at(frameIndex);
+		currentFrame = frameList.at(frameIndex);
+		drawGestureFrame(currentFrame);
+	}
+	else if (!isVisualizerMode && recording && lmRecorder.getCurrentFrame(currentFrame))
+	{
+		drawGestureFrame(currentFrame);
+	}
+}
 
-		for (int i = 0; i<currentFrame.getFingerCount(); i++)
+void MainComponent::drawGestureFrame(GestureFrame currentFrame)
+{
+	LeapUtilGL::GLAttribScope colorScope( GL_CURRENT_BIT | GL_LINE_BIT );
+
+	const float fScale = m_fPointableRadius;
+
+	glLineWidth( 3.0f );
+
+	for (int i = 0; i<currentFrame.getFingerCount(); i++)
+	{
+		Leap::Vector fingerTip(currentFrame.getFingerTipPosition(i).getX(),
+			currentFrame.getFingerTipPosition(i).getY(), currentFrame.getFingerTipPosition(i).getZ());
+		Leap::Vector fingerVector(currentFrame.getFingerVector(i).getX(), currentFrame.getFingerVector(i).getY(),
+			currentFrame.getFingerVector(i).getZ());
+
+		Leap::Vector vStartPos   = m_mtxFrameTransform.transformPoint(fingerTip * m_fFrameScale);
+		Leap::Vector vEndPos     = m_mtxFrameTransform.transformDirection( fingerVector ) * -0.25f;
+
+		glColor3fv( m_avColors[i].toFloatPointer() );
 		{
-			Leap::Vector fingerTip(currentFrame.getFingerTipPosition(i).getX(),
-				currentFrame.getFingerTipPosition(i).getY(), currentFrame.getFingerTipPosition(i).getZ());
-			Leap::Vector vStartPos   = m_mtxFrameTransform.transformPoint(fingerTip * m_fFrameScale);
+			LeapUtilGL::GLMatrixScope matrixScope;
 
-			glColor3fv( m_avColors[i].toFloatPointer() );
-			{
-                LeapUtilGL::GLMatrixScope matrixScope;
+			glTranslatef( vStartPos.x, vStartPos.y, vStartPos.z );
 
-                glTranslatef( vStartPos.x, vStartPos.y, vStartPos.z );
+			glBegin(GL_LINES);
 
-                /*glBegin(GL_LINES);
+			glVertex3f( 0, 0, 0 );
+			glVertex3fv( vEndPos.toFloatPointer() );
 
-                glVertex3f( 0, 0, 0 );
-                glVertex3fv( vEndPos.toFloatPointer() );
+			glEnd();
 
-                glEnd();*/
+			glScalef( fScale, fScale, fScale );
 
-                glScalef( fScale, fScale, fScale );
-
-                LeapUtilGL::drawSphere( LeapUtilGL::kStyle_Solid );
-            }
+			LeapUtilGL::drawSphere( LeapUtilGL::kStyle_Solid );
 		}
 	}
 }
@@ -390,13 +427,27 @@ bool MainComponent::keyPressed( const KeyPress &keyPress )
 	switch( iKeyCode )
     {
 		case ' ':
-			resetCamera();
+			if (isVisualizerMode)
+			{
+				resetCamera();
+			}
+			else
+			{
+				if (recording)
+				{
+					stopRecording();
+				}
+				else
+				{
+					startRecording();
+				}
+			}				
 			break;
 		case 'H':
-			m_bShowHelp = !m_bShowHelp;
-			break;
-		case 'P':
-			m_bPaused = !m_bPaused;
+			if (isVisualizerMode)
+			{
+				m_bShowHelp = !m_bShowHelp;
+			}			
 			break;
 		default:
 			return false;
@@ -430,10 +481,10 @@ void MainComponent::buttonClicked (Button* clickedButton)
 {
 	if (clickedButton->getComponentID() == "OPEN_GESTURES_FILES")
 	{
-		FileChooser fc ("Choose a gestures file to open...", File::getCurrentWorkingDirectory(), "*", true);
+		FileChooser fc ("Choose a gestures files to open", File::getCurrentWorkingDirectory(), "*.lmr", false);
 
 		if (fc.browseForMultipleFilesToOpen())
-        {
+        	{
 			vector<string> gesturesPaths;
 			for (int i = 0; i < fc.getResults().size(); ++i)
 			{
@@ -460,6 +511,16 @@ void MainComponent::buttonClicked (Button* clickedButton)
 		}
 
 		playing = !playing;
+	}
+	else if (clickedButton->getComponentID() == "CHANGE_WORK_MODE")
+	{
+		stopRecording();
+		isVisualizerMode = !isVisualizerMode;
+		
+		playButton.setVisible(isVisualizerMode);
+		frameSlider.setVisible(isVisualizerMode);
+		
+		factory->changeWorkMode(isVisualizerMode);
 	}
 }
 
@@ -497,7 +558,6 @@ void MainComponent::sliderValueChanged (Slider* slider)
 {
 	if (slider->getComponentID() == "FRAME_SLIDER")
 	{
-
 	}
 }
 
@@ -523,7 +583,7 @@ void MainComponent::setGesturesPaths(vector<string> gesturesPaths)
 bool MainComponent::parseFile(String filePath)
 {
 	fstream file;
-	file.open(filePath.toStdString());
+	file.open(filePath.toStdString().c_str());
 
 	string line;
 	frameList.clear();
@@ -532,7 +592,11 @@ bool MainComponent::parseFile(String filePath)
 	{
 		while ( getline(file,line) )
 		{
-			frameList.push_back(parseLine(line));
+			GestureFrame gestureFrame;
+			if (parseLine(gestureFrame, line))
+			{
+				frameList.push_back(gestureFrame);
+			}
 		}
 	}
 	else
@@ -540,46 +604,74 @@ bool MainComponent::parseFile(String filePath)
 		return false;
 	}
 
-    file.close();
+    	file.close();
 	
 	return true;
 }
 
-GestureFrame MainComponent::parseLine(string line)
+bool MainComponent::parseLine(GestureFrame &gestureFrame, string line)
 {
-    vector<string> fingers;
+    	vector<string> fingers;
 	GestureFrame tempFrame;
 
 	StringHelper::split(line, '#', fingers);
 
-	for(int i=0; i<fingers.size(); i++)
+	for(int i=1; i<fingers.size(); i++)
 	{
 		if (fingers[i].size() > 0)
 		{
-			Position* newPos = parseFinger(fingers[i]);
-			if (newPos != NULL)
+			if (!parseFinger(gestureFrame, fingers[i]))
 			{
-				tempFrame.addFingerTip(*newPos);
+				return false;
 			}
 		}
 	}
 
-	return tempFrame;
+	return true;
 }
 
 
-Position* MainComponent::parseFinger(string finger)
+bool MainComponent::parseFinger(GestureFrame &gestureFrame, string finger)
 {
 	vector<string> pos;
 	StringHelper::split(finger, ';', pos);
 
-	if (pos.size() == 3)
+	if (pos.size() == 6)
 	{
-		return new Position(strtod(pos[0].c_str(), NULL), strtod(pos[1].c_str(), NULL), strtod(pos[2].c_str(), NULL));
+		Vertex fingerTipPos(strtod(pos[0].c_str(), NULL), strtod(pos[1].c_str(), NULL), strtod(pos[2].c_str(), NULL));
+		Vertex fingerTipVect(strtod(pos[3].c_str(), NULL), strtod(pos[4].c_str(), NULL), strtod(pos[5].c_str(), NULL));
+		gestureFrame.addFinger(fingerTipPos, fingerTipVect);
+		return true;
 	}
 	else
 	{
-		return NULL;
+		return false;
 	}
+}
+
+void MainComponent::startRecording()
+{
+	if (!recording)
+	{
+		lmRecorder.startRecording();
+		recording = true;
+	}
+}
+
+void MainComponent::stopRecording()
+{
+	if (recording)
+	{
+		lmRecorder.stopRecording();
+	
+		FileChooser fc ("Browse for gestures file to save...", File::getCurrentWorkingDirectory(), "*.lmr", false);
+		if (fc.browseForFileToSave(true))
+		{
+			string path = fc.getResult().getFullPathName().toStdString();
+		
+			lmRecorder.saveRecording(path);
+		}
+		recording = false;
+	} 
 }
 

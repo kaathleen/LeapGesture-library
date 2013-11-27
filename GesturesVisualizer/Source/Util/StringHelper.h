@@ -1,5 +1,5 @@
-#ifndef STRINGHELPER
-#define STRINGHELPER
+#ifndef STRINGHELPER_H_INCLUDED
+#define STRINGHELPER_H_INCLUDED
 
 class StringHelper
 {
@@ -27,4 +27,4 @@ private:
 	
 };
 
-#endif //STRINGHELPER
+#endif //STRINGHELPER_H_INCLUDED

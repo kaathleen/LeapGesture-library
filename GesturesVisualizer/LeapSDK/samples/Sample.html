@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<!--
-/------------------------------------------------------------------------------\
+<!------------------------------------------------------------------------------
 | Copyright (C) 2012-2013 Leap Motion, Inc. All rights reserved.               |
 | Leap Motion proprietary and confidential. Not for distribution.              |
 | Use subject to the terms of the Leap Motion SDK Agreement available at       |
 | https://developer.leapmotion.com/sdk_agreement, or another agreement         |
 | between Leap Motion and you, your company or other organization.             |
-\------------------------------------------------------------------------------/
--->
+------------------------------------------------------------------------------->
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Leap Motion JavaScript Sample</title>
-<script src="http://js.leapmotion.com/0.2.0/leap.min.js"></script>
+<script src="./leap.js"></script>
 <script>
 // Store frame for motion functions
-var previousFrame = null;
+var previousFrame;
 var paused = false;
 var pauseOnGesture = false;
 
@@ -38,7 +36,7 @@ Leap.loop(controllerOptions, function(frame) {
                   + "Gestures: " + frame.gestures.length + "<br />";
 
   // Frame motion factors
-  if (previousFrame && previousFrame.valid) {
+  if (previousFrame) {
     var translation = frame.translation(previousFrame);
     frameString += "Translation: " + vectorToString(translation) + " mm <br />";
 
@@ -69,7 +67,7 @@ Leap.loop(controllerOptions, function(frame) {
       handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br />";
 
       // Hand motion factors
-      if (previousFrame && previousFrame.valid) {
+      if (previousFrame) {
         var translation = hand.translation(previousFrame);
         handString += "Translation: " + vectorToString(translation) + " mm<br />";
 
@@ -197,9 +195,9 @@ function vectorToString(vector, digits) {
   if (typeof digits === "undefined") {
     digits = 1;
   }
-  return "(" + vector[0].toFixed(digits) + ", "
-             + vector[1].toFixed(digits) + ", "
-             + vector[2].toFixed(digits) + ")";
+  return "(" + vector.x.toFixed(digits) + ", "
+             + vector.y.toFixed(digits) + ", "
+             + vector.z.toFixed(digits) + ")";
 }
 
 function togglePause() {
@@ -220,9 +218,15 @@ function pauseForGestures() {
   }
 }
 
+function checkLibrary() {
+  if (typeof Leap === "undefined") {
+    document.getElementById("main").innerHTML = "The Leap Motion JavaScript client library (leap.js file) was not found. Please download the library from the GitHub project at <a href='https://github.com/leapmotion/leapjs'>https://github.com/leapmotion/leapjs</a>."
+    alert("The Leap Motion JavaScript client library (leap.js file) was not found. Please download the latest version from the GitHub project at https://github.com/leapmotion/leapjs");
+  }
+}
 </script>
 </head>
-<body>
+<body onload="checkLibrary()">
 <h1>Leap Motion JavaScript Sample</h1>
 <div id="main">
   <button id="pause" onclick="togglePause()">Pause</button>

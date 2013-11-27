@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DocSetFeedURL</key>
+	<string>http://leapmotion.github.com/xcode-docs/publish/com.leapmotion.cplusplus.xar</string>
+	<key>CFBundleName</key>
+	<string>Leap C++ API Reference</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.leapmotion.cplusplus</string>
+	<key>CFBundleVersion</key>
+	<string>0.7.9</string>
+	<key>DocSetFeedName</key>
+	<string>Leap Motion C++ API</string>
+	<key>DocSetPublisherIdentifier</key>
+	<string>com.leapmotion</string>
+	<key>DocSetPublisherName</key>
+	<string>Leap Motion</string>
+</dict>
+</plist>

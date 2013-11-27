@@ -1,0 +1,15 @@
+﻿Build started 2013-11-24 13:18:44.
+     1>Project "C:\Users\Wąs\Documents\GitHub\projekt-inzynierski\SVM_static\VS\ZERO_CHECK.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "x64\Debug\ZERO_CHECK\ZERO_CHECK.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ComputeCustomBuildOutput:
+         Creating directory "D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\".
+       CustomBuild:
+         Checking Build System
+         System nie może odnaleźć określonej ścieżki.
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(151,5): error MSB6006: "cmd.exe" exited with code 3.
+     1>Done Building Project "C:\Users\Wąs\Documents\GitHub\projekt-inzynierski\SVM_static\VS\ZERO_CHECK.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.37

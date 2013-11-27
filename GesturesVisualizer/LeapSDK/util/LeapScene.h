@@ -19,7 +19,7 @@
 // define this macro if you want SceneObject::GetAs<> to use
 // simple internally implemented typeid checks
 // instead of dynamic casting.
-// some code bases prohibit the use of dynamic_cast.
+// some code bases prohibit the use of dynamic_cast. 
 // this provides a basic alternative.
 // see the comment at SceneObject::GetAs<> below
 #undef LEAP_SCENE_NO_DYNAMIC_CAST
@@ -132,13 +132,13 @@ public:
     m_uiFlags &= ~(1 << static_cast<uint32_t>(interactionType));
   }
 
-  bool HasAnyInteraction() const
-  {
+  bool HasAnyInteraction() const 
+  { 
     static const uint32_t kInteractionMask =  kIT_SelectionChange  |
                                               kIT_Rotation         |
                                               kIT_Translation      |
                                               kIT_Scale;
-    return (m_uiFlags & kInteractionMask) != 0;
+    return (m_uiFlags & kInteractionMask) != 0; 
   }
 
   /// accessors to interaction values - validity depends on what types of interactions are in the flags.
@@ -177,18 +177,18 @@ public:
     kF_UpdateContact = 1 << 1
   };
 
-  enum
-  {
-    kMaxObjects             = 512,
+  enum 
+  { 
+    kMaxObjects             = 512, 
     kMaxRayHits             = 32,
     kInteractionQueueLength = 32
   };
 
   LEAP_EXPORT Scene();
 
-  LEAP_EXPORT virtual ~Scene()
+  LEAP_EXPORT virtual ~Scene() 
   {
-    Reset();
+    Reset(); 
   }
 
   /// AddObject allocates new objects and add them to the list of scene children to manage.
@@ -197,11 +197,11 @@ public:
   /// you can not add an existing instance of an externally allocated object for management.
   /// the scene always creates the managed instance.
   /// this restriction allows the object management to stay simple and concise.
-  template<class ObjectClass>
+  template<class ObjectClass> 
   ObjectClass* AddObject()
   {
     return allocateObject<ObjectClass>();
-  }
+  } 
 
   /// RemoveObject() marks an object for removal.  It is not actually removed until the next call to Update().
   /// Removal does not delete the object, it orphans the object (unsets the scene member) and
@@ -280,18 +280,18 @@ public:
   uint32_t GetNumRayHits() const { return m_uiNumRayHits; }
 
   /// access to a ray test hit that happened during the last update
-  const SceneRayHit* GetRayHit( uint32_t idx ) const
+  const SceneRayHit* GetRayHit( uint32_t idx ) const 
   {
-    return idx < m_uiNumRayHits ? &(m_aRayHits[idx]) : NULL;
+    return idx < m_uiNumRayHits ? &(m_aRayHits[idx]) : NULL; 
   }
 
   /// number of potential interactions that were queued up during the last update
   uint32_t GetNumQueuedInteractions() const { return m_uiNumQueuedInteractions; }
 
   /// access to a potential interaction queued up during the last update
-  const SceneInteraction* GetQueuedInteraction( uint32_t idx ) const
+  const SceneInteraction* GetQueuedInteraction( uint32_t idx ) const 
   {
-    return idx < m_uiNumQueuedInteractions ? &(m_aInteractionQueue[idx]) : NULL;
+    return idx < m_uiNumQueuedInteractions ? &(m_aInteractionQueue[idx]) : NULL; 
   }
 
   /// transforms a point from the Leap API (e.g. Pointable::tipPosition()) into scene space
@@ -360,7 +360,7 @@ private:
 
   void updateContact( const SceneContactPoint& testPoint );
 
-  template<class T>
+  template<class T> 
   T* allocateObject()
   {
     if ( m_uiNumObjects < static_cast<uint32_t>(kMaxObjects) )
@@ -438,12 +438,12 @@ public:
   enum { kMaxContactPoints = 5 };
 
 public:
-  SceneObject()
+  SceneObject() 
     : m_pUserData(NULL),
       m_paContactPoints( m_aContactPoints ),
       m_paLastContactPoints( m_aContactPoints + kMaxContactPoints ),
       m_fTotalHitTime(0.0f),
-      m_fScale(1.0f),
+      m_fScale(1.0f), 
       m_uiNumPointing(0),
       m_uiNumContacts(0),
       m_uiLastNumContacts(0),
@@ -500,20 +500,20 @@ public:
   uint32_t GetSerial() const { return m_serial; }
 
   Scene* GetScene() const { return m_pScene; }
-
+  
   void Translate(const Vector& translation) { m_mtxTransform.origin += translation; }
 
-  void Rotate(const Vector& axis, float angleRadians)
-  {
+  void Rotate(const Vector& axis, float angleRadians) 
+  { 
     m_mtxTransform =  m_mtxTransform * Matrix(axis, angleRadians);
   }
 
-  void Rotate(const Matrix& rotationMatrix)
+  void Rotate(const Matrix& rotationMatrix) 
   {
     m_mtxTransform = m_mtxTransform * LeapUtil::ExtractRotation( rotationMatrix );
   }
 
-  void Scale(float scaleMult)
+  void Scale(float scaleMult) 
   {
     m_fScale *= scaleMult;
   }
@@ -555,12 +555,12 @@ public:
 
   void SetCenter(const Vector& vCenter) { m_mtxTransform.origin = vCenter; }
 
-  void SetRotation(const Vector& vAxis, float fAngleRadians)
-  {
+  void SetRotation(const Vector& vAxis, float fAngleRadians) 
+  { 
     m_mtxTransform.setRotation( vAxis, fAngleRadians );
   }
 
-  void SetRotation(const Matrix& rotationMatrix)
+  void SetRotation(const Matrix& rotationMatrix) 
   {
     m_mtxTransform = Matrix( rotationMatrix.xBasis, rotationMatrix.yBasis, rotationMatrix.zBasis, m_mtxTransform.origin );
   }
@@ -577,9 +577,9 @@ public:
 
   bool IsSelected() const { return m_bSelected != false; }
 
-  void SetSelected(bool selected)
-  {
-    m_bSelected = selected;
+  void SetSelected(bool selected) 
+  { 
+    m_bSelected = selected; 
     if ( !m_bSelected )
     {
       ClearHitTime();
@@ -604,31 +604,31 @@ public:
 
   void IncNumPointing() { m_uiNumPointing++; }
 
-  void IncNumContacts(const SceneContactPoint& contactPoint)
+  void IncNumContacts(const SceneContactPoint& contactPoint) 
   {
-    if (m_uiNumContacts < kMaxContactPoints)
+    if (m_uiNumContacts < kMaxContactPoints) 
     {
       m_paContactPoints[m_uiNumContacts++] = contactPoint;
     }
   }
 
-  void ClearHits()
-  {
+  void ClearHits() 
+  { 
     m_uiNumContacts       = 0;
     m_uiLastNumContacts   = 0;
     m_uiHasInitialContact = 0;
     m_uiNumPointing       = 0;
-    m_fTotalHitTime       = 0.0f;
+    m_fTotalHitTime       = 0.0f; 
   }
 
   float GetTotalHitTime() const { return m_fTotalHitTime; }
 
-  const SceneContactPoint* GetContactPoint(uint32_t uiIndex) const
+  const SceneContactPoint* GetContactPoint(uint32_t uiIndex) const 
   {
     return uiIndex < static_cast<uint32_t>(kMaxContactPoints) ? m_paContactPoints + uiIndex : NULL;
   }
 
-  const SceneContactPoint* GetLastContactPoint(uint32_t uiIndex) const
+  const SceneContactPoint* GetLastContactPoint(uint32_t uiIndex) const 
   {
     return uiIndex < static_cast<uint32_t>(kMaxContactPoints) ? m_paLastContactPoints + uiIndex : NULL;
   }
@@ -638,7 +638,7 @@ public:
     return m_uiHasInitialContact ? &m_initialContactPoint : NULL;
   }
 
-  const SceneContactPoint* GetContactPointByPointableID(int iPointableID) const
+  const SceneContactPoint* GetContactPointByPointableID(int iPointableID) const 
   {
     for ( uint32_t i = 0; i < m_uiNumContacts; i++ )
     {
@@ -651,7 +651,7 @@ public:
     return NULL;
   }
 
-  const SceneContactPoint* GetLastContactPointByPointableID(int iPointableID) const
+  const SceneContactPoint* GetLastContactPointByPointableID(int iPointableID) const 
   {
     for ( uint32_t i = 0; i < m_uiLastNumContacts; i++ )
     {
@@ -759,7 +759,7 @@ private:
 }; // SceneBox
 
 class LEAP_EXPORT_CLASS SceneCylinder : public SceneObject
-{
+{    
 public:
   /// if you extend SceneObject or any of its descendant classes
   /// the public methods ObjectType() and GetType() should be implemented exactly as they are below.
@@ -796,7 +796,7 @@ private:
 }; // SceneCylinder
 
 class LEAP_EXPORT_CLASS SceneDisk : public SceneObject
-{
+{  
 public:
   /// if you extend SceneObject or any of its descendant classes
   /// the public methods ObjectType() and GetType() should be implemented exactly as they are below.
@@ -817,7 +817,7 @@ public:
 
   LEAP_EXPORT virtual bool TestRayHit(const SceneRay& testRay, float& fHitDistOut) const;
 
-  LEAP_EXPORT virtual bool TestSphereHit(const Vector& vTestPoint, float fTestRadius) const;
+  LEAP_EXPORT virtual bool TestSphereHit(const Vector& vTestPoint, float fTestRadius) const; 
 
 #if defined(LEAP_SCENE_USE_UTIL_GL)
   LEAP_EXPORT virtual void DebugDrawGL( LeapUtilGL::eStyle drawStyle=LeapUtilGL::kStyle_Solid ) const;
@@ -873,7 +873,7 @@ public:
   LEAP_EXPORT virtual bool TestRayHit(const SceneRay& testRay, float& fHitDistOut) const;
 
   LEAP_EXPORT virtual bool TestSphereHit(const Vector& vTestCenter, float fTestRadius) const;
-
+ 
 #if defined(LEAP_SCENE_USE_UTIL_GL)
   LEAP_EXPORT virtual void DebugDrawGL( LeapUtilGL::eStyle drawStyle=LeapUtilGL::kStyle_Solid ) const;
 #endif

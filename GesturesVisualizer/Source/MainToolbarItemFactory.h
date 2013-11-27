@@ -1,9 +1,7 @@
 #ifndef MAINITEMTOOLBARFACTORY_H_INCLUDED
 #define MAINITEMTOOLBARFACTORY_H_INCLUDED
 
-using namespace std;
-
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "Header.h"
 
 //========================================================================== ====
 /*
@@ -24,8 +22,9 @@ public:
     // are the ones we'll use in this demo.
     enum MainToolbarItemIds
     {
-        open_gesture_files	= 1,
-        choose_gesture_file		= 2
+		change_work_mode = 1,
+        open_gesture_files = 2,
+        choose_gesture_file = 3
     };
 
     void getAllToolbarItemIds (Array <int>& ids);
@@ -35,6 +34,8 @@ public:
     ToolbarItemComponent* createItem (int itemId);
 
 	void setGesturesList(StringArray gestures);
+
+	void changeWorkMode(bool isVisualizerMode);
 
 private:
 	ButtonListener* buttonListener;
@@ -131,6 +132,11 @@ private:
         {
         }
 
+		void setButtonText (String buttonText)
+		{
+			textButton.setButtonText(buttonText);
+		}
+
         void contentAreaChanged (const Rectangle<int>& newArea)
         {
             textButton.setSize (newArea.getWidth() - 2,
@@ -143,6 +149,7 @@ private:
 		TextButton textButton;
     };
 
+	ToolbarTextButton* changeWorkModeButton;
 	ToolbarTextButton* chooseGesturesButton;
 	ToolbarComboBox* gesturesComboBox;
 };

@@ -1,0 +1,16 @@
+﻿Build started 2013-11-24 13:18:45.
+     1>Project "C:\Users\Wąs\Documents\GitHub\projekt-inzynierski\SVM_static\VS\SVMstatic.vcxproj" on node 3 (build target(s)).
+     1>c:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1200,9): warning : The referenced project 'D:/Projects/x/projekt-inzynierski/SVM_static/VS/ZERO_CHECK.vcxproj' does not exist.
+     1>PrepareForBuild:
+         Creating directory "D:\Projects\x\projekt-inzynierski\SVM_static\VS\Debug\".
+       InitializeBuildStatus:
+         Creating "SVMstatic.dir\Debug\SVMstatic.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       CustomBuild:
+         Building Custom Rule D:/Projects/x/projekt-inzynierski/SVM_static/CMakeLists.txt
+         System nie może odnaleźć określonej ścieżki.
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(151,5): error MSB6006: "cmd.exe" exited with code 3.
+     1>Done Building Project "C:\Users\Wąs\Documents\GitHub\projekt-inzynierski\SVM_static\VS\SVMstatic.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.13

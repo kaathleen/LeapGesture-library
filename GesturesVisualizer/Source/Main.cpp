@@ -1,10 +1,7 @@
-#include "../JuceLibraryCode/JuceHeader.h"
-
-#include "MainComponent.h"
-#include "DefaultWindow.h"
-
 #include "Header.h"
 
+#include "DefaultWindow.h"
+#include "MainComponent.h"
 
 //==============================================================================
 class GesturesVisualizerApplication  : public JUCEApplication
@@ -20,32 +17,32 @@ public:
     //==============================================================================
     void initialise (const String& commandLine)
     {
-		vector<string> commands = StringHelper::split(commandLine.toStdString(), ' ');
-        mainWindow = new DefaultWindow("Gestures Visualizer");
-		mainWindow.get()->setContentOwned (new MainComponent(commands), true);
-		mainWindow.get()->centreWithSize (mainWindow.get()->getWidth(), mainWindow.get()->getHeight());
+	vector<string> commands = StringHelper::split(commandLine.toStdString(), ' ');
+	mainWindow = new DefaultWindow("Gestures Visualizer");
+	mainWindow.get()->setContentOwned (new MainComponent(commands), true);
+	mainWindow.get()->centreWithSize (mainWindow.get()->getWidth(), mainWindow.get()->getHeight());
     }
 
     void shutdown()
     {
-        // Add your application's shutdown code here..
+	// Add your application's shutdown code here..
 
-        mainWindow = nullptr; // (deletes our window)
+	mainWindow = nullptr; // (deletes our window)
     }
 
     //==============================================================================
     void systemRequestedQuit()
     {
-        // This is called when the app is being asked to quit: you can ignore this
-        // request and let the app carry on running, or call quit() to allow the app to close.
-        quit();
+    	// This is called when the app is being asked to quit: you can ignore this
+	// request and let the app carry on running, or call quit() to allow the app to close.
+	quit();
     }
 
-    void anotherInstanceStarted (const String& commandLine)
+    void anotherInstanceStarted (const String&)
     {
-        // When another instance of the app is launched while this one is running,
-        // this method is invoked, and the commandLine parameter tells you what
-        // the other instance's command-line arguments were.
+    	// When another instance of the app is launched while this one is running,
+	// this method is invoked, and the commandLine parameter tells you what
+	// the other instance's command-line arguments were.
     }
 
 private:

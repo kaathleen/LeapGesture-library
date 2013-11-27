@@ -43,13 +43,13 @@ class SampleListener extends Listener {
                          + ", tools: " + frame.tools().count()
                          + ", gestures " + frame.gestures().count());
 
-        if (!frame.hands().isEmpty()) {
+        if (!frame.hands().empty()) {
             // Get the first hand
             Hand hand = frame.hands().get(0);
 
             // Check if the hand has any fingers
             FingerList fingers = hand.fingers();
-            if (!fingers.isEmpty()) {
+            if (!fingers.empty()) {
                 // Calculate the hand's average finger tip position
                 Vector avgPos = Vector.zero();
                 for (Finger finger : fingers) {
@@ -133,7 +133,7 @@ class SampleListener extends Listener {
             }
         }
 
-        if (!frame.hands().isEmpty() || !gestures.isEmpty()) {
+        if (!frame.hands().empty() || !gestures.empty()) {
             System.out.println();
         }
     }

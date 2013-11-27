@@ -95,7 +95,6 @@
 %constattrib( Leap::Pointable, Leap::Pointable::Zone, touchZone )
 %constattrib( Leap::Pointable, float, touchDistance )
 %leapattrib( Leap::Pointable, Vector, stabilizedTipPosition )
-%constattrib( Leap::Pointable, float, timeVisible );
 %leapattrib( Leap::Pointable, Frame, frame );
 
 %constattrib( Leap::Hand, int, id );
@@ -109,8 +108,6 @@
 %constattrib( Leap::Hand, bool, isValid );
 %leapattrib( Leap::Hand, Vector, sphereCenter );
 %constattrib( Leap::Hand, float, sphereRadius );
-%leapattrib( Leap::Hand, Vector, stabilizedPalmPosition )
-%constattrib( Leap::Hand, float, timeVisible );
 %leapattrib( Leap::Hand, Frame, frame );
 
 %constattrib( Leap::Gesture, Leap::Gesture::Type, type )
@@ -160,6 +157,13 @@
 %constattrib( Leap::ScreenList, bool, isEmpty );
 %constattrib( Leap::DeviceList, bool, isEmpty );
 
+%constattrib( Leap::PointableList, bool, empty );
+%constattrib( Leap::FingerList, bool, empty );
+%constattrib( Leap::ToolList, bool, empty );
+%constattrib( Leap::HandList, bool, empty );
+%constattrib( Leap::GestureList, bool, empty );
+%constattrib( Leap::ScreenList, bool, empty );
+
 %leapattrib( Leap::PointableList, Pointable, leftmost );
 %leapattrib( Leap::PointableList, Pointable, rightmost );
 %leapattrib( Leap::PointableList, Pointable, frontmost );
@@ -175,7 +179,6 @@
 
 %constattrib( Leap::Frame, int64_t, id );
 %constattrib( Leap::Frame, int64_t, timestamp );
-%constattrib( Leap::Frame, float, currentFramesPerSecond );
 %leapattrib( Leap::Frame, PointableList, pointables );
 %leapattrib( Leap::Frame, FingerList, fingers );
 %leapattrib( Leap::Frame, ToolList, tools );
@@ -213,7 +216,7 @@
 %staticattrib( Leap::Gesture, static const Gesture&, invalid);
 %staticattrib( Leap::Screen, static const Screen&, invalid );
 %staticattrib( Leap::Device, static const Device&, invalid );
-%staticattrib( Leap::InteractionBox, static const InteractionBox&, invalid );
+%staticattrib( Leap::InteractionBox, static const Device&, invalid );
 %staticattrib( Leap::Frame, static const Frame&, invalid);
 
 %constattrib( Leap::Vector, float, magnitude );
@@ -228,6 +231,7 @@
 %constattrib( Leap::Controller, Controller::PolicyFlag, policyFlags );
 %leapattrib( Leap::Controller, Config, config );
 %leapattrib( Leap::Controller, ScreenList, locatedScreens );
+%leapattrib( Leap::Controller, ScreenList, calibratedScreens );
 %leapattrib( Leap::Controller, DeviceList, devices );
 
 %staticattrib( Leap::Vector, static const Vector&, zero );

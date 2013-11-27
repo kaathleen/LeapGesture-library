@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:docset="http://developer.apple.com/rss/docset_extensions" xml:lang="en">
+    <id>http://leapmotion.github.com/xcode-docs/publish/com.leapmotion.cplusplus.xar/20130502153715</id>
+    <title type="text">Leap Motion C++ API</title>
+    <link rel="self" href="http://leapmotion.github.com/xcode-docs/publish/com.leapmotion.cplusplus.xar"></link>
+    <docset:publisherName>Leap Motion</docset:publisherName>
+    <docset:publisherID>com.leapmotion</docset:publisherID>
+    <updated>2013-05-02T15:37:15-07:00</updated>
+    <entry>
+        <id>tag:leapmotion.github.com,2013-05-02:com.leapmotion.cplusplus/0.7.9</id>
+        <title type="text">Leap C++ API Reference</title>
+        <updated>2013-05-02T15:37:15-07:00</updated>
+        <content type="text">Leap C++ API Reference (v0.7.9)</content>
+        <link rel="enclosure" type="application/octet-stream" href="http://leapmotion.github.com/xcode-docs/publish/com.leapmotion.cplusplus.xar" length="1564156"></link>
+        <docset:identifier>com.leapmotion.cplusplus</docset:identifier>
+        <docset:version>0.7.9</docset:version>
+    </entry>
+</feed>

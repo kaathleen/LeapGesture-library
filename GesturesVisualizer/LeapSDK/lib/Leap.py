@@ -281,8 +281,6 @@ class Pointable(Interface):
     if _newclass:touch_distance = _swig_property(LeapPython.Pointable_touch_distance_get)
     __swig_getmethods__["stabilized_tip_position"] = LeapPython.Pointable_stabilized_tip_position_get
     if _newclass:stabilized_tip_position = _swig_property(LeapPython.Pointable_stabilized_tip_position_get)
-    __swig_getmethods__["time_visible"] = LeapPython.Pointable_time_visible_get
-    if _newclass:time_visible = _swig_property(LeapPython.Pointable_time_visible_get)
     __swig_getmethods__["frame"] = LeapPython.Pointable_frame_get
     if _newclass:frame = _swig_property(LeapPython.Pointable_frame_get)
     __swig_destroy__ = LeapPython.delete_Pointable
@@ -377,10 +375,6 @@ class Hand(Interface):
     if _newclass:sphere_center = _swig_property(LeapPython.Hand_sphere_center_get)
     __swig_getmethods__["sphere_radius"] = LeapPython.Hand_sphere_radius_get
     if _newclass:sphere_radius = _swig_property(LeapPython.Hand_sphere_radius_get)
-    __swig_getmethods__["stabilized_palm_position"] = LeapPython.Hand_stabilized_palm_position_get
-    if _newclass:stabilized_palm_position = _swig_property(LeapPython.Hand_stabilized_palm_position_get)
-    __swig_getmethods__["time_visible"] = LeapPython.Hand_time_visible_get
-    if _newclass:time_visible = _swig_property(LeapPython.Hand_time_visible_get)
     __swig_getmethods__["frame"] = LeapPython.Hand_frame_get
     if _newclass:frame = _swig_property(LeapPython.Hand_frame_get)
     __swig_destroy__ = LeapPython.delete_Hand
@@ -651,6 +645,8 @@ class PointableList(Interface):
     def append(self, *args): return LeapPython.PointableList_append(self, *args)
     __swig_getmethods__["is_empty"] = LeapPython.PointableList_is_empty_get
     if _newclass:is_empty = _swig_property(LeapPython.PointableList_is_empty_get)
+    __swig_getmethods__["empty"] = LeapPython.PointableList_empty_get
+    if _newclass:empty = _swig_property(LeapPython.PointableList_empty_get)
     __swig_getmethods__["leftmost"] = LeapPython.PointableList_leftmost_get
     if _newclass:leftmost = _swig_property(LeapPython.PointableList_leftmost_get)
     __swig_getmethods__["rightmost"] = LeapPython.PointableList_rightmost_get
@@ -685,6 +681,8 @@ class FingerList(Interface):
     def append(self, *args): return LeapPython.FingerList_append(self, *args)
     __swig_getmethods__["is_empty"] = LeapPython.FingerList_is_empty_get
     if _newclass:is_empty = _swig_property(LeapPython.FingerList_is_empty_get)
+    __swig_getmethods__["empty"] = LeapPython.FingerList_empty_get
+    if _newclass:empty = _swig_property(LeapPython.FingerList_empty_get)
     __swig_getmethods__["leftmost"] = LeapPython.FingerList_leftmost_get
     if _newclass:leftmost = _swig_property(LeapPython.FingerList_leftmost_get)
     __swig_getmethods__["rightmost"] = LeapPython.FingerList_rightmost_get
@@ -719,6 +717,8 @@ class ToolList(Interface):
     def append(self, *args): return LeapPython.ToolList_append(self, *args)
     __swig_getmethods__["is_empty"] = LeapPython.ToolList_is_empty_get
     if _newclass:is_empty = _swig_property(LeapPython.ToolList_is_empty_get)
+    __swig_getmethods__["empty"] = LeapPython.ToolList_empty_get
+    if _newclass:empty = _swig_property(LeapPython.ToolList_empty_get)
     __swig_getmethods__["leftmost"] = LeapPython.ToolList_leftmost_get
     if _newclass:leftmost = _swig_property(LeapPython.ToolList_leftmost_get)
     __swig_getmethods__["rightmost"] = LeapPython.ToolList_rightmost_get
@@ -753,6 +753,8 @@ class HandList(Interface):
     def append(self, *args): return LeapPython.HandList_append(self, *args)
     __swig_getmethods__["is_empty"] = LeapPython.HandList_is_empty_get
     if _newclass:is_empty = _swig_property(LeapPython.HandList_is_empty_get)
+    __swig_getmethods__["empty"] = LeapPython.HandList_empty_get
+    if _newclass:empty = _swig_property(LeapPython.HandList_empty_get)
     __swig_getmethods__["leftmost"] = LeapPython.HandList_leftmost_get
     if _newclass:leftmost = _swig_property(LeapPython.HandList_leftmost_get)
     __swig_getmethods__["rightmost"] = LeapPython.HandList_rightmost_get
@@ -787,6 +789,8 @@ class GestureList(Interface):
     def append(self, *args): return LeapPython.GestureList_append(self, *args)
     __swig_getmethods__["is_empty"] = LeapPython.GestureList_is_empty_get
     if _newclass:is_empty = _swig_property(LeapPython.GestureList_is_empty_get)
+    __swig_getmethods__["empty"] = LeapPython.GestureList_empty_get
+    if _newclass:empty = _swig_property(LeapPython.GestureList_empty_get)
     def __iter__(self):
       _pos = 0
       while _pos < len(self):
@@ -816,6 +820,8 @@ class ScreenList(Interface):
     def closest_screen(self, *args): return LeapPython.ScreenList_closest_screen(self, *args)
     __swig_getmethods__["is_empty"] = LeapPython.ScreenList_is_empty_get
     if _newclass:is_empty = _swig_property(LeapPython.ScreenList_is_empty_get)
+    __swig_getmethods__["empty"] = LeapPython.ScreenList_empty_get
+    if _newclass:empty = _swig_property(LeapPython.ScreenList_empty_get)
     def __iter__(self):
       _pos = 0
       while _pos < len(self):
@@ -921,8 +927,6 @@ class Frame(Interface):
     if _newclass:id = _swig_property(LeapPython.Frame_id_get)
     __swig_getmethods__["timestamp"] = LeapPython.Frame_timestamp_get
     if _newclass:timestamp = _swig_property(LeapPython.Frame_timestamp_get)
-    __swig_getmethods__["current_frames_per_second"] = LeapPython.Frame_current_frames_per_second_get
-    if _newclass:current_frames_per_second = _swig_property(LeapPython.Frame_current_frames_per_second_get)
     __swig_getmethods__["pointables"] = LeapPython.Frame_pointables_get
     if _newclass:pointables = _swig_property(LeapPython.Frame_pointables_get)
     __swig_getmethods__["fingers"] = LeapPython.Frame_fingers_get
@@ -1028,6 +1032,8 @@ class Controller(Interface):
     if _newclass:config = _swig_property(LeapPython.Controller_config_get)
     __swig_getmethods__["located_screens"] = LeapPython.Controller_located_screens_get
     if _newclass:located_screens = _swig_property(LeapPython.Controller_located_screens_get)
+    __swig_getmethods__["calibrated_screens"] = LeapPython.Controller_calibrated_screens_get
+    if _newclass:calibrated_screens = _swig_property(LeapPython.Controller_calibrated_screens_get)
     __swig_getmethods__["devices"] = LeapPython.Controller_devices_get
     if _newclass:devices = _swig_property(LeapPython.Controller_devices_get)
 Controller_swigregister = LeapPython.Controller_swigregister

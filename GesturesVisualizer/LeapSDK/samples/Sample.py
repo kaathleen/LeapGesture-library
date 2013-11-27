@@ -37,13 +37,13 @@ class SampleListener(Leap.Listener):
         print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d, tools: %d, gestures: %d" % (
               frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
 
-        if not frame.hands.is_empty:
+        if not frame.hands.empty:
             # Get the first hand
             hand = frame.hands[0]
 
             # Check if the hand has any fingers
             fingers = hand.fingers
-            if not fingers.is_empty:
+            if not fingers.empty:
                 # Calculate the hand's average finger tip position
                 avg_pos = Leap.Vector()
                 for finger in fingers:
@@ -105,7 +105,7 @@ class SampleListener(Leap.Listener):
                             gesture.id, self.state_string(gesture.state),
                             screentap.position, screentap.direction )
 
-        if not (frame.hands.is_empty and frame.gestures().is_empty):
+        if not (frame.hands.empty and frame.gestures().empty):
             print ""
 
     def state_string(self, state):

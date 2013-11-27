@@ -120,7 +120,7 @@ void drawGrid( ePlane plane, unsigned int horizSubdivs, unsigned int vertSubdivs
 
 void drawSphere( eStyle style )
 {
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     gluQuadricDrawStyle(s_quadric, GLU_SILHOUETTE);
@@ -135,7 +135,7 @@ void drawSphere( eStyle style )
 
   gluSphere( s_quadric, 1.0, 32, 32 );
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     glPopAttrib();
@@ -148,7 +148,7 @@ void drawSphere( eStyle style )
 
 void drawQuad( eStyle style, ePlane plane )
 {
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     glPushAttrib( GL_LIGHTING_BIT );
@@ -236,13 +236,13 @@ void drawQuad( eStyle style, ePlane plane )
 
 void drawBox( eStyle style )
 {
-  static const float s_afCorners[8][3] = {
+  static const float s_afCorners[8][3] = {  
                                             // near face - ccw facing origin from face.
                                             {-0.5f, -0.5f,  0.5f},
                                             { 0.5f, -0.5f,  0.5f},
                                             { 0.5f,  0.5f,  0.5f},
-                                            {-0.5f,  0.5f,  0.5f},
-
+                                            {-0.5f,  0.5f,  0.5f},                                            
+                                            
                                             // far face - ccw facing origin from face
                                             { 0.5f, -0.5f,  -0.5f},
                                             {-0.5f, -0.5f,  -0.5f},
@@ -251,7 +251,7 @@ void drawBox( eStyle style )
 
  };
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     glPushAttrib( GL_LIGHTING_BIT );
@@ -361,7 +361,7 @@ void drawBox( eStyle style )
 
   glEnd();
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     glPopAttrib();
@@ -373,10 +373,10 @@ void drawBox( eStyle style )
 }
 
 void drawCylinder( eStyle style, eAxis axis )
-{
+{ 
   GLMatrixScope matrixScope;
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     gluQuadricDrawStyle(s_quadric, GLU_SILHOUETTE);
@@ -417,7 +417,7 @@ void drawCylinder( eStyle style, eAxis axis )
 
   gluCylinder( s_quadric, 0.5f, 0.5f, 1.0f, 32, 32 );
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     glPopAttrib();
@@ -432,7 +432,7 @@ void drawDisk( eStyle style, ePlane plane )
 {
   GLMatrixScope matrixScope;
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     gluQuadricDrawStyle(s_quadric, GLU_SILHOUETTE);
@@ -461,7 +461,7 @@ void drawDisk( eStyle style, ePlane plane )
   glRotatef( 180.0f, 0, 1, 0 );
   gluDisk(s_quadric, 0, 0.5f, 32, 1);
 
-  switch ( style )
+  switch ( style ) 
   {
    case kStyle_Outline:
     glPopAttrib();
@@ -544,7 +544,7 @@ void CameraGL::SetupGLProjection() const
 void CameraGL::SetupGLView() const
 {
   ResetGLView();
-  glMultMatrixf( GetView().toArray4x4() );
+  glMultMatrixf( GetView().toArray4x4() ); 
 }
 
 }

@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="oVldZn" name="GesturesVisualizer" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.GesturesVisualizer" includeBinaryInAppConfig="1"
-              jucerVersion="3.1.0">
+              jucerVersion="3.1.0" defines="LEAP_SCENE_USE_UTIL_GL=1">
   <MAINGROUP id="RTAE8x" name="GesturesVisualizer">
     <GROUP id="{E59EEAA0-6480-D272-B275-587162115D49}" name="LeapUtil">
       <FILE id="Hh9zU3" name="LeapUtil.cpp" compile="1" resource="0" file="LeapSDK/util/LeapUtil.cpp"/>
@@ -12,9 +12,9 @@
     </GROUP>
     <GROUP id="{C925EA35-2919-2376-B355-FF29F0DABB4F}" name="Source">
       <GROUP id="{A9968C45-204F-4A07-609B-B5EB9F4F3F8A}" name="Util">
+        <FILE id="d0XYBn" name="Vertex.h" compile="0" resource="0" file="Source/Util/Vertex.h"/>
         <FILE id="b4Qy0F" name="StringHelper.h" compile="0" resource="0" file="Source/Util/StringHelper.h"/>
         <FILE id="ttDAFw" name="GLColor.h" compile="0" resource="0" file="Source/Util/GLColor.h"/>
-        <FILE id="ChrWyK" name="Position.h" compile="0" resource="0" file="Source/Util/Position.h"/>
       </GROUP>
       <FILE id="u875Re" name="DefaultWindow.cpp" compile="1" resource="0"
             file="Source/DefaultWindow.cpp"/>
@@ -22,6 +22,8 @@
       <FILE id="xkNjs6" name="GestureFrame.cpp" compile="1" resource="0"
             file="Source/GestureFrame.cpp"/>
       <FILE id="N8seeN" name="GestureFrame.h" compile="0" resource="0" file="Source/GestureFrame.h"/>
+      <FILE id="k5GPed" name="LMRecorder.h" compile="0" resource="0" file="Source/LMRecorder.h"/>
+      <FILE id="U5EOqj" name="LMRecorder.cpp" compile="1" resource="0" file="Source/LMRecorder.cpp"/>
       <FILE id="V2kKPI" name="MainToolbarItemFactory.cpp" compile="1" resource="0"
             file="Source/MainToolbarItemFactory.cpp"/>
       <FILE id="VF5Aad" name="MainToolbarItemFactory.h" compile="0" resource="0"
@@ -62,6 +64,27 @@
         <MODULEPATH id="juce_core" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
       </MODULEPATHS>
     </VS2010>
+    <LINUX_MAKE targetFolder="Builds/Linux" externalLibraries="GLU&#10;Leap"
+                extraLinkerFlags="-Wl,-rpath,\$$ORIGIN/../../../LeapSDK/lib/$(shell [[ $$(uname -m) == x86_64 &amp;&amp; &quot;$(TARGET_ARCH)&quot; == &quot;-march=native&quot; ]] &amp;&amp; echo x64 || echo x86),-rpath,\$$ORIGIN/../../../LeapSDK/lib/$(shell [[ $$(uname -m) == x86_64 &amp;&amp; &quot;$(TARGET_ARCH)&quot; == &quot;-march=native&quot; ]] &amp;&amp; echo x64 || echo x86)">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib;../../LeapSDK/lib/$(shell [[ $$(uname -m) == x86_64 &amp;&amp; &quot;$(TARGET_ARCH)&quot; == &quot;-march=native&quot; ]] &amp;&amp; echo x64 || echo x86)"
+                       isDebug="1" optimisation="1" targetName="GesturesVisualizer"
+                       headerPath="../../LeapSDK/include;../../LeapSDK/util"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib;../../LeapSDK/lib/$(shell [[ $$(uname -m) == x86_64 &amp;&amp; &quot;$(TARGET_ARCH)&quot; == &quot;-march=native&quot; ]] &amp;&amp; echo x64 || echo x86)"
+                       isDebug="0" optimisation="2" targetName="GesturesVisualizer"
+                       headerPath="../../LeapSDK/include;../../LeapSDK/util"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_opengl" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_graphics" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_events" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_data_structures" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_cryptography" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+        <MODULEPATH id="juce_core" path="/home/kuba/Pobrane/JUCE-master/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>

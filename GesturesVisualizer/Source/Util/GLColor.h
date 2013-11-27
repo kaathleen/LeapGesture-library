@@ -1,5 +1,5 @@
-#ifndef GLCOLOR
-#define GLCOLOR
+#ifndef GLCOLOR_H_INCLUDED
+#define GLCOLOR_H_INCLUDED
 
 struct GLColor 
 {
@@ -21,4 +21,4 @@ struct GLColor
   GLfloat r, g, b, a; 
 };
 
-#endif  // GLCOLOR
+#endif  // GLCOLOR_H_INCLUDED

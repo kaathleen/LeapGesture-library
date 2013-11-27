@@ -1,9 +1,9 @@
 #ifndef GESTUREFRAME_H_INCLUDED
 #define GESTUREFRAME_H_INCLUDED
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "Header.h"
 
-#include "Util/Position.h"
+#include "Util/Vertex.h"
 
 //========================================================================== ====
 /*
@@ -16,16 +16,26 @@ public:
     //==============================================================================
     GestureFrame();
 
-	void addFingerTip(Position fingerTipPosition);
+	void addFinger(Vertex fingerTipPosition, Vertex fingerVector);
     
-	Position* getFingerTipPositions()
+	Vertex* getFingersTipPositions()
 	{
-		return this->fingerTipPositions;
+		return this->fingersTipPositions;
 	}
 
-	Position getFingerTipPosition(int fingerIndex)
+	Vertex* getFingerVectors()
 	{
-		return this->fingerTipPositions[fingerIndex];
+		return this->fingersVectors;
+	}
+
+	Vertex getFingerTipPosition(int fingerIndex)
+	{
+		return this->fingersTipPositions[fingerIndex];
+	}
+
+	Vertex getFingerVector(int fingerIndex)
+	{
+		return this->fingersVectors[fingerIndex];
 	}
 
 	int getFingerCount()
@@ -37,7 +47,8 @@ private:
     //==============================================================================
 	const static int FINGER_MAX_COUNT = 20;
 
-	Position fingerTipPositions[FINGER_MAX_COUNT];
+	Vertex fingersTipPositions[FINGER_MAX_COUNT];
+	Vertex fingersVectors[FINGER_MAX_COUNT];
 	int fingerCount;
 	
 };

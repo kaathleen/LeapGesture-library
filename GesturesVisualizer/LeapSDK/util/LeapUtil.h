@@ -81,9 +81,9 @@ Leap::Vector FromVector3( const Vec3& vIn )
   return Leap::Vector( static_cast<float>(vIn.x), static_cast<float>(vIn.y), static_cast<float>(vIn.z) );
 }
 
-inline bool IsNearZero( float fVal )
+inline bool IsNearZero( float fVal ) 
 {
- return fabs(fVal) <= kfEpsilon;
+ return fabs(fVal) <= kfEpsilon; 
 }
 
 inline bool IsNearZero( const Leap::Vector& vVec )
@@ -105,7 +105,7 @@ inline Leap::Matrix ExtractRotation( const Leap::Matrix& mtxTransform )
 }
 
 /// returns a matrix representing the inverse rotation by simple transposition of the rotation block.
-inline Leap::Matrix RotationInverse( const Leap::Matrix& mtxRot )
+inline Leap::Matrix RotationInverse( const Leap::Matrix& mtxRot ) 
 {
   return Leap::Matrix(  Leap::Vector( mtxRot.xBasis.x, mtxRot.yBasis.x, mtxRot.zBasis.x ),
                         Leap::Vector( mtxRot.xBasis.y, mtxRot.yBasis.y, mtxRot.zBasis.y ),
@@ -114,7 +114,7 @@ inline Leap::Matrix RotationInverse( const Leap::Matrix& mtxRot )
 
 /// returns a matrix that is the orthonormal inverse of the argument matrix.
 /// this is only valid if the input matrix is orthonormal (the basis vectors are mutually perpendicular and of length 1)
-inline Leap::Matrix RigidInverse( const Leap::Matrix& mtxTransform )
+inline Leap::Matrix RigidInverse( const Leap::Matrix& mtxTransform ) 
 {
   Leap::Matrix  rigidInverse = RotationInverse( mtxTransform );
   rigidInverse.origin  = rigidInverse.transformDirection( -mtxTransform.origin );
@@ -215,7 +215,7 @@ template<int _HistoryLength=256>
 class RollingAverage
 {
 public:
-  enum
+  enum 
   {
     kHistoryLength = _HistoryLength
   };
@@ -223,16 +223,16 @@ public:
 public:
   RollingAverage() { Reset(); }
 
-  void Reset()
+  void Reset() 
   {
     m_uiCurIndex  = 0;
     m_fNumSamples = 0.0f;
     m_fSum        = 0.0f;
     m_fAverage    = 0.0f;
-    for ( int i = 0; i < kHistoryLength; m_afSamples[i++] = 0.0f );
+    for ( int i = 0; i < kHistoryLength; m_afSamples[i++] = 0.0f );   
   }
 
-  float AddSample( float fSample )
+  float AddSample( float fSample ) 
   {
     m_fNumSamples =   Min( (m_fNumSamples + 1.0f), static_cast<float>(kHistoryLength) );
     m_fSum        -=  m_afSamples[m_uiCurIndex];
@@ -271,7 +271,7 @@ private:
 class Camera
 {
 public:
-  Camera()
+  Camera() 
     : m_fOrbitDistance(-1.0f),
       m_fMaxOrbitLatitude( LeapUtil::kfPi * 0.375f ),
       m_fNearClip( 0.1f ),
@@ -299,9 +299,9 @@ public:
 
   void SetRotation( const Leap::Vector& vAxis, float fRadians ) { m_mtxPOV.setRotation( vAxis, fRadians ); }
 
-  void SetRotation( const Leap::Matrix& mtxRot )
-  {
-    m_mtxPOV.xBasis = mtxRot.xBasis;
+  void SetRotation( const Leap::Matrix& mtxRot ) 
+  { 
+    m_mtxPOV.xBasis = mtxRot.xBasis; 
     m_mtxPOV.yBasis = mtxRot.yBasis;
     m_mtxPOV.zBasis = mtxRot.zBasis;
   }
@@ -332,7 +332,7 @@ public:
     m_mtxPOV = m_mtxPOV * Leap::Matrix( vAxis, fRadians );
   }
 
-  /// the point of interest for the camera to orbit around
+  /// the point of interest for the camera to orbit around 
   const Leap::Vector& GetOrbitTarget() const
   {
     return m_vOrbitTarget;
@@ -419,7 +419,7 @@ private:
   float         m_fMaxOrbitLatitude;
   float         m_fNearClip;
   float         m_fFarClip;
-  float         m_fVerticalFOVDegrees;
+  float         m_fVerticalFOVDegrees; 
   float         m_fAspectRatio;
 };
 
@@ -427,10 +427,10 @@ private:
 /// Utility class for adding simple momentum to 2D or 3D UI elements.
 class ScrollMomentum {
 public:
-  ScrollMomentum()
-    : m_vDirection(Leap::Vector::yAxis()),
+  ScrollMomentum() 
+    : m_vDirection(Leap::Vector::yAxis()), 
       m_fScrollSize(512.0f),
-      m_fSpeed(0),
+      m_fSpeed(0), 
       m_fMinSpeed(0.125f),
       m_fDrag(0.4f),
       m_fDragPower(2.0f),
@@ -486,7 +486,7 @@ public:
   void                setFixedTimeStep( float fFixedTimeStep )              { m_fFixedTimeStep = fabs(fFixedTimeStep); }
 
   /// The coefficient of drag to use for slowing movement over time.
-  /// Drag is always a positive value.
+  /// Drag is always a positive value.  
   /// The default value is 0.4
   float               getDrag() const                                       { return m_fDrag; }
   void                setDrag( float fDrag )                                { m_fDrag = fabs(fDrag); }
@@ -504,10 +504,10 @@ public:
 
   /// Convenience method for setting a direction and initial speed in one call.
   /// see SetDirection() and SetSpeed()
-  void setVelocity( const Leap::Vector& vDirection, float fSpeed )
+  void setVelocity( const Leap::Vector& vDirection, float fSpeed ) 
   {
     setDirection( vDirection );
-    setSpeed( fSpeed );
+    setSpeed( fSpeed ); 
   }
 
   /// Update handles time stepping.
@@ -516,16 +516,16 @@ public:
   /// chunk, update will iterate through the time in increments of the fixed time step.
   /// If it is smaller, the delta time is accumulated over successive calls to update
   /// until one time step has passed and then it is processed.
-  void  update( float fDeltaTimeSeconds )
+  void  update( float fDeltaTimeSeconds ) 
   {
-    if ( fDeltaTimeSeconds <= 0.0f )
+    if ( fDeltaTimeSeconds <= 0.0f ) 
     {
       return;
     }
 
-    if ( fabs(m_fSpeed) > m_fMinSpeed )
+    if ( fabs(m_fSpeed) > m_fMinSpeed ) 
     {
-      if ( m_fDrag > 0 )
+      if ( m_fDrag > 0 ) 
       {
         // only force to fixed time step if doing drag calculation
 
@@ -539,7 +539,7 @@ public:
         fDeltaTimeSeconds += m_fPendingDeltaTime;
 
         // process time since last update in fixed chunks
-        for ( ; fDeltaTimeSeconds >= m_fFixedTimeStep; fDeltaTimeSeconds -= m_fFixedTimeStep )
+        for ( ; fDeltaTimeSeconds >= m_fFixedTimeStep; fDeltaTimeSeconds -= m_fFixedTimeStep ) 
         {
           const float fDragForce = powf( fScrollSpeed, m_fDragPower ) * m_fDrag;
 
@@ -547,7 +547,7 @@ public:
           fScrollSpeed -= fDragForce * m_fFixedTimeStep;
 
           // bail out if speed has hit minimum threshold
-          if ( fScrollSpeed <= fMinScrollSpeed )
+          if ( fScrollSpeed <= fMinScrollSpeed ) 
           {
             m_fSpeed = 0.0f;
             fDeltaTimeSeconds = 0.0f;
@@ -563,15 +563,15 @@ public:
 
         // keep track of any leftover time not processed during this update.
         m_fPendingDeltaTime = fDeltaTimeSeconds;
-      }
-      else
+      } 
+      else 
       {
         // simple position change with velocity and no drag - not affected by large time steps. no looping needed.
         m_vPosition += m_vDirection * ((m_fPendingDeltaTime + fDeltaTimeSeconds) * m_fSpeed);
         m_fPendingDeltaTime = 0.0f;
       }
-    }
-    else
+    } 
+    else 
     {
       // enforce zeroing of speeds below minimum absolute value.
       m_fSpeed = 0.0f;
@@ -612,7 +612,7 @@ public:
 /// maintains reference count that is incremented for each
 /// new instance of a smart pointer that refers to the same raw pointer
 /// and decremented each time a reference is released.
-/// a reference is released when
+/// a reference is released when 
 /// a smart pointer goes out of scope
 /// OR has another value assigned to it
 /// OR .Release() is called explicitly.
@@ -633,7 +633,7 @@ public:
 
 private:
   // a managed pointer is a pointer of the desired type plus a reference count.
-  struct ManagedPointerEntry
+  struct ManagedPointerEntry 
   {
     ManagedType*  m_pPointer;
     uint32_t      m_uiRefCount;
@@ -647,7 +647,7 @@ private:
     enum { kPoolSize = kManagedPointerPoolSize, kDeadPointer = 0xdeadbea7 };
 
     ManagedPointerPool()
-      : m_uiNextFree(0),
+      : m_uiNextFree(0), 
         m_uiNumAllocated(0)
     {
       for ( uint32_t i = 0; i < static_cast<uint32_t>(kPoolSize); i++ )
@@ -667,7 +667,7 @@ private:
       // but adds significant safety - it prevents
       // assigning the same raw pointer to two different
       // member entries - this would result in double
-      // deletion when the 2nd one hit its end of life.
+      // deletion when the 2nd one hit its end of life. 
       pEntry = findEntry( pPointer );
 
       if ( pEntry )
@@ -703,7 +703,7 @@ private:
 
       // if this is a valid allocated entry (from this pool, and not already freed)
       if (  (entryIndex < kPoolSize)  &&
-            (m_uiNumAllocated != 0)   &&
+            (m_uiNumAllocated != 0)   && 
             (pEntry->m_pPointer != reinterpret_cast<ManagedType*>(kDeadPointer)) )
       {
         // clear the entry
@@ -771,7 +771,7 @@ private:
   }
 
   /// increment the reference count on our shared managed pointer entry (if any)
-  void refInc()
+  void refInc() 
   {
     if ( m_pManagedPointer )
     {
@@ -782,7 +782,7 @@ private:
   /// decrement the reference count on our shared managed pointer entry (if any)
   /// if the reference count hits 0 the raw pointer is passed to Destructor::Destroy
   /// and the managed pointer entry is returned to the pool.
-  void refDec()
+  void refDec() 
   {
     if ( m_pManagedPointer )
     {
