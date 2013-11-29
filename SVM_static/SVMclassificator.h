@@ -13,6 +13,8 @@
 #include <cmath>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+#include <fstream>
 
 class SVMclassificator
 {

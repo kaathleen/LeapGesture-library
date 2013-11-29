@@ -42,10 +42,12 @@ void SVMclassificator::dataScalingClassify(vector<vector<double> >& data) {
 
 void SVMclassificator::train(vector< vector<double> > data, vector<int> label, const int _NUMBER_OF_CLASSES) {
 	NUMBER_OF_CLASSES = _NUMBER_OF_CLASSES;
-	int trainSetSize = data.size();
+	int trainSetSize = label.size();
+	featureSize = data[0].size();
 
 	// Data scaling to interval [0.0 , 1.0]
 	dataScaling(data);
+	printf("Data scaled properly\n");
 
 	// Defining training set
 	problem = new svm_problem;
@@ -90,9 +92,12 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 	svmParameter->C = 1000000.0;
 	svmParameter->gamma = 0.0001;
 
+
+	ofstream cv;
+	cv.open("CrossValidation.tmp");
 	double best_c = -5, best_g = -15, best_cross = 0;
 	/// Looking for model
-	for (double c = -5; c < -5/*15*/; c++) {
+	for (double c = -5; c < 15; c++) {
 		for (double gamma = -15; gamma < 3; gamma++) {
 			svmParameter->C = pow(2, c);
 			svmParameter->gamma = pow(2, gamma);
@@ -111,6 +116,11 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 			}
 			double cross = (count * 1.0 / trainSetSize * 100.0);
 
+			cv<<"C: "<<c<<" gamma: "<<gamma<<" Recognition: "<<cross<<"%"<<std::endl;
+			cout<<"-----------------------------------------------------------------"<<endl;
+			cout<<"C: "<<c<<" gamma: "<<gamma<<" Recognition: "<<cross<<"%"<<std::endl;
+			cout<<"-----------------------------------------------------------------"<<endl;
+
 			if (cross > best_cross) {
 				best_cross = cross;
 				best_g = gamma;
@@ -118,6 +128,7 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 			}
 		}
 	}
+	cv.close();
 
 	// Using best model
 	svmParameter->C = pow(2, best_c);
