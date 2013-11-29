@@ -1,8 +1,7 @@
 #ifndef DEFAULTWINDOW_H_INCLUDED
 #define DEFAULTWINDOW_H_INCLUDED
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "MainComponent.h"
+#include "Header.h"
 
 //==============================================================================
 /*
@@ -12,7 +11,7 @@
 class DefaultWindow : public DocumentWindow
 {
 public:
-	DefaultWindow::DefaultWindow(const juce::String windowName)  : DocumentWindow (windowName, Colours::lightgrey, DocumentWindow::allButtons)
+	DefaultWindow(const juce::String windowName)  : DocumentWindow (windowName, Colours::lightgrey, DocumentWindow::allButtons)
 	{
 		setUsingNativeTitleBar(true);
 		setVisible (true);

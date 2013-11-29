@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Index</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Index</h1>
+    
+    
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>LeapJS</h1>
+
+<p>Welcome to the Leap JavaScript framework. This is intended for use with the Leap (<a href='https://www.leapmotion.com/'>https://www.leapmotion.com/</a>).</p>
+
+<p><a href="https://travis-ci.org/leapmotion/leapjs"><img src="https://travis-ci.org/leapmotion/leapjs.png" alt="Build Status" title="" /></a></p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://leapmotion.github.io/leapjs/">API Documentation</a></li>
+<li><a href="http://leapmotion.github.io/leapjs/examples/">Examples</a></li>
+</ul>
+
+<h2>Installation</h2>
+
+<p>If you're using npm, you can use <code>npm install leapjs</code>.</p>
+
+<h2>Usage</h2>
+
+<p>LeapJS works with Node.js or your browser.</p>
+
+<h3>From the browser</h3>
+
+<p>Include the leap.js script included at the root of this package, or, use the minified version provided at leap.min.js.</p>
+
+<div class="highlight"><pre lang="html">
+<script src="./leap.min.js"></script>
+
+</pre></div>
+
+<h3>From node</h3>
+
+<p>Use the following:</p>
+
+<div class="highlight"><pre lang="javascript">var Leap = require('leapjs').Leap
+</pre></div>
+
+<h3>Getting frames</h3>
+
+<p>To listen to the frame events, you can use the friendly <code>Leap.loop</code> function.
+This will auto-detect which type of event loop you can accept, and, call your callback with frames.</p>
+
+<div class="highlight"><pre lang="javascript">Leap.loop(function(frame) {
+  // ... your code here
+})
+</pre></div>
+
+<p>As well, you can call a special version of <code>Leap.loop</code> where you provide a second argument to the callback.
+This allows you to wait until you're ready to receieve further frame events. Here is an example of
+this approach.</p>
+
+<div class="highlight"><pre lang="javascript">Leap.loop(function(frame, done) {
+  // do things
+  done() // if you don't invoke this, you won't get more events
+})
+</pre></div>
+
+<h3>Options</h3>
+
+<p>The controller supports several options.</p>
+
+<ul>
+<li><code>host</code> – The host used by the WebSocket connection, default is <code>"127.0.0.1"</code></li>
+<li><code>port</code> – The port used by the WebSocket connection, default is <code>6437</code></li>
+<li><code>enableGestures</code> – Enabled or disabled gesture recognition for this controller, default is <code>false</code></li>
+<li><code>frameEventName</code> – The name of the frame event to pass through as a <code>frame</code> event. This auto-detects which type of frame event to use.</li>
+</ul>
+
+<h4>Passing options</h4>
+
+<p>Using the <code>loop</code> method, you can pass in options in the following way:</p>
+
+<div class="highlight"><pre lang="javascript">Leap.loop({enableGestures: true}, {
+  // do things
+});
+</pre></div>
+
+<p>To pass in options when constructing the controller, do the following:</p>
+
+<div class="highlight"><pre lang="javascript">var controller = new Leap.Controller({enableGestures: true});
+</pre></div>
+
+<h3>Internals of the event loop</h3>
+
+<p>Leap.loop attempts to pick the right event loop to use. Within the
+background page of a Chrome extension, Chrome will not use the <code>animationFrame</code> loop. As well,
+in Node.js no animation event exists.</p>
+
+<p>In general, browsers optimize the load of requestAnimationFrame based on load, element visibility,
+battery status, etc. Chrome has chosen to optimize this by omitting the functionality
+altogether in the background.js of its extensions.</p>
+
+<p>To manually pick the event type you'd like to use, create a leap controller and listen for the appropriate event
+type, either <code>frame</code> or <code>animationFrame</code>.</p>
+
+<h3>Picking your own event type</h3>
+
+<div class="highlight"><pre lang="javascript">var controller = new Leap.Controller();
+
+// for the frame event
+controller.on('frame', function() {
+  console.log("hello frame")
+})
+
+// for the animationFrame event. this is only supported from within the browser
+controller.on('animationFrame', function() {
+  console.log("hello frame")
+})
+controller.connect()
+</pre></div>
+
+<h2>Examples</h2>
+
+<p>Inside the examples directory are a few great examples. To get them running, do the following:</p>
+
+<ul>
+<li>Run <code>npm install</code></li>
+<li>Run <code>make serve</code></li>
+<li>Point your browser at <a href='http://localhost:8080/examples'>http://localhost:8080/examples</a> and enjoy</li>
+</ul>
+
+<h3>Node.js example</h3>
+
+<p>To run the node.js example, run <code>node examples/node.js</code>.</p>
+
+<h2>Development</h2>
+
+<p>You can build your own leap.js file by using <code>make build</code>. If you're doing any amount of development, you'll find it
+convenient to run <code>make watch</code>. This takes care of building leap.js for you on every edit. As well, you can both
+watch and running <code>make watch-test</code>.</p>
+
+<h2>Tests</h2>
+
+<p>There are currently rudamentary tests. To get them running, do the following:</p>
+
+<ul>
+<li>Run <code>npm install</code></li>
+<li>Run <code>make test</code></li>
+</ul>
+
+<p>Or use make watch-test as noted above.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Leap.CircleGesture.html">CircleGesture</a></li><li><a href="Leap.Controller.html">Controller</a></li><li><a href="Leap.Frame.html">Frame</a></li><li><a href="Leap.Gesture.html">Gesture</a></li><li><a href="Leap.Hand.html">Hand</a></li><li><a href="Leap.KeyTapGesture.html">KeyTapGesture</a></li><li><a href="Leap.Matrix.html">Matrix</a></li><li><a href="Leap.Pointable.html">Pointable</a></li><li><a href="Leap.ScreenTapGesture.html">ScreenTapGesture</a></li><li><a href="Leap.SwipeGesture.html">SwipeGesture</a></li><li><a href="Leap.Vector.html">Vector</a></li></ul><h3>Namespaces</h3><ul><li><a href="Leap.html">Leap</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Jun 10 2013 10:32:19 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

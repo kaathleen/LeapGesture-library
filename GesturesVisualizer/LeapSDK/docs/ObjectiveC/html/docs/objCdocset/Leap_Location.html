@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>Leap_Location Document</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../../css/stylesPrint.css" />	
+		<meta name="generator" content="appledoc 2.1 (build 858)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">Leap Motion API </a></h1>
+				<a id="developerHome" href="../index.html">Leap Motion</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode" id="pageTitleHeader">Leap_Location Document</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar"></ul>
+		</header>
+		<article>
+			<a title="Leap_Location Document" name="top"></a>
+			<div id="overview_contents" role="main">
+				<div id="container">	
+					<h1>LeapScreen Location  </h1>
+
+<p>A user can register the position and orientation of their monitor<br/>
+screens using the Leap application. When screen locations are known, you<br/>
+can use the <a href="../../Classes/LeapScreen.html">LeapScreen</a> class to get the physical position and size<br/>
+of that screen in terms of the Leap coordinate system and to find where<br/>
+on the screen a finger or tool is pointing.</p>
+
+<p>Registering the screen location with the Screen Locator utility is not<br/>
+needed for most functions of the Leap to work properly. Registration is<br/>
+required only when your application uses the LeapScreen class.</p>
+
+<h2>Overview  </h2>
+
+<p>The <LeapScreen> class provides the position and orientation of a display<br/>
+screen within the Leap frame of reference. The <br/>
+<a href="../../Classes/LeapScreen.html#//api/name/intersect:normalize:clampRatio:">[LeapScreen intersect:normalize:clampRatio:]</a><br/>
+function calculates the position of a point at the intersection between<br/>
+the screen plane and a ray emanating from a finger or tool. Likewise, the <br/>
+<a href="../../Classes/LeapScreen.html#//api/name/intersect:direction:normalize:clampRatio:">[LeapScreen intersect:direction:normalize:clampRatio:]</a><br/>
+function calculates the position of a point at the intersection between<br/>
+the screen plane and a a ray projected in an arbitrary direction from an arbitrary point.<br/>
+Additionally, the <a href="../../Classes/LeapScreen.html#//api/name/project:normalize:clampRatio:">[LeapScreen project:normalize:clampRatio:]</a> function calculates the position<br/>
+of a point projected orthogonally onto the screen plane.</p>
+
+<p>Before using the LeapScreen class, however, consider that registering the<br/>
+screen location takes a certain amount of effort by the user and that<br/>
+the registered location is only valid until the user moves the monitor<br/>
+or the Leap. Your application&rsquo;s use of the API must be sufficiently<br/>
+valuable that the user feels their effort is worthwhile. We recommend<br/>
+that you make it clear to your users why you need them to register their<br/>
+screen locations and that you provide a quick test for the user to check<br/>
+whether the screen location is still accurate.</p>
+
+<p>For instructions on using the Screen Locator utility, see <a href="Leap_Application.html#screen-location">Screen<br/>
+location</a>.</p>
+
+<h3>Screen coordinates</h3>
+
+<p>For each known screen, the <a href="../../Classes/LeapScreen.html">LeapScreen</a> class provides an origin point and<br/>
+vectors representing the horizontal and vertical extents of the screen.<br/>
+A normal vector is also provided.</p>
+
+<p><img src="../../docs/images/Leap_Screen_Space.png" alt="The origin and orientation vectors of a located  
+screen." /></p>
+
+<p>The screen origin is placed at the bottom, left-hand corner of the<br/>
+screen. The axis vectors are parallel to the corresponding side of the<br/>
+screen. The length of these vectors represent the length of the screen<br/>
+in millimeters. The normal vector is a unit direction vector<br/>
+perpendicular to the surface of the screen.</p>
+
+<h3>Intersection and projection points</h3>
+
+<p>The <a href="../../Classes/LeapScreen.html">LeapScreen</a> class provides two intersection functions for calculating the<br/>
+point on the screen given either a pointable object or an arbitrary 3D point <br/>
+and direction. The functions projects a ray along the given direction and determine <br/>
+where that ray intersects the plane of the screen. It returns a valid value as long as<br/>
+the ray points toward the plane in which the screen lies. If the pointer is parallel <br/>
+or pointing away from the screen, then the coordinates contained in the intersection <br/>
+vector are all NaN (not-a-number).</p>
+
+<p><img src="../../docs/images/Leap_Screen_Intersection.png" alt="Three pointers with corresponding intersection  
+points." /></p>
+
+<ul>
+<li><em>Pointer A intersects the screen plane outside the physical screen<br/>
+bounds</em></li>
+<li><em>Pointer B intersects the screen directly</em></li>
+<li><em>Pointer C does not intersect the screen plane</em></li>
+</ul>
+
+
+<p>Additionally, the LeapScreen class provides a projection function for<br/>
+calculating the location on the screen where a point is projected onto<br/>
+its plane. Unlike the intersection functions, the projection function<br/>
+always returns a valid value, as a point can always be projected onto a<br/>
+plane.</p>
+
+<p><img src="../../docs/images/Leap_Screen_Projection.png" alt="Two points with corresponding projection  
+points." /></p>
+
+<ul>
+<li><em>Point A is projected onto the screen directly</em></li>
+<li><em>Point B is projected onto the screen plane outside the physical<br/>
+screen bounds</em></li>
+</ul>
+
+
+<p>You can request the intersection and projection points in terms of the<br/>
+Leap coordinate system. The coordinates returned form a 3D Vector<br/>
+representing the point in space measured in millimeters from the Leap<br/>
+origin. Alternately, you can request 2D, normalized coordinates, which<br/>
+define the intersection and projection point relative to the bottom,<br/>
+left-hand corner of the screen and within the plane of the screen.</p>
+
+<p>When using normalized coordinates, the origin point is (0, 0, 0) and the<br/>
+opposite, top, right-hand corner is (1, 1, 0). The x and y values for<br/>
+points within the screen plane are always between 0 and 1 and represent<br/>
+the ratio of that point between one side of the screen and another (z<br/>
+values are always zero when using normalized coordinates). For example,<br/>
+the point at the center of the screen has normalized coordinates (0.5,<br/>
+0.5, 0). Normalized coordinates for intersection and projection points<br/>
+outside the screen border can be less than 0 or greater than 1.</p>
+
+<p>By default, the intersection and projection functions clamp the<br/>
+normalized coordinates to the range (0..1, 0..1, 0). This means that any<br/>
+intersection or projection points outside the screen border are<br/>
+effectively moved onto the border. You can change the default clamping<br/>
+area by setting the <code>clampRatio</code> parameter when calling one of the<br/>
+intersection or projection functions. The default clamp ratio is 1.0.<br/>
+Use a smaller value to decrease the clamping area, and a larger value to<br/>
+increase the area. For example, setting <code>clampRatio</code> to 0.5 limits the<br/>
+interaction area to the center 50% of the screen and clamps all point<br/>
+coordinates between 0.25 and 0.75. Likewise, setting <code>clampRatio</code> to 2.0<br/>
+doubles the interaction area and clamps point coordinates between -0.5<br/>
+and 1.5. The resulting interaction area is always centered on the<br/>
+screen&rsquo;s center.</p>
+
+<h2>Find the closest screen  </h2>
+
+<p>You can get a list of all screens with registered locations from a<br/>
+<a href="../../Classes/LeapController.html">LeapController</a> instance:</p>
+
+<pre><code>- (void)onFrame:(NSNotification *)notification  
+{  
+    LeapController *controller = (LeapController *)[notification object];  
+    NSArray *screens = [controller calibratedScreens];  
+}  
+</code></pre>
+
+<p>Note that the screen list always contains at least one entry, even if<br/>
+the user has never registered the location of a screen. This entry<br/>
+represents the user&rsquo;s default screen.</p>
+
+<p>You can get the closest screen that a ray projected along a finger or<br/>
+tool will intersect from the NSArray containing the calibrated screen list<br/>
+using NSArray functions defined in the <a href="../../Categories/NSArray+LeapScreenList.html">NSArray(LeapScreenList)</a> category:</p>
+
+<pre><code>LeapFrame *frame = [controller frame:0];  
+if ([frame.pointables count] &gt; 0) {  
+    LeapPointable *pointable = [frame.pointables objectAtIndex:0];  
+    NSArray *screens = controller.calibratedScreens;  
+
+    LeapScreen *screen = [screens closestScreenHit:pointable];  
+    NSLog(@"ClosestScreenHit ID: %d; Size: %d, %d", screen.id, screen.widthPixels, screen.heightPixels);  
+}  
+</code></pre>
+
+<p>Similarly, you can get the closest screen to a point (such as a finger<br/>
+or tool&rsquo;s tip position):</p>
+
+<pre><code>LeapFrame *frame = [controller frame:0];  
+if ([frame.pointables count] &gt; 0) {  
+    LeapPointable *pointable = [frame.pointables objectAtIndex:0];  
+    NSArray *screens = controller.calibratedScreens;  
+
+    LeapScreen *screen = [screens closestScreen:pointable.tipPosition];  
+    NSLog(@"ClosestScreen ID: %d; Size: %d, %d", screen.id, screen.widthPixels, screen.heightPixels);  
+}  
+</code></pre>
+
+<h2>Find the pixel coordinates of an intersection point  </h2>
+
+<p>You can request normalized coordinates from the <a href="../../Classes/LeapScreen.html#//api/name/intersect:normalize:clampRatio:">[LeapScreen intersect:normalize:clampRatio:]</a> <br/>
+and <a href="../../Classes/LeapScreen.html#//api/name/intersect:direction:normalize:clampRatio:">[LeapScreen intersect:direction:normalize:clampRatio:]</a> functions<br/>
+to help calculate the on-screen, pixel coordinates of an intersection point:</p>
+
+<pre><code>LeapFrame *frame = [controller frame:0];  
+if ([frame.pointables count] &gt; 0) {  
+    LeapPointable *pointable = [frame.pointables objectAtIndex:0];  
+    NSArray *screens = controller.calibratedScreens;  
+    LeapScreen *screen = [screens closestScreenHit:pointable];  
+
+    LeapVector *normalizedCoordinates = [screen intersect:pointable normalize:YES clampRatio:2.0];  
+    int xPixel = normalizedCoordinates.x * screen.widthPixels;  
+    int yPixel = screen.heightPixels - normalizedCoordinates.y * screen.heightPixels;  
+    NSLog(@"Normalized coordinates: (%d, %d)", xPixel, yPixel);  
+}  
+</code></pre>
+
+<h2>Find the Leap coordinates of a projection point  </h2>
+
+<p>You can find the coordinates of a point projected onto the screen plane<br/>
+using the <a href="../../Classes/LeapScreen.html#//api/name/project:normalize:clampRatio:">[LeapScreen project:normalize:clampRatio:]</a> function. For example, you may want to project a<br/>
+finger or tool&rsquo;s position onto the closest screen, ignoring its<br/>
+direction:</p>
+
+<pre><code>LeapFrame *frame = [controller frame:0];  
+if ([frame.pointables count] &gt; 0) {  
+    LeapPointable *pointable = [frame.pointables objectAtIndex:0];  
+    NSArray *screens = controller.calibratedScreens;  
+    LeapScreen *screen = [screens closestScreen:pointable.tipPosition];  
+
+    LeapVector *leapCoordinates = [screen project:pointable.tipPosition normalize:NO clampRatio:1.0];  
+    NSLog(@"Leap coordinates: (%f, %f, %f)", leapCoordinates.x, leapCoordinates.y, leapCoordinates.z);  
+}  
+</code></pre>
+
+<h2>Set the interaction area larger or smaller  </h2>
+
+<p>When using normalized coordinates, you make the area in which the user<br/>
+can point larger or smaller by setting the <code>clampRatio</code> parameter when<br/>
+calling the <a href="../../Classes/LeapScreen.html#//api/name/intersect:normalize:clampRatio:">[LeapScreen intersect:normalize:clampRatio:]</a> or <br/>
+<a href="../../Classes/LeapScreen.html#//api/name/intersect:direction:normalize:clampRatio:">[LeapScreen intersect:direction:normalize:clampRatio:]</a> functions. By <br/>
+default, the <code>clampRatio</code> parameter is 1.0, which corresponds to the <br/>
+bounds of the screen. Any points outside these bounds will be clamped to <br/>
+the border when the point coordinates are returned. (Points within the <br/>
+bounds of the interaction area are unaffected by clamping.)</p>
+
+<p>To halve the interaction area, set the <code>clampRatio</code> parameter to 0.5<br/>
+when you call the <code>intersect()</code> function:</p>
+
+<pre><code>LeapVector *normalizedCoordinates = [screen intersect:pointable normalize:YES clampRatio:0.5];  
+</code></pre>
+
+<p>To double the area, double the <code>clampRatio</code>:</p>
+
+<pre><code>LeapVector *normalizedCoordinates = [screen intersect:pointable normalize:YES clampRatio:2.0];  
+</code></pre>
+
+<h2>Find the distance between the pointing finger or tool and the screen  </h2>
+
+<p>To get the distance between the pointing finger or tool and the screen<br/>
+intersection point, simply subtract the two Vector objects representing<br/>
+these points and get the magnitude of the result. When calling the<br/>
+<a href="../../Classes/LeapScreen.html#//api/name/intersect:normalize:clampRatio:">[LeapScreen intersect:normalize:clampRatio:]</a> or <a href="../../Classes/LeapScreen.html#//api/name/intersect:direction:normalize:clampRatio:">[LeapScreen intersect:direction:normalize:clampRatio:]</a> <br/>
+functions to get the intersection point, set the <code>normalized</code> parameter to false:</p>
+
+<pre><code>LeapFrame *frame = [controller frame:0];  
+if ([frame.pointables count] &gt; 0) {  
+    LeapPointable *pointable = [frame.pointables objectAtIndex:0];  
+    NSArray *screens = controller.calibratedScreens;  
+    LeapScreen *screen = [screens closestScreenHit:pointable];  
+
+    LeapVector *leapCoordinates = [screen intersect:pointable normalize:NO clampRatio:0.0];  
+    LeapVector *tipToScreen = [leapCoordinates minus:pointable.tipPosition];  
+    float pointingDistance = tipToScreen.magnitude;  
+    NSLog(@"Distance: %f", pointingDistance);  
+}  
+</code></pre>
+
+<p>To get the shortest distance between the pointing finger and tool and<br/>
+the screen plane, that is, the distance of a perpendicular line segment<br/>
+from the plane to the pointable tip, use the <a href="../../Classes/LeapScreen.html#//api/name/distanceToPoint:">[LeapScreen distanceToPoint:]</a><br/>
+function passing in the tip position:</p>
+
+<pre><code>LeapFrame *frame = [controller frame:0];  
+if ([frame.pointables count] &gt; 0) {  
+    LeapPointable *pointable = [[frame pointables] objectAtIndex:0];  
+    NSArray *screens = [controller calibratedScreens];  
+
+    LeapScreen *screen = [screens closestScreenHit:pointable];  
+    float normalDistance = [screen distanceToPoint:pointable.tipPosition];  
+    NSLog(@"Normal distance: %f", normalDistance);  
+}  
+</code></pre>
+
+<hr />
+
+<p>Copyright © 2012-2013 Leap Motion, Inc. All rights reserved.</p>
+
+<p>Leap Motion proprietary and confidential. Not for distribution. Use<br/>
+subject to the terms of the Leap Motion SDK Agreement available at<br/>
+<a href="https://developer.leapmotion.com/sdk_agreement">https://developer.leapmotion.com/sdk_agreement</a>, or another agreement<br/>
+between Leap Motion and you, your company or other organization.</p>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2013 Leap Motion. All rights reserved. (Last updated: 2013-06-10)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.1 (build 858)</a>.</span></p>
+						
+					
+					</div>
+				</div>
+			</div>
+		</article>
+	</body>
+</html>

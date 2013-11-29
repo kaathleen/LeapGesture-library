@@ -83,14 +83,14 @@ private:
 class GLAttribScope
 {
 public:
-  GLAttribScope( GLbitfield flags )
-  {
-    glPushAttrib( flags );
+  GLAttribScope( GLbitfield flags ) 
+  { 
+    glPushAttrib( flags ); 
   }
 
-  ~GLAttribScope()
-  {
-    glPopAttrib();
+  ~GLAttribScope() 
+  { 
+    glPopAttrib(); 
   }
 
 private:

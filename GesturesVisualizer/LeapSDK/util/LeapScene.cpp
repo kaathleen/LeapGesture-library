@@ -23,7 +23,7 @@ using namespace LeapUtil;
 //
 //***********************
 
-Scene::Scene()
+Scene::Scene() 
   : m_pUserData( NULL ),
     m_fDeltaTimeSeconds( 0.0f ),
     m_fPointableRadius( 1.0f ),
@@ -34,20 +34,20 @@ Scene::Scene()
     m_uiNumPendingRemovals( 0 ),
     m_uiNextSerial( 0 ),
     m_uiFlags( kF_UpdateRayCast | kF_UpdateContact )
-{
+{ 
   memset( m_apObjects, 0, sizeof(m_apObjects) );
 }
 
-void Scene::RemoveObject( SceneObject* pObject )
+void Scene::RemoveObject( SceneObject* pObject ) 
 {
-  if ( pObject && (pObject->m_pScene == this) && !pObject->m_bPendingRemoval )
+  if ( pObject && (pObject->m_pScene == this) && !pObject->m_bPendingRemoval ) 
   {
     pObject->m_bPendingRemoval = true;
     m_uiNumPendingRemovals++;
   }
 }
 
-void Scene::Reset()
+void Scene::Reset() 
 {
   for ( uint32_t i = 0; i < m_uiNumObjects; i++ )
   {
@@ -67,7 +67,7 @@ void Scene::Reset()
   clearRayHits();
 }
 
-void Scene::Update(const Frame& frame, float fDeltaTimeSeconds)
+void Scene::Update(const Frame& frame, float fDeltaTimeSeconds) 
 {
   m_fDeltaTimeSeconds = fDeltaTimeSeconds;
 
@@ -82,12 +82,12 @@ void Scene::Update(const Frame& frame, float fDeltaTimeSeconds)
   updateInteraction( frame );
 }
 
-void Scene::DeselectAll()
+void Scene::DeselectAll() 
 {
   SceneInteraction deselection;
   deselection.m_uiFlags = kIT_SelectionChange;
 
-  for (size_t i=0; i < m_uiNumObjects; i++)
+  for (size_t i=0; i < m_uiNumObjects; i++) 
   {
     m_apObjects[i]->SetSelected( false );
   }
@@ -98,17 +98,17 @@ const SceneObjectPtr& Scene::TestRayHit( const SceneRay& ray ) const
   float fClosestHitDist = FLT_MAX;
   int closestHitIndex   = -1;
 
-  for (uint32_t i = 0; i < m_uiNumObjects; i++)
+  for (uint32_t i = 0; i < m_uiNumObjects; i++) 
   {
     float fHitDist = FLT_MAX;
-    if (m_apObjects[i]->TestRayHit(ray, fHitDist) && (fHitDist < fClosestHitDist) )
+    if (m_apObjects[i]->TestRayHit(ray, fHitDist) && (fHitDist < fClosestHitDist) ) 
     {
       closestHitIndex = static_cast<int>(i);
       fClosestHitDist = fHitDist;
     }
   }
 
-  if (closestHitIndex >= 0)
+  if (closestHitIndex >= 0) 
   {
     return m_apObjects[closestHitIndex];
   }
@@ -174,27 +174,27 @@ void Scene::deallocateObject( uint32_t idxToRemove )
   }
 }
 
-bool Scene::testRayHitClosest( SceneRayHit& hitResult )
+bool Scene::testRayHitClosest( SceneRayHit& hitResult ) 
 {
   float fClosestHitDist = FLT_MAX;
   int closestHitIndex   = -1;
 
-  for (uint32_t i = 0; i < m_uiNumObjects; i++)
+  for (uint32_t i = 0; i < m_uiNumObjects; i++) 
   {
     float fHitDist = FLT_MAX;
-    if (m_apObjects[i]->TestRayHit(hitResult.m_ray, fHitDist) && (fHitDist < fClosestHitDist) )
+    if (m_apObjects[i]->TestRayHit(hitResult.m_ray, fHitDist) && (fHitDist < fClosestHitDist) ) 
     {
       closestHitIndex = static_cast<int>(i);
       fClosestHitDist = fHitDist;
     }
   }
 
-  if (closestHitIndex >= 0)
+  if (closestHitIndex >= 0) 
   {
     hitResult.m_fHitDistance  = fClosestHitDist;
     hitResult.m_pHitObject    = m_apObjects[closestHitIndex];
     hitResult.m_hitPoint      = hitResult.m_ray.CalcPointOn( hitResult.m_fHitDistance );
-
+    
     m_apObjects[closestHitIndex]->IncNumPointing();
 
     m_apObjects[closestHitIndex]->m_fTotalHitTime += m_fDeltaTimeSeconds;
@@ -205,11 +205,11 @@ bool Scene::testRayHitClosest( SceneRayHit& hitResult )
   return false;
 }
 
-void Scene::updateContact( const SceneContactPoint& testPoint )
+void Scene::updateContact( const SceneContactPoint& testPoint ) 
 {
-  for (size_t i=0; i < m_uiNumObjects; i++)
+  for (size_t i=0; i < m_uiNumObjects; i++) 
   {
-    if ( m_apObjects[i]->TestSphereHit( testPoint.m_vPoint, m_fPointableRadius ) )
+    if ( m_apObjects[i]->TestSphereHit( testPoint.m_vPoint, m_fPointableRadius ) ) 
     {
       m_apObjects[i]->IncNumContacts( testPoint );
       m_apObjects[i]->m_fTotalHitTime += m_fDeltaTimeSeconds;
@@ -221,12 +221,12 @@ void Scene::updateSelectionAndContact( const Frame& frame )
 {
   const PointableList& pointables = frame.pointables();
 
-  if ( pointables.isEmpty() && frame.hands().isEmpty() )
+  if ( pointables.empty() && frame.hands().empty() ) 
   {
     queueDeselectAll();
   }
 
-  for ( uint32_t j = 0, numPointables = pointables.count(); j < numPointables; j++ )
+  for ( uint32_t j = 0, numPointables = pointables.count(); j < numPointables; j++ ) 
   {
     const Pointable& pointable    = pointables[j];
     const Vector  vPos            = TransformFramePoint( pointable.tipPosition() );
@@ -258,11 +258,11 @@ void Scene::updateInteraction( const Frame& frame )
 
   (void)frame;
 
-  for (size_t i=0; i < m_uiNumObjects; i++)
+  for (size_t i=0; i < m_uiNumObjects; i++) 
   {
     const SceneObjectPtr& pObj = m_apObjects[i];
 
-    if (!pObj->HasInitialContact() && pObj->GetNumContacts() == 0 && pObj->GetNumPointing() == 0)
+    if (!pObj->HasInitialContact() && pObj->GetNumContacts() == 0 && pObj->GetNumPointing() == 0) 
     {
       pObj->m_fTotalHitTime = 0.0f;
     }
@@ -274,8 +274,8 @@ void Scene::updateInteraction( const Frame& frame )
       selection.m_pObject = pObj;
       queueInteraction( selection );
     }
-    /// possible manipulation
-    else if ( pObj->IsSelected() )
+    /// possible manipulation 
+    else if ( pObj->IsSelected() ) 
     {
 
       if ( pObj->HasInitialContact() )
@@ -324,7 +324,7 @@ void Scene::updateInteraction( const Frame& frame )
       }
 
       /// multi touch
-      if (pObj->GetLastNumContacts() >= 2 && pObj->GetNumContacts() >= 2)
+      if (pObj->GetLastNumContacts() >= 2 && pObj->GetNumContacts() >= 2) 
       {
         const SceneContactPoint&  lastContact0  = *(pObj->GetLastContactPoint(0));
         const SceneContactPoint&  lastContact1  = *(pObj->GetLastContactPoint(1));
@@ -336,7 +336,7 @@ void Scene::updateInteraction( const Frame& frame )
           const Vector lastVec = (lastContact1.m_vPoint - lastContact0.m_vPoint);
           const Vector newVec = (pCurContact1->m_vPoint - pCurContact0->m_vPoint);
 
-          if ( !IsNearEqual(lastVec, newVec) && !IsNearZero(lastVec) )
+          if ( !IsNearEqual(lastVec, newVec) && !IsNearZero(lastVec) ) 
           {
             const float   fLastDist = lastVec.magnitude();
             const float   fNewDist  = newVec.magnitude();
@@ -351,7 +351,7 @@ void Scene::updateInteraction( const Frame& frame )
             const float   fAngle    = acosf( vNewDir.dot(vLastDir) );
 
             /// translate by average movement
-            const Vector  vTrans    = ( (pCurContact0->m_vPoint - lastContact0.m_vPoint) +
+            const Vector  vTrans    = ( (pCurContact0->m_vPoint - lastContact0.m_vPoint) + 
                                         (pCurContact1->m_vPoint - lastContact1.m_vPoint) ) * 0.5f;
 
             SceneInteraction interaction;
@@ -404,12 +404,12 @@ void Scene::processPendingRemovals()
   }
 }
 
-void Scene::queueDeselectAll()
+void Scene::queueDeselectAll() 
 {
   SceneInteraction deselection;
   deselection.m_uiFlags = kIT_SelectionChange;
 
-  for (size_t i=0; i < m_uiNumObjects; i++)
+  for (size_t i=0; i < m_uiNumObjects; i++) 
   {
     if ( m_apObjects[i]->IsSelected() )
     {
@@ -468,9 +468,9 @@ bool SceneBox::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
   float fTMin           = MaxComponent(ComponentWiseMin(vLower, vUpper));
   float fTMax           = MinComponent(ComponentWiseMax(vLower, vUpper));
 
-  if (fTMin < fTMax)
+  if (fTMin < fTMax) 
   {
-    if (fTMin > 0)
+    if (fTMin > 0) 
     {
       fHitDistOut = fTMin;
       return true;
@@ -509,8 +509,8 @@ void SceneBox::DebugDrawGL( eStyle drawStyle ) const
   glScalef( vSize.x, vSize.y, vSize.z );
 
   drawBox( drawStyle );
-
-  if ( IsSelected() )
+    
+  if ( IsSelected() ) 
   {
     GLAttribScope attribScope( GL_CURRENT_BIT|GL_DEPTH_BUFFER_BIT );
 
@@ -539,7 +539,7 @@ bool SceneCylinder::TestRayHit(const SceneRay& testRay, float& fHitDistOut) cons
   Vector RxA          = testRayObj.m_vDirection.cross(vAxis);
   float norm          = RxA.magnitude();
 
-  if (norm > 0)
+  if (norm > 0) 
   {
     Vector D = RxA/norm;
     float d = fabs(testRayObj.m_vOrigin.dot(D));
@@ -552,13 +552,13 @@ bool SceneCylinder::TestRayHit(const SceneRay& testRay, float& fHitDistOut) cons
     float tin = temp - s;
     float tout = temp + s;
 
-    if (tin > 0 && fabs(testRayObj.CalcPointOn(tin).y) <= height/2.0)
+    if (tin > 0 && fabs(testRayObj.CalcPointOn(tin).y) <= height/2.0) 
     {
       fHitDistOut = tin;
       return true;
     }
-
-    if (tout > 0 && fabs(testRayObj.CalcPointOn(tout).y) <= height/2.0)
+      
+    if (tout > 0 && fabs(testRayObj.CalcPointOn(tout).y) <= height/2.0) 
     {
       fHitDistOut = tout;
       return true;
@@ -584,7 +584,7 @@ bool SceneCylinder::TestSphereHit(const Vector& vTestPoint, float fTestRadius) c
 
   // only bother with the rest of the checks if the distance to the axis is less than
   // the sum of the cylinder radius and test sphere radius. any farther and they could not be touching.
-  if (fAxisToPointDistSq < (fTestRadius + fCylRadius)*(fTestRadius + fCylRadius))
+  if (fAxisToPointDistSq < (fTestRadius + fCylRadius)*(fTestRadius + fCylRadius)) 
   {
     // distance from the vertical center of the cylinder to the test point projected onto the axis.
     const float fAbsDistAlongAxis = fabs(vTestPosObj.y);
@@ -592,29 +592,29 @@ bool SceneCylinder::TestSphereHit(const Vector& vTestPoint, float fTestRadius) c
     // simplest case - sphere vs. wall of cylinder.
     // the first check was whether or not the test sphere was within contact of the axis.
     // if the distance along the axis is inside the cylinder the sphere is in contact with the wall.
-    if (fAbsDistAlongAxis < fHalfCylHeight)
+    if (fAbsDistAlongAxis < fHalfCylHeight) 
     {
       return true;
-    }
+    } 
 
     // next simplest case - sphere vs. centers of cylinder end caps.
     // if the distance from the axis is within the cylinder
     // and the the test point along the axis is within the sphere radius of the end
     // it's touching.
-    if (fAxisToPointDistSq < (fCylRadius*fCylRadius) && fAbsDistAlongAxis < (fHalfCylHeight + fTestRadius) )
+    if (fAxisToPointDistSq < (fCylRadius*fCylRadius) && fAbsDistAlongAxis < (fHalfCylHeight + fTestRadius) ) 
     {
       return true;
     }
 
     // final case - sphere vs. edges (corners) of cylinder end caps
 
-    // this is the closest point on the cylinder edge to the test point.
+    // this is the closest point on the cylinder edge to the test point. 
     const Vector  vClosest =  fCylRadius*vAxisToPoint.normalized() +
                               Vector( 0, fHalfCylHeight * ((vTestPosObj.y < 0.0f) ? -1.0f : 1.0f), 0 );
 
     // if the distance from the closest point to the test point is within the radius of
     // the test sphere it is in contact.
-    if ((vTestPosObj-vClosest).magnitudeSquared() < fTestRadius*fTestRadius)
+    if ((vTestPosObj-vClosest).magnitudeSquared() < fTestRadius*fTestRadius) 
     {
       return true;
     }
@@ -636,7 +636,7 @@ void SceneCylinder::DebugDrawGL( eStyle drawStyle ) const
 
   drawCylinder( drawStyle, kAxis_Y );
 
-  if ( IsSelected() )
+  if ( IsSelected() ) 
   {
     GLAttribScope attribScope( GL_CURRENT_BIT|GL_DEPTH_BUFFER_BIT );
 
@@ -657,7 +657,7 @@ void SceneCylinder::DebugDrawGL( eStyle drawStyle ) const
 bool SceneDisk::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
 {
   // by converting ray to object space we can do simpler testing.
-  // in object space the normal is the z axis (0, 0, 1) and the
+  // in object space the normal is the z axis (0, 0, 1) and the 
   // disk is a circle in the x/y plane centered at the origin (0, 0, 0)
   SceneRay  testRayObj   = testRay.Transformed( GetWorldToObjectTransform() );
   float     fRadius      = m_fScale * m_fRadius;
@@ -666,7 +666,7 @@ bool SceneDisk::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
 
   // if the z component of the ray direction is 0 the direction is all on the x/y plane
   // which means it is parallel to the disk and will not intersect.
-  if (fabs(testRayObj.m_vDirection.z) < kfEpsilon)
+  if (fabs(testRayObj.m_vDirection.z) < kfEpsilon) 
   {
     return false;
   }
@@ -676,7 +676,7 @@ bool SceneDisk::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
 
   // if the plane hit distance is negative the ray is pointing away from the disk
   // if positive it is pointing towards the plane.
-  if ( fPlaneHitDist > 0 )
+  if ( fPlaneHitDist > 0 ) 
   {
     // intersection point of the ray with the plane of the disk
     const Vector vPointOnPlane = testRayObj.CalcPointOn( fPlaneHitDist );
@@ -695,13 +695,13 @@ bool SceneDisk::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
 bool SceneDisk::TestSphereHit(const Vector& vTestPoint, float fTestRadius) const
 {
   // by converting the test point to object space we can do simpler testing.
-  // in object space the normal is the z axis (0, 0, 1) and the
+  // in object space the normal is the z axis (0, 0, 1) and the 
   // disk is a circle in the x/y plane centered at the origin (0, 0, 0)
   const Vector  vPos    = WorldToObjectPoint(vTestPoint);
   const float   fDiskRadius = (m_fScale*m_fRadius);
 
   // the test point has to be within the test sphere radius of the disk plane or it isn't touching.
-  if (fabs(vPos.z) < fTestRadius)
+  if (fabs(vPos.z) < fTestRadius) 
   {
     // projection of the test point onto the plane of the disk.
     const Vector  vOnPlane( vPos.x, vPos.y, 0 );
@@ -713,7 +713,7 @@ bool SceneDisk::TestSphereHit(const Vector& vTestPoint, float fTestRadius) const
     // can be from the center and still be in contact.
     fTestRadius =  fCos * fTestRadius + fDiskRadius;
 
-    if (vOnPlane.magnitudeSquared() < fTestRadius * fTestRadius)
+    if (vOnPlane.magnitudeSquared() < fTestRadius * fTestRadius) 
     {
       return true;
     }
@@ -734,7 +734,7 @@ void SceneDisk::DebugDrawGL( eStyle drawStyle ) const
 
   drawDisk( drawStyle, kPlane_XY );
 
-  if ( IsSelected() )
+  if ( IsSelected() ) 
   {
     GLAttribScope attribScope( GL_CURRENT_BIT|GL_DEPTH_BUFFER_BIT );
 
@@ -756,7 +756,7 @@ bool ScenePlane::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
 {
   const float fRayAngleCos = GetNormal().dot( testRay.m_vDirection );
 
-  if (fabs(fRayAngleCos) < kfEpsilon)
+  if (fabs(fRayAngleCos) < kfEpsilon) 
   {
     return false;
   }
@@ -767,7 +767,7 @@ bool ScenePlane::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
   // distance from the ray origin point to the plane along the path of the ray
   const float fPlaneHitDist = fRayOriginPlaneDist/fRayAngleCos;
 
-  if (fPlaneHitDist > 0)
+  if (fPlaneHitDist > 0) 
   {
     fHitDistOut = fPlaneHitDist;
     return true;
@@ -776,7 +776,7 @@ bool ScenePlane::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
   return false;
 }
 
-bool ScenePlane::TestSphereHit(const Vector& vTestPoint, float fTestRadius) const
+bool ScenePlane::TestSphereHit(const Vector& vTestPoint, float fTestRadius) const 
 {
   return fabs((vTestPoint - GetCenter()).dot(GetNormal())) < fTestRadius;
 }
@@ -796,12 +796,12 @@ bool SceneSphere::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
   const float   c       = O.dot(O) - fRadius*fRadius;
   const float   disc    = b*b - c;
 
-  if (disc > 0)
+  if (disc > 0) 
   {
     float sdisc = sqrtf(disc);
     float root = (-b - sdisc);
 
-    if (root > 0)
+    if (root > 0) 
     {
       fHitDistOut = root;
       return true;
@@ -809,7 +809,7 @@ bool SceneSphere::TestRayHit(const SceneRay& testRay, float& fHitDistOut) const
 
     root = (-b + sdisc);
 
-    if (root > 0)
+    if (root > 0) 
     {
       fHitDistOut = root;
       return true;
@@ -838,7 +838,7 @@ void SceneSphere::DebugDrawGL( eStyle drawStyle ) const
 
   drawSphere( drawStyle );
 
-  if ( IsSelected() )
+  if ( IsSelected() ) 
   {
     GLAttribScope attribScope( GL_CURRENT_BIT|GL_DEPTH_BUFFER_BIT );
 

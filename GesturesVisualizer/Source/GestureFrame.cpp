@@ -5,11 +5,12 @@ GestureFrame::GestureFrame()
 	this->fingerCount = 0;
 }
 
-void GestureFrame::addFingerTip(Position fingerTipPosition)
+void GestureFrame::addFinger(Vertex fingerTipPosition, Vertex fingerVector)
 {
 	if (fingerCount < FINGER_MAX_COUNT)
 	{
-		fingerTipPositions[fingerCount] = fingerTipPosition;
+		fingersTipPositions[fingerCount] = fingerTipPosition;
+		fingersVectors[fingerCount] = fingerVector;
 		fingerCount++;
 	}
 }

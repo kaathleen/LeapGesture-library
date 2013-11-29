@@ -1,0 +1,213 @@
+The system is: Windows - 6.1 - x86
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+Microsoft (R) Visual Studio Version 10.0.40219.1.
+Copyright (C) Microsoft Corp. All rights reserved.
+1>------ Build started: Project: CompilerIdC, Configuration: Debug x64 ------
+1>Build started 2013-11-23 20:22:27.
+1>InitializeBuildStatus:
+1>  Creating "Debug\CompilerIdC.unsuccessfulbuild" because "AlwaysCreate" was specified.
+1>ClCompile:
+1>  CMakeCCompilerId.c
+1>Link:
+1>  CompilerIdC.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\2.8.10.2\CompilerIdC\.\CompilerIdC.exe
+1>PostBuildEvent:
+1>  CMAKE_C_COMPILER=c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\cl.exe
+1>FinalizeBuildStatus:
+1>  Deleting file "Debug\CompilerIdC.unsuccessfulbuild".
+1>  Touching "Debug\CompilerIdC.lastbuildstate".
+1>
+1>Build succeeded.
+1>
+1>Time Elapsed 00:00:00.68
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj.user"
+
+The C compiler identification is MSVC, found in "D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/2.8.10.2/CompilerIdC/CompilerIdC.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler:  
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+Microsoft (R) Visual Studio Version 10.0.40219.1.
+Copyright (C) Microsoft Corp. All rights reserved.
+1>------ Build started: Project: CompilerIdCXX, Configuration: Debug x64 ------
+1>Build started 2013-11-23 20:22:30.
+1>InitializeBuildStatus:
+1>  Creating "Debug\CompilerIdCXX.unsuccessfulbuild" because "AlwaysCreate" was specified.
+1>ClCompile:
+1>  CMakeCXXCompilerId.cpp
+1>Link:
+1>  CompilerIdCXX.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\2.8.10.2\CompilerIdCXX\.\CompilerIdCXX.exe
+1>PostBuildEvent:
+1>  CMAKE_CXX_COMPILER=c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\cl.exe
+1>FinalizeBuildStatus:
+1>  Deleting file "Debug\CompilerIdCXX.unsuccessfulbuild".
+1>  Touching "Debug\CompilerIdCXX.lastbuildstate".
+1>
+1>Build succeeded.
+1>
+1>Time Elapsed 00:00:00.70
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj.user"
+
+The CXX compiler identification is MSVC, found in "D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/2.8.10.2/CompilerIdCXX/CompilerIdCXX.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp
+
+Run Build Command:c:\PROGRA~2\MICROS~2.0\Common7\IDE\devenv.com CMAKE_TRY_COMPILE.sln /build Debug /project cmTryCompileExec1028479691
+
+Microsoft (R) Visual Studio Version 10.0.40219.1.
+Copyright (C) Microsoft Corp. All rights reserved.
+1>------ Build started: Project: cmTryCompileExec1028479691, Configuration: Debug x64 ------
+1>Build started 2013-11-23 20:22:33.
+1>PrepareForBuild:
+1>  Creating directory "D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\".
+1>InitializeBuildStatus:
+1>  Creating "cmTryCompileExec1028479691.dir\Debug\cmTryCompileExec1028479691.unsuccessfulbuild" because "AlwaysCreate" was specified.
+1>ClCompile:
+1>  Microsoft (R) C/C++ Optimizing Compiler Version 16.00.40219.01 for x64
+1>  Copyright (C) Microsoft Corporation.  All rights reserved.
+1>  
+1>  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1028479691.dir\Debug\\" /Fd"D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1028479691.pdb" /Gd /TC /errorReport:prompt testCCompiler.c  /Zm1000 
+1>  
+1>  testCCompiler.c
+1>Link:
+1>  cmTryCompileExec1028479691.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1028479691.exe
+1>LinkEmbedManifest:
+1>  cmTryCompileExec1028479691.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1028479691.exe
+1>FinalizeBuildStatus:
+1>  Deleting file "cmTryCompileExec1028479691.dir\Debug\cmTryCompileExec1028479691.unsuccessfulbuild".
+1>  Touching "cmTryCompileExec1028479691.dir\Debug\cmTryCompileExec1028479691.lastbuildstate".
+1>
+1>Build succeeded.
+1>
+1>Time Elapsed 00:00:01.30
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp
+
+Run Build Command:c:\PROGRA~2\MICROS~2.0\Common7\IDE\devenv.com CMAKE_TRY_COMPILE.sln /build Debug /project cmTryCompileExec2446941258
+
+Microsoft (R) Visual Studio Version 10.0.40219.1.
+Copyright (C) Microsoft Corp. All rights reserved.
+1>------ Build started: Project: cmTryCompileExec2446941258, Configuration: Debug x64 ------
+1>Build started 2013-11-23 20:22:37.
+1>PrepareForBuild:
+1>  Creating directory "D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\".
+1>InitializeBuildStatus:
+1>  Creating "cmTryCompileExec2446941258.dir\Debug\cmTryCompileExec2446941258.unsuccessfulbuild" because "AlwaysCreate" was specified.
+1>ClCompile:
+1>  Microsoft (R) C/C++ Optimizing Compiler Version 16.00.40219.01 for x64
+1>  Copyright (C) Microsoft Corporation.  All rights reserved.
+1>  
+1>  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec2446941258.dir\Debug\\" /Fd"D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2446941258.pdb" /Gd /TC /errorReport:prompt "C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c"  /Zm1000 
+1>  
+1>  CMakeCCompilerABI.c
+1>Link:
+1>  cmTryCompileExec2446941258.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2446941258.exe
+1>LinkEmbedManifest:
+1>  cmTryCompileExec2446941258.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2446941258.exe
+1>FinalizeBuildStatus:
+1>  Deleting file "cmTryCompileExec2446941258.dir\Debug\cmTryCompileExec2446941258.unsuccessfulbuild".
+1>  Touching "cmTryCompileExec2446941258.dir\Debug\cmTryCompileExec2446941258.lastbuildstate".
+1>
+1>Build succeeded.
+1>
+1>Time Elapsed 00:00:01.36
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp
+
+Run Build Command:c:\PROGRA~2\MICROS~2.0\Common7\IDE\devenv.com CMAKE_TRY_COMPILE.sln /build Debug /project cmTryCompileExec1557211664
+
+Microsoft (R) Visual Studio Version 10.0.40219.1.
+Copyright (C) Microsoft Corp. All rights reserved.
+1>------ Build started: Project: cmTryCompileExec1557211664, Configuration: Debug x64 ------
+1>Build started 2013-11-23 20:22:41.
+1>PrepareForBuild:
+1>  Creating directory "D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\".
+1>InitializeBuildStatus:
+1>  Creating "cmTryCompileExec1557211664.dir\Debug\cmTryCompileExec1557211664.unsuccessfulbuild" because "AlwaysCreate" was specified.
+1>ClCompile:
+1>  Microsoft (R) C/C++ Optimizing Compiler Version 16.00.40219.01 for x64
+1>  Copyright (C) Microsoft Corporation.  All rights reserved.
+1>  
+1>  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec1557211664.dir\Debug\\" /Fd"D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1557211664.pdb" /Gd /TP /errorReport:prompt testCXXCompiler.cxx  /Zm1000 
+1>  
+1>  testCXXCompiler.cxx
+1>Link:
+1>  cmTryCompileExec1557211664.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1557211664.exe
+1>LinkEmbedManifest:
+1>  cmTryCompileExec1557211664.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1557211664.exe
+1>FinalizeBuildStatus:
+1>  Deleting file "cmTryCompileExec1557211664.dir\Debug\cmTryCompileExec1557211664.unsuccessfulbuild".
+1>  Touching "cmTryCompileExec1557211664.dir\Debug\cmTryCompileExec1557211664.lastbuildstate".
+1>
+1>Build succeeded.
+1>
+1>Time Elapsed 00:00:01.19
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp
+
+Run Build Command:c:\PROGRA~2\MICROS~2.0\Common7\IDE\devenv.com CMAKE_TRY_COMPILE.sln /build Debug /project cmTryCompileExec97569171
+
+Microsoft (R) Visual Studio Version 10.0.40219.1.
+Copyright (C) Microsoft Corp. All rights reserved.
+1>------ Build started: Project: cmTryCompileExec97569171, Configuration: Debug x64 ------
+1>Build started 2013-11-23 20:22:44.
+1>PrepareForBuild:
+1>  Creating directory "D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\".
+1>InitializeBuildStatus:
+1>  Creating "cmTryCompileExec97569171.dir\Debug\cmTryCompileExec97569171.unsuccessfulbuild" because "AlwaysCreate" was specified.
+1>ClCompile:
+1>  Microsoft (R) C/C++ Optimizing Compiler Version 16.00.40219.01 for x64
+1>  Copyright (C) Microsoft Corporation.  All rights reserved.
+1>  
+1>  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec97569171.dir\Debug\\" /Fd"D:/Projects/x/projekt-inzynierski/SVM_static/VS/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec97569171.pdb" /Gd /TP /errorReport:prompt "C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp"  /Zm1000 
+1>  
+1>  CMakeCXXCompilerABI.cpp
+1>Link:
+1>  cmTryCompileExec97569171.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec97569171.exe
+1>LinkEmbedManifest:
+1>  cmTryCompileExec97569171.vcxproj -> D:\Projects\x\projekt-inzynierski\SVM_static\VS\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec97569171.exe
+1>FinalizeBuildStatus:
+1>  Deleting file "cmTryCompileExec97569171.dir\Debug\cmTryCompileExec97569171.unsuccessfulbuild".
+1>  Touching "cmTryCompileExec97569171.dir\Debug\cmTryCompileExec97569171.lastbuildstate".
+1>
+1>Build succeeded.
+1>
+1>Time Elapsed 00:00:01.32
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
+

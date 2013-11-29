@@ -52,13 +52,13 @@ void SampleListener::onFrame(const Controller& controller) {
             << ", tools: " << frame.tools().count()
             << ", gestures: " << frame.gestures().count() << std::endl;
 
-  if (!frame.hands().isEmpty()) {
+  if (!frame.hands().empty()) {
     // Get the first hand
     const Hand hand = frame.hands()[0];
 
     // Check if the hand has any fingers
     const FingerList fingers = hand.fingers();
-    if (!fingers.isEmpty()) {
+    if (!fingers.empty()) {
       // Calculate the hand's average finger tip position
       Vector avgPos;
       for (int i = 0; i < fingers.count(); ++i) {
@@ -147,7 +147,7 @@ void SampleListener::onFrame(const Controller& controller) {
     }
   }
 
-  if (!frame.hands().isEmpty() || !gestures.isEmpty()) {
+  if (!frame.hands().empty() || !gestures.empty()) {
     std::cout << std::endl;
   }
 }
