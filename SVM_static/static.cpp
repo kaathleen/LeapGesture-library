@@ -11,6 +11,487 @@ bool myfunction(double i, double j) {
 	return (i > j);
 }
 
+
+vector<double> features1(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+		}
+	}
+	sort(angles.begin(), angles.end(), myfunction);
+
+	for (int i = 0; i < 5; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn);
+		}
+	}
+	sort(dist.begin(), dist.end(), myfunction);
+
+	for (int i = 0; i < 5; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 7 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+vector<double> features2(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+		}
+	}
+	sort(angles.begin(), angles.end(), myfunction);
+
+	for (int i = 0; i < 10; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn);
+		}
+	}
+	sort(dist.begin(), dist.end(), myfunction);
+
+	for (int i = 0; i < 10; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 12 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+vector<double> features3(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+		}
+	}
+
+	for (int i = 0; i < 10; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn);
+		}
+	}
+
+	for (int i = 0; i < 10; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 12 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+
+vector<double> features4(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+		}
+	}
+
+	for (int i = 0; i < 15; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn);
+		}
+	}
+
+	for (int i = 0; i < 15; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 17 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+vector<double> features5(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+		}
+	}
+	sort(angles.begin(), angles.end(), myfunction);
+
+	for (int i = 0; i < 5; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	double maximum = -1.0;
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			if (wyn > maximum) {
+				maximum = wyn;
+			}
+		}
+	}
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn / maximum);
+		}
+	}
+	sort(dist.begin(), dist.end(), myfunction);
+
+	for (int i = 1; i < 6; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 7 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+vector<double> features6(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+			if (abs(x * x2 + y * y2 + z * z2) > 3.14) {
+				cout << "=" << i << "," << k << " :" << x << " " << x2
+						<< " " << y << " " << y2 << " " << z << " " << z2
+						<< endl;
+				cout << i << " " << k << "<" << r->fingerCount << "!";
+				for (int zz = 0; zz < 3; zz++) {
+					for (int yy = 0; yy < 6; yy++) {
+						cout << r->getFinger(zz, yy) << " ";
+					}
+				}
+				cout << endl;
+
+			}
+		}
+	}
+	sort(angles.begin(), angles.end(), myfunction);
+
+	for (int i = 0; i < 10; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	double maximum = -1.0;
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			if (wyn > maximum) {
+				maximum = wyn;
+			}
+		}
+	}
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn / maximum);
+		}
+	}
+	sort(dist.begin(), dist.end(), myfunction);
+
+	for (int i = 1; i < 11; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 12 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+vector<double> features7(LMReader *r, ofstream& svm_gesture) {
+	// Defining the set of features
+	vector<double> row;
+	// 1 feature -> number of fingers
+	row.push_back(r->fingerCount);
+
+	svm_gesture << "1:" << r->fingerCount << " ";
+
+	// angles between fingers
+	vector<double> angles(15, 0.0);
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, DIRX);
+		double y = r->getFinger(i, DIRY);
+		double z = r->getFinger(i, DIRZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, DIRX);
+			double y2 = r->getFinger(k, DIRY);
+			double z2 = r->getFinger(k, DIRZ);
+
+			angles.push_back(abs(x * x2 + y * y2 + z * z2));
+			if (abs(x * x2 + y * y2 + z * z2) > 3.14) {
+				cout << "=" << i << "," << k << " :" << x << " " << x2
+						<< " " << y << " " << y2 << " " << z << " " << z2
+						<< endl;
+				cout << i << " " << k << "<" << r->fingerCount << "!";
+				for (int zz = 0; zz < 3; zz++) {
+					for (int yy = 0; yy < 6; yy++) {
+						cout << r->getFinger(zz, yy) << " ";
+					}
+				}
+				cout << endl;
+
+			}
+		}
+	}
+	sort(angles.begin(), angles.end(), myfunction);
+
+	for (int i = 0; i < 15; i++) {
+		row.push_back(angles[i]);
+		svm_gesture << i + 2 << ":" << angles[i] << " ";
+	}
+
+	// Distances between tips
+	vector<double> dist(15, 0.0);
+
+	double maximum = -1.0;
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			if (wyn > maximum) {
+				maximum = wyn;
+			}
+		}
+	}
+
+	for (int i = 0; i < r->fingerCount; i++) {
+		double x = r->getFinger(i, TIPX);
+		double y = r->getFinger(i, TIPY);
+		double z = r->getFinger(i, TIPZ);
+		for (int k = i + 1; k < r->fingerCount; k++) {
+			double x2 = r->getFinger(k, TIPX);
+			double y2 = r->getFinger(k, TIPY);
+			double z2 = r->getFinger(k, TIPZ);
+
+			double wyn = sqrt(
+					(x - x2) * (x - x2) + (y - y2) * (y - y2)
+							+ (z - z2) * (z - z2));
+			dist.push_back(wyn / maximum);
+		}
+	}
+	sort(dist.begin(), dist.end(), myfunction);
+
+	for (int i = 1; i < 16; i++) {
+		row.push_back(dist[i]);
+		svm_gesture << i + 17 << ":" << dist[i] << " ";
+	}
+
+	return row;
+}
+
+
 int main(int argc, char **argv) {
 
 	// This is optimal. Change only in special cases
@@ -44,61 +525,11 @@ int main(int argc, char **argv) {
 			// Defining the set of features
 			vector<double> row;
 
+			// j + 1
 			svm_gesture << j + 1 << " ";
 
-			// 1 feature -> number of fingers
-			row.push_back(r[j]->fingerCount);
+			row = features7(r[j], svm_gesture);
 
-			// !!!
-			// DEFINE YOUR OWN FEATURES HERE !
-			// remember that each feature row should be equal size --> this can be changed but do we need it?
-			// !!!
-			svm_gesture << "1:" << r[j]->fingerCount << " ";
-
-			// angles between fingers
-			vector<double> angles(5, 0.0);
-			for (int i = 0; i < r[j]->fingerCount; i++) {
-				double x = r[j]->getFinger(i, DIRX);
-				double y = r[j]->getFinger(i, DIRY);
-				double z = r[j]->getFinger(i, DIRZ);
-				for (int k = i + 1; k < r[j]->fingerCount; k++) {
-					double x2 = r[j]->getFinger(k, DIRX);
-					double y2 = r[j]->getFinger(k, DIRY);
-					double z2 = r[j]->getFinger(k, DIRZ);
-
-					angles.push_back(abs(x * x2 + y * y2 + z * z2));
-				}
-			}
-			sort(angles.begin(), angles.end(), myfunction);
-
-			for (int i = 0; i < 5; i++) {
-				row.push_back(angles[i]);
-				svm_gesture << i + 2 << ":" << angles[i] << " ";
-			}
-
-			// Distances between tips
-			vector<double> dist(5, 0.0);
-			for (int i = 0; i < r[j]->fingerCount; i++) {
-				double x = r[j]->getFinger(i, TIPX);
-				double y = r[j]->getFinger(i, TIPY);
-				double z = r[j]->getFinger(i, TIPZ);
-				for (int k = i + 1; k < r[j]->fingerCount; k++) {
-					double x2 = r[j]->getFinger(k, TIPX);
-					double y2 = r[j]->getFinger(k, TIPY);
-					double z2 = r[j]->getFinger(k, TIPZ);
-
-					double wyn = sqrt(
-							(x - x2) * (x - x2) + (y - y2) * (y - y2)
-									+ (z - z2) * (z - z2));
-					dist.push_back(wyn);
-				}
-			}
-			sort(dist.begin(), dist.end(), myfunction);
-
-			for (int i = 0; i < 5; i++) {
-				row.push_back(dist[i]);
-				svm_gesture << i + 7 << ":" << dist[i] << " ";
-			}
 
 			svm_gesture << endl;
 
@@ -110,6 +541,7 @@ int main(int argc, char **argv) {
 	svm_gesture.close();
 
 	cout << "Preprocessing" << endl;
+	return 0;
 	/*int window_size = 5;
 	 for (int i=0;i<NUMBER_OF_CLASSES;i++)
 	 {

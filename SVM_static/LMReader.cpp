@@ -38,7 +38,8 @@ void LMReader::fillFields() {
 
 	int fieldCount = -1;
 
-	while(buf[p_end] != 0x00) {
+	int slen = buf.length();
+	while (buf[p_end] != 0x00 && p_end < slen) {
 
 		fieldCount++;
 
