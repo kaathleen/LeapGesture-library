@@ -422,19 +422,6 @@ vector<double> features7(LMReader *r, ofstream& svm_gesture) {
 			double z2 = r->getFinger(k, DIRZ);
 
 			angles.push_back(abs(x * x2 + y * y2 + z * z2));
-			if (abs(x * x2 + y * y2 + z * z2) > 3.14) {
-				cout << "=" << i << "," << k << " :" << x << " " << x2
-						<< " " << y << " " << y2 << " " << z << " " << z2
-						<< endl;
-				cout << i << " " << k << "<" << r->fingerCount << "!";
-				for (int zz = 0; zz < 3; zz++) {
-					for (int yy = 0; yy < 6; yy++) {
-						cout << r->getFinger(zz, yy) << " ";
-					}
-				}
-				cout << endl;
-
-			}
 		}
 	}
 	sort(angles.begin(), angles.end(), myfunction);
@@ -528,7 +515,7 @@ int main(int argc, char **argv) {
 			// j + 1
 			svm_gesture << j + 1 << " ";
 
-			row = features7(r[j], svm_gesture);
+			row = features5(r[j], svm_gesture);
 
 
 			svm_gesture << endl;
