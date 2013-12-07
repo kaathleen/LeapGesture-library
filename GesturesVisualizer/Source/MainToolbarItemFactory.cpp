@@ -60,3 +60,8 @@ void MainToolbarItemFactory::changeWorkMode(bool isVisualizerMode)
 		gesturesComboBox->setVisible(true);
 	}
 }
+
+void MainToolbarItemFactory::setWorkModeButtonEnable(bool isEnable)
+{
+	changeWorkModeButton->setEnabled(isEnable);
+}

@@ -11,19 +11,38 @@
       <FILE id="wkrK7n" name="LeapUtilGL.h" compile="0" resource="0" file="LeapSDK/util/LeapUtilGL.h"/>
     </GROUP>
     <GROUP id="{C925EA35-2919-2376-B355-FF29F0DABB4F}" name="Source">
+      <GROUP id="{42DE8101-EBF5-8CEA-32BA-19DC220792B4}" name="StorageDriver">
+        <FILE id="dCZ5iE" name="BinaryFileStorageDriver.cpp" compile="1" resource="0"
+              file="Source/StorageDriver/BinaryFileStorageDriver.cpp"/>
+        <FILE id="nd5IEm" name="BinaryFileStorageDriver.h" compile="0" resource="0"
+              file="Source/StorageDriver/BinaryFileStorageDriver.h"/>
+        <FILE id="ZSG2fp" name="GestureStorageDriver.h" compile="0" resource="0"
+              file="Source/StorageDriver/GestureStorageDriver.h"/>
+      </GROUP>
+      <GROUP id="{D55FEC34-5E93-6B3C-7ED0-4463AAB2F0C4}" name="Model">
+        <FILE id="yYrlBm" name="Vertex.cpp" compile="1" resource="0" file="Source/Model/Vertex.cpp"/>
+        <FILE id="fIDmyv" name="GestureFinger.cpp" compile="1" resource="0"
+              file="Source/Model/GestureFinger.cpp"/>
+        <FILE id="rq7BmZ" name="GestureFinger.h" compile="0" resource="0" file="Source/Model/GestureFinger.h"/>
+        <FILE id="wp3cGK" name="GestureFrame.cpp" compile="1" resource="0"
+              file="Source/Model/GestureFrame.cpp"/>
+        <FILE id="cxkuTP" name="GestureFrame.h" compile="0" resource="0" file="Source/Model/GestureFrame.h"/>
+        <FILE id="Focfx7" name="GestureHand.cpp" compile="1" resource="0" file="Source/Model/GestureHand.cpp"/>
+        <FILE id="bXMhDp" name="GestureHand.h" compile="0" resource="0" file="Source/Model/GestureHand.h"/>
+        <FILE id="O7Dlpq" name="Vertex.h" compile="0" resource="0" file="Source/Model/Vertex.h"/>
+      </GROUP>
       <GROUP id="{A9968C45-204F-4A07-609B-B5EB9F4F3F8A}" name="Util">
-        <FILE id="d0XYBn" name="Vertex.h" compile="0" resource="0" file="Source/Util/Vertex.h"/>
         <FILE id="b4Qy0F" name="StringHelper.h" compile="0" resource="0" file="Source/Util/StringHelper.h"/>
         <FILE id="ttDAFw" name="GLColor.h" compile="0" resource="0" file="Source/Util/GLColor.h"/>
       </GROUP>
       <FILE id="u875Re" name="DefaultWindow.cpp" compile="1" resource="0"
             file="Source/DefaultWindow.cpp"/>
       <FILE id="cR1l4t" name="DefaultWindow.h" compile="0" resource="0" file="Source/DefaultWindow.h"/>
-      <FILE id="xkNjs6" name="GestureFrame.cpp" compile="1" resource="0"
-            file="Source/GestureFrame.cpp"/>
-      <FILE id="N8seeN" name="GestureFrame.h" compile="0" resource="0" file="Source/GestureFrame.h"/>
+      <FILE id="scyZjk" name="Header.h" compile="0" resource="0" file="Source/Header.h"/>
       <FILE id="k5GPed" name="LMRecorder.h" compile="0" resource="0" file="Source/LMRecorder.h"/>
       <FILE id="U5EOqj" name="LMRecorder.cpp" compile="1" resource="0" file="Source/LMRecorder.cpp"/>
+      <FILE id="EAEBPL" name="LMRecorderListener.h" compile="0" resource="0"
+            file="Source/LMRecorderListener.h"/>
       <FILE id="V2kKPI" name="MainToolbarItemFactory.cpp" compile="1" resource="0"
             file="Source/MainToolbarItemFactory.cpp"/>
       <FILE id="VF5Aad" name="MainToolbarItemFactory.h" compile="0" resource="0"
@@ -32,38 +51,9 @@
             file="Source/MainComponent.cpp"/>
       <FILE id="FxoSao" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="raUYej" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="scyZjk" name="Header.h" compile="0" resource="0" file="Source/Header.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <VS2010 targetFolder="Builds/VisualStudio2010" externalLibraries="leap.lib">
-      <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="GesturesVisualizer"
-                       headerPath="..\..\LeapSDK\include;..\..\LeapSDK\util" libraryPath="$(TargetDir)"
-                       postbuildCommand="copy /Y ..\..\LeapSDK\lib\x86\Leap.dll &quot;$(TargetDir)&quot;"
-                       prebuildCommand="copy /Y ..\..\LeapSDK\lib\x86\leapd.lib &quot;$(TargetDir)leap.lib&quot;"/>
-        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="2" targetName="GesturesVisualizer"
-                       headerPath="..\..\LeapSDK\include;..\..\LeapSDK\util" libraryPath="$(TargetDir)"
-                       postbuildCommand="copy /Y ..\..\LeapSDK\lib\x86\Leap.dll &quot;$(TargetDir)&quot;"
-                       prebuildCommand="copy /Y ..\..\LeapSDK\lib\x86\leap.lib &quot;$(TargetDir)leap.lib&quot;"/>
-      </CONFIGURATIONS>
-      <MODULEPATHS>
-        <MODULEPATH id="juce_events" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_graphics" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_data_structures" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_gui_basics" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_gui_extra" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_cryptography" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_opengl" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_audio_basics" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_audio_processors" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-        <MODULEPATH id="juce_audio_devices"/>
-        <MODULEPATH id="juce_audio_formats"/>
-        <MODULEPATH id="juce_core" path="..\..\..\..\Downloads\JUCE-master\JUCE-master\modules"/>
-      </MODULEPATHS>
-    </VS2010>
     <LINUX_MAKE targetFolder="Builds/Linux" externalLibraries="GLU&#10;Leap"
                 extraLinkerFlags="-Wl,-rpath,\$$ORIGIN/../../../LeapSDK/lib/$(shell [[ $$(uname -m) == x86_64 &amp;&amp; &quot;$(TARGET_ARCH)&quot; == &quot;-march=native&quot; ]] &amp;&amp; echo x64 || echo x86),-rpath,\$$ORIGIN/../../../LeapSDK/lib/$(shell [[ $$(uname -m) == x86_64 &amp;&amp; &quot;$(TARGET_ARCH)&quot; == &quot;-march=native&quot; ]] &amp;&amp; echo x64 || echo x86)">
       <CONFIGURATIONS>

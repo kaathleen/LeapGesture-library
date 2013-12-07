@@ -7,7 +7,7 @@ const int MainComponent::timerDelay = 16;
 
 MainComponent::MainComponent() : Component( "Main component" )
 {
-    init();
+	init();
 }
 
 MainComponent::MainComponent(vector<string>& commands) : Component( "Main component" )
@@ -18,9 +18,12 @@ MainComponent::MainComponent(vector<string>& commands) : Component( "Main compon
 
 void MainComponent::init()
 {
+	gestureStorageDriver = new BinaryFileStorageDriver();
+	lmRecorder = new LMRecorder(gestureStorageDriver);
+	
 	setSize (500, 400);
 	
-	lmRecorder.addListener(this);
+	lmRecorder->addListener(this);
 
 	addAndMakeVisible (&toolbar);
 
@@ -57,15 +60,15 @@ void MainComponent::init()
                 "Arrow Keys  - Rotate camera\n"
                 "Space       - Reset camera";
 
-    m_strPrompt = "Press 'h' for help";
-    m_recorderStartStr = "Press 'Space' for start recording";
-    m_recorderStopStr = "Press 'Space' for stop recording";
+	m_strPrompt = "Press 'h' for help";
+	m_recorderStartStr = "Press 'Space' for start recording";
+	m_recorderStopStr = "Press 'Space' for stop recording";
 
 	//OpenGl init
 	m_openGLContext.setRenderer (this);
-    m_openGLContext.setComponentPaintingEnabled (true);
-    m_openGLContext.attachTo (*this);
-    setBounds( 0, 0, 1024, 768 );
+	m_openGLContext.setComponentPaintingEnabled (true);
+	m_openGLContext.attachTo (*this);
+	setBounds( 0, 0, 1024, 768 );
 	
 	initColors();
 	resetCamera();
@@ -76,6 +79,8 @@ void MainComponent::init()
 
 MainComponent::~MainComponent()
 {
+	delete gestureStorageDriver;
+	delete lmRecorder;
 }
 
 void MainComponent::paint (Graphics& g)
@@ -84,10 +89,6 @@ void MainComponent::paint (Graphics& g)
 
 void MainComponent::resized()
 {
-    // This is called when the MainComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
-
 	toolbar.setBounds (getLocalBounds().removeFromTop  (50));
 	frameSlider.setBounds (getLocalBounds().removeFromBottom(50).removeFromRight(this->getWidth()-100));
 	playButton.setBounds (getLocalBounds().removeFromBottom(35).removeFromRight(this->getWidth()-10).removeFromLeft(80));
@@ -104,141 +105,132 @@ void MainComponent::timerCallback()
 void MainComponent::newOpenGLContextCreated()
 {
 	glEnable(GL_BLEND);
-    glEnable(GL_TEXTURE_2D);
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_BACK);
-    //glFrontFace(GL_CCW);
+	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glFrontFace(GL_CCW);
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(true);
-    glDepthFunc(GL_LESS);
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(true);
+	glDepthFunc(GL_LESS);
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glShadeModel(GL_SMOOTH);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glShadeModel(GL_SMOOTH);
 
-    glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 
-    m_fixedFont = Font("Courier New", 24, Font::plain );
+	m_fixedFont = Font("Courier New", 24, Font::plain );
 }
 
 void MainComponent::renderOpenGL()
 {
-    /*double  curSysTimeSeconds = Time::highResolutionTicksToSeconds(Time::getHighResolutionTicks());
-    float   fRenderDT = static_cast<float>(curSysTimeSeconds - m_fLastRenderTimeSeconds);
-    fRenderDT = m_avgRenderDeltaTime.AddSample( fRenderDT );
-    m_fLastRenderTimeSeconds = curSysTimeSeconds;
+	LeapUtilGL::GLMatrixScope sceneMatrixScope;
 
-    float fRenderFPS = (fRenderDT > 0) ? 1.0f/fRenderDT : 0.0f;
+	setupScene();
 
-    m_strRenderFPS = String::formatted( "RenderFPS: %4.2f", fRenderFPS );*/
+	// draw the grid background
+	{
+		LeapUtilGL::GLAttribScope colorScope(GL_CURRENT_BIT);
 
-    LeapUtilGL::GLMatrixScope sceneMatrixScope;
+		glColor3f( 0, 0, 1 );
 
-    setupScene();
+		{
+			LeapUtilGL::GLMatrixScope gridMatrixScope;
 
-    // draw the grid background
-    {
-        LeapUtilGL::GLAttribScope colorScope(GL_CURRENT_BIT);
+			glTranslatef( 0, 0.0f, -1.5f );
 
-        glColor3f( 0, 0, 1 );
+			glScalef( 3, 3, 3 );
 
-        {
-            LeapUtilGL::GLMatrixScope gridMatrixScope;
+			LeapUtilGL::drawGrid( LeapUtilGL::kPlane_XY, 20, 20 );
+		}
 
-            glTranslatef( 0, 0.0f, -1.5f );
+		{
+			LeapUtilGL::GLMatrixScope gridMatrixScope;
 
-            glScalef( 3, 3, 3 );
+			glTranslatef( 0, -1.5f, 0.0f );
 
-            LeapUtilGL::drawGrid( LeapUtilGL::kPlane_XY, 20, 20 );
-        }
+			glScalef( 3, 3, 3 );
 
-        {
-            LeapUtilGL::GLMatrixScope gridMatrixScope;
+			LeapUtilGL::drawGrid( LeapUtilGL::kPlane_ZX, 20, 20 );
+		}
+	}
 
-            glTranslatef( 0, -1.5f, 0.0f );
-
-            glScalef( 3, 3, 3 );
-
-            LeapUtilGL::drawGrid( LeapUtilGL::kPlane_ZX, 20, 20 );
-        }
-    }
-
-    drawFrame((int)frameSlider.getValue() - 1);
-    renderOpenGL2D();
+	drawFrame((int)frameSlider.getValue() - 1);
+	renderOpenGL2D();
 }
 
 void MainComponent::renderOpenGL2D() 
 {
-    LeapUtilGL::GLAttribScope attribScope( GL_ENABLE_BIT );
+	LeapUtilGL::GLAttribScope attribScope( GL_ENABLE_BIT );
 
-    // when enabled text draws poorly.
-    //glDisable(GL_CULL_FACE);
+	// when enabled text draws poorly.
+	//glDisable(GL_CULL_FACE);
 
-    ScopedPointer<LowLevelGraphicsContext> glRenderer (createOpenGLGraphicsContext (m_openGLContext, getWidth(), getHeight()));
+	ScopedPointer<LowLevelGraphicsContext> glRenderer (createOpenGLGraphicsContext (m_openGLContext, getWidth(), getHeight()));
 
-    if (glRenderer != nullptr)
-    {
-	Graphics g(*glRenderer.get());
-
-	int iMargin   = 10;
-	int iFontSize = static_cast<int>(m_fixedFont.getHeight());
-	int iLineStep = iFontSize + (iFontSize >> 2);
-	int iBaseLine = 20;
-	Font origFont = g.getCurrentFont();
-
-	const Rectangle<int>& rectBounds = getBounds();
-
-	if ( m_bShowHelp )
+	if (glRenderer != nullptr)
 	{
-	    g.setColour( Colours::seagreen );
-	    g.setFont( static_cast<float>(iFontSize) );
+		Graphics g(*glRenderer.get());
 
-	    g.setFont( m_fixedFont );
-	    g.setColour( Colours::slateblue );
+		int iMargin   = 10;
+		int iFontSize = static_cast<int>(m_fixedFont.getHeight());
+		int iLineStep = iFontSize + (iFontSize >> 2);
+		int iBaseLine = 20;
+		Font origFont = g.getCurrentFont();
 
-	    g.drawMultiLineText(  m_strHelp,
-				    iMargin,
-				    iBaseLine + iLineStep * 2,
-				    rectBounds.getWidth() - iMargin*2 );
-	}
+		const Rectangle<int>& rectBounds = getBounds();
 
-	g.setFont( origFont );
-	g.setFont( static_cast<float>(iFontSize) );
-
-	if(isVisualizerMode)
-	{
-		g.setColour( Colours::salmon );
-		g.drawMultiLineText(  m_strPrompt,
-				iMargin,
-				rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
-				rectBounds.getWidth()/4 );
-	}
-	else
-	{
-		if (recording)
+		if ( m_bShowHelp )
 		{
-			g.setColour( Colours::red );
-			g.drawMultiLineText(  m_recorderStopStr,
-				iMargin,
-				rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
-				rectBounds.getWidth()/4 );			
+		    g.setColour( Colours::seagreen );
+		    g.setFont( static_cast<float>(iFontSize) );
+
+		    g.setFont( m_fixedFont );
+		    g.setColour( Colours::slateblue );
+
+		    g.drawMultiLineText(  m_strHelp,
+					    iMargin,
+					    iBaseLine + iLineStep * 2,
+					    rectBounds.getWidth() - iMargin*2 );
+		}
+
+		g.setFont( origFont );
+		g.setFont( static_cast<float>(iFontSize) );
+
+		if(isVisualizerMode)
+		{
+			g.setColour( Colours::salmon );
+			g.drawMultiLineText(  m_strPrompt,
+					iMargin,
+					rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
+					rectBounds.getWidth()/4 );
 		}
 		else
 		{
-			g.setColour( Colours::white );
-			g.drawMultiLineText(  m_recorderStartStr,
-				iMargin,
-				rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
-				rectBounds.getWidth()/4 );
+			if (recording)
+			{
+				g.setColour( Colours::red );
+				g.drawMultiLineText(  m_recorderStopStr,
+					iMargin,
+					rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
+					rectBounds.getWidth()/4 );			
+			}
+			else
+			{
+				g.setColour( Colours::white );
+				g.drawMultiLineText(  m_recorderStartStr,
+					iMargin,
+					rectBounds.getBottom() - (iFontSize + iFontSize + iLineStep),
+					rectBounds.getWidth()/4 );
+			}
 		}
 	}
-    }
 }
 
 void MainComponent::drawFrame( int frameIndex )
@@ -248,48 +240,97 @@ void MainComponent::drawFrame( int frameIndex )
 	if (isVisualizerMode && frameIndex < frameList.size())
 	{
 		currentFrame = frameList.at(frameIndex);
-		drawGestureFrame(currentFrame);
+		drawGestureFrame(&currentFrame);
 	}
-	else if (!isVisualizerMode && recording && lmRecorder.getCurrentFrame(currentFrame))
+	else if (!isVisualizerMode && recording && lmRecorder->getCurrentFrame(currentFrame))
 	{
-		drawGestureFrame(currentFrame);
+		drawGestureFrame(&currentFrame);
 	}
 }
 
-void MainComponent::drawGestureFrame(GestureFrame currentFrame)
+void MainComponent::drawGestureFrame(GestureFrame *currentFrame)
 {
 	LeapUtilGL::GLAttribScope colorScope( GL_CURRENT_BIT | GL_LINE_BIT );
 
 	const float fScale = m_fPointableRadius;
+	const float fHandScale = m_fPointableRadius/3;
 
 	glLineWidth( 3.0f );
 
-	for (int i = 0; i<currentFrame.getFingerCount(); i++)
+	for (int i = 0; i<currentFrame->getHandCount(); i++)
 	{
-		Leap::Vector fingerTip(currentFrame.getFingerTipPosition(i).getX(),
-			currentFrame.getFingerTipPosition(i).getY(), currentFrame.getFingerTipPosition(i).getZ());
-		Leap::Vector fingerVector(currentFrame.getFingerVector(i).getX(), currentFrame.getFingerVector(i).getY(),
-			currentFrame.getFingerVector(i).getZ());
+		GestureHand* currHand = currentFrame->getHand(i);
+		if (currHand != NULL)
+		{	
+			Leap::Vector handPosition(currHand->getPalmPosition().getX(), currHand->getPalmPosition().getY(), currHand->getPalmPosition().getZ());
+			Leap::Vector handStabilizedPosition(currHand->getStabilizedPalmPosition().getX(),
+				currHand->getStabilizedPalmPosition().getY(), currHand->getStabilizedPalmPosition().getZ());
+			Leap::Vector handNormal(currHand->getPalmNormal().getX(), currHand->getPalmNormal().getY(), currHand->getPalmNormal().getZ());
+			Leap::Vector handDirection(currHand->getDirection().getX(), currHand->getDirection().getY(), currHand->getDirection().getZ());
+			
+			Leap::Vector vStartPos		= m_mtxFrameTransform.transformPoint(handPosition * m_fFrameScale);
+			Leap::Vector vNormalEndPos	= m_mtxFrameTransform.transformDirection( handNormal ) * 0.25;
+			Leap::Vector vDirectionEndPos	= m_mtxFrameTransform.transformDirection( handDirection ) * 0.25;
+			
+			glColor3fv( m_avColors[i].toFloatPointer() );
+			{
+				LeapUtilGL::GLMatrixScope matrixScope;
 
-		Leap::Vector vStartPos   = m_mtxFrameTransform.transformPoint(fingerTip * m_fFrameScale);
-		Leap::Vector vEndPos     = m_mtxFrameTransform.transformDirection( fingerVector ) * -0.25f;
+				glTranslatef( vStartPos.x, vStartPos.y, vStartPos.z );
 
-		glColor3fv( m_avColors[i].toFloatPointer() );
-		{
-			LeapUtilGL::GLMatrixScope matrixScope;
+				glBegin(GL_LINES);
 
-			glTranslatef( vStartPos.x, vStartPos.y, vStartPos.z );
+				glVertex3f( 0, 0, 0 );
+				glVertex3fv( vNormalEndPos.toFloatPointer() );
 
-			glBegin(GL_LINES);
+				glEnd();
+				
+				glBegin(GL_LINES);
 
-			glVertex3f( 0, 0, 0 );
-			glVertex3fv( vEndPos.toFloatPointer() );
+				glVertex3f( 0, 0, 0 );
+				glVertex3fv( vDirectionEndPos.toFloatPointer() );
 
-			glEnd();
+				glEnd();
+				
+				glScalef( fHandScale, fHandScale, fHandScale );
 
-			glScalef( fScale, fScale, fScale );
+				LeapUtilGL::drawSphere( LeapUtilGL::kStyle_Outline );
+			}
+			
+			for (int j=0; j<currHand->getFingerCount(); j++)
+			{
+				GestureFinger* currFinger = currHand->getFinger(j);
+				if (currFinger != NULL)
+				{
+					Leap::Vector fingerTipPosition(currFinger->getTipPosition().getX(), currFinger->getTipPosition().getY(), currFinger->getTipPosition().getZ());
+					Leap::Vector fingerStabilizedTipPosition(currFinger->getStabilizedTipPosition().getX(),
+						currFinger->getStabilizedTipPosition().getY(), currFinger->getStabilizedTipPosition().getZ());
+					Leap::Vector fingerDirection(currFinger->getDirection().getX(), currFinger->getDirection().getY(), currFinger->getDirection().getZ());
+					float fingerLength = currFinger->getLength();
+					float fingerWidth = currFinger->getWidth();
 
-			LeapUtilGL::drawSphere( LeapUtilGL::kStyle_Solid );
+					Leap::Vector vStartPos   = m_mtxFrameTransform.transformPoint(fingerTipPosition * m_fFrameScale);
+					Leap::Vector vEndPos     = m_mtxFrameTransform.transformDirection( fingerDirection ) * -fingerLength * m_fFrameScale;
+
+					glColor3fv( m_avColors[j].toFloatPointer() );
+					{
+						LeapUtilGL::GLMatrixScope matrixScope;
+
+						glTranslatef( vStartPos.x, vStartPos.y, vStartPos.z );
+
+						glBegin(GL_LINES);
+
+						glVertex3f( 0, 0, 0 );
+						glVertex3fv( vEndPos.toFloatPointer() );
+
+						glEnd();
+
+						glScalef( fScale, fScale, fScale );
+
+						LeapUtilGL::drawSphere( LeapUtilGL::kStyle_Outline );
+					}
+				}
+			}
 		}
 	}
 }
@@ -486,7 +527,7 @@ void MainComponent::buttonClicked (Button* clickedButton)
 		if (fc.browseForMultipleFilesToOpen())
         	{
 			vector<string> gesturesPaths;
-			for (int i = 0; i < fc.getResults().size(); ++i)
+			for (int i = 0; i < fc.getResults().size(); i++)
 			{
 				gesturesPaths.push_back(fc.getResults().getReference(i).getFullPathName().toStdString());
 			}
@@ -525,10 +566,15 @@ void MainComponent::buttonClicked (Button* clickedButton)
 }
 
 void MainComponent::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
-{
+{   
 	if (comboBoxThatHasChanged->getComponentID() == "CHOOSE_GESTURE_FILE")
 	{
-		if(parseFile(gestures[comboBoxThatHasChanged->getSelectedId()-1]) == false)
+        	frameList.clear();         
+		string path = gestures[comboBoxThatHasChanged->getSelectedId()-1];
+		AlertWindow::showMessageBoxAsync (AlertWindow::InfoIcon,
+                                          "Alert Box",
+                                          path);
+		if(gestureStorageDriver->loadAllGestureFrames(path, frameList) == false)
 		{
 			AlertWindow::showMessageBoxAsync (AlertWindow::InfoIcon,
                                           "Alert Box",
@@ -536,8 +582,8 @@ void MainComponent::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 			return;
 		}
 
-		if (gestures.size() > 0)
-		{
+		if (frameList.size() > 0)
+		{                                          
 			frameSlider.setRange (1, frameList.size(), 1);
 			frameSlider.setValue(1);
 			frameSlider.setEnabled(true);
@@ -580,81 +626,13 @@ void MainComponent::setGesturesPaths(vector<string> gesturesPaths)
 	}
 }
 
-bool MainComponent::parseFile(String filePath)
-{
-	fstream file;
-	file.open(filePath.toStdString().c_str());
-
-	string line;
-	frameList.clear();
-
-	if(file.is_open())
-	{
-		while ( getline(file,line) )
-		{
-			GestureFrame gestureFrame;
-			if (parseLine(gestureFrame, line))
-			{
-				frameList.push_back(gestureFrame);
-			}
-		}
-	}
-	else
-	{
-		return false;
-	}
-
-    	file.close();
-	
-	return true;
-}
-
-bool MainComponent::parseLine(GestureFrame &gestureFrame, string line)
-{
-    	vector<string> fingers;
-	GestureFrame tempFrame;
-
-	StringHelper::split(line, '#', fingers);
-
-	for(int i=1; i<fingers.size(); i++)
-	{
-		if (fingers[i].size() > 0)
-		{
-			if (!parseFinger(gestureFrame, fingers[i]))
-			{
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
-
-
-bool MainComponent::parseFinger(GestureFrame &gestureFrame, string finger)
-{
-	vector<string> pos;
-	StringHelper::split(finger, ';', pos);
-
-	if (pos.size() == 6)
-	{
-		Vertex fingerTipPos(strtod(pos[0].c_str(), NULL), strtod(pos[1].c_str(), NULL), strtod(pos[2].c_str(), NULL));
-		Vertex fingerTipVect(strtod(pos[3].c_str(), NULL), strtod(pos[4].c_str(), NULL), strtod(pos[5].c_str(), NULL));
-		gestureFrame.addFinger(fingerTipPos, fingerTipVect);
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 void MainComponent::startRecording()
 {
 	if (!recording)
 	{
-		lmRecorder.startRecording();
+		lmRecorder->startRecording();
 		recording = true;
+		factory->setWorkModeButtonEnable(false);
 	}
 }
 
@@ -662,16 +640,17 @@ void MainComponent::stopRecording()
 {
 	if (recording)
 	{
-		lmRecorder.stopRecording();
+		lmRecorder->stopRecording();
 	
 		FileChooser fc ("Browse for gestures file to save...", File::getCurrentWorkingDirectory(), "*.lmr", false);
 		if (fc.browseForFileToSave(true))
 		{
 			string path = fc.getResult().getFullPathName().toStdString();
 		
-			lmRecorder.saveRecording(path);
+			lmRecorder->saveRecording(path);
 		}
 		recording = false;
+		factory->setWorkModeButtonEnable(true);
 	} 
 }
 

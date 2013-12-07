@@ -2,6 +2,8 @@
 #define HEADER_H_INCLUDED
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h> 
 #include <string>
 #include <sstream>
 #include <fstream> 
@@ -17,7 +19,6 @@
 
 using namespace std;
 
-#include "Util/Vertex.h"
 #include "Util/GLColor.h"
 #include "Util/StringHelper.h"
 

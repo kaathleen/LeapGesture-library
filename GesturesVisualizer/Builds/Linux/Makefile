@@ -51,8 +51,12 @@ endif
 OBJECTS := \
   $(OBJDIR)/LeapUtil_9c75cf6f.o \
   $(OBJDIR)/LeapUtilGL_7f869754.o \
+  $(OBJDIR)/BinaryFileStorageDriver_6188bf1b.o \
+  $(OBJDIR)/Vertex_f711bef3.o \
+  $(OBJDIR)/GestureFinger_a64f6ded.o \
+  $(OBJDIR)/GestureFrame_8ad6f373.o \
+  $(OBJDIR)/GestureHand_b0dd7fb3.o \
   $(OBJDIR)/DefaultWindow_da6e5872.o \
-  $(OBJDIR)/GestureFrame_1963002d.o \
   $(OBJDIR)/LMRecorder_53ba0748.o \
   $(OBJDIR)/MainToolbarItemFactory_b8c43e9e.o \
   $(OBJDIR)/MainComponent_a6ffb4a5.o \
@@ -95,14 +99,34 @@ $(OBJDIR)/LeapUtilGL_7f869754.o: ../../LeapSDK/util/LeapUtilGL.cpp
 	@echo "Compiling LeapUtilGL.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
+$(OBJDIR)/BinaryFileStorageDriver_6188bf1b.o: ../../Source/StorageDriver/BinaryFileStorageDriver.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling BinaryFileStorageDriver.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/Vertex_f711bef3.o: ../../Source/Model/Vertex.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling Vertex.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/GestureFinger_a64f6ded.o: ../../Source/Model/GestureFinger.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling GestureFinger.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/GestureFrame_8ad6f373.o: ../../Source/Model/GestureFrame.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling GestureFrame.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/GestureHand_b0dd7fb3.o: ../../Source/Model/GestureHand.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling GestureHand.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 $(OBJDIR)/DefaultWindow_da6e5872.o: ../../Source/DefaultWindow.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling DefaultWindow.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/GestureFrame_1963002d.o: ../../Source/GestureFrame.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling GestureFrame.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/LMRecorder_53ba0748.o: ../../Source/LMRecorder.cpp

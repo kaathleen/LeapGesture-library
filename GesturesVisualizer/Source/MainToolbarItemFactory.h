@@ -17,25 +17,27 @@ public:
 		this->comboBoxListener = comboBoxListener;
 	}
 
-    //==============================================================================
-    // Each type of item a toolbar can contain must be given a unique ID. These
-    // are the ones we'll use in this demo.
-    enum MainToolbarItemIds
-    {
+	//==============================================================================
+	// Each type of item a toolbar can contain must be given a unique ID. These
+	// are the ones we'll use in this demo.
+	enum MainToolbarItemIds
+	{
 		change_work_mode = 1,
-        open_gesture_files = 2,
-        choose_gesture_file = 3
-    };
+		open_gesture_files = 2,
+		choose_gesture_file = 3
+	};
 
-    void getAllToolbarItemIds (Array <int>& ids);
+	void getAllToolbarItemIds (Array <int>& ids);
 
-    void getDefaultItemSet (Array <int>& ids);
+	void getDefaultItemSet (Array <int>& ids);
 
-    ToolbarItemComponent* createItem (int itemId);
+	ToolbarItemComponent* createItem (int itemId);
 
 	void setGesturesList(StringArray gestures);
 
 	void changeWorkMode(bool isVisualizerMode);
+	
+	void setWorkModeButtonEnable(bool isEnable);
 
 private:
 	ButtonListener* buttonListener;

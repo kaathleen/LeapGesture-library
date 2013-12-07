@@ -1,39 +1,22 @@
 #ifndef LMRECORDER_H_INCLUDED
 #define LMRECORDER_H_INCLUDED
 
+#include <fstream>
+
 #include "Header.h"
 
-#include "GestureFrame.h"
+#include "Model/GestureFrame.h"
+#include "StorageDriver/GestureStorageDriver.h"
+
 #include "LMRecorderListener.h"
 
 class GestureFrame;
 
-#define czas_start()    clock_gettime(CLOCK_REALTIME, &t1)
-#define czas_stop()     clock_gettime(CLOCK_REALTIME, &t2)
-#define czas_oblicz()   czas = (double)(t2.tv_sec - t1.tv_sec) + 1.e-9*(t2.tv_nsec - t1.tv_nsec)
-
 class LMRecorder : public Leap::Listener {
 
 public:
-
-	Leap::Frame frame;
-	Leap::Finger finger;
-	int count, diffx, diffy;
-	FILE *outfile;
-	int i;
-    	timespec t1, t2;
-    	double czas;
-    	long lastTime;
-    	
-    	vector<LMRecorderListener*> listeners;
-    	
-    	GestureFrame *currentFrame;
-    	
-	LMRecorder() {
-		initValues();
-	}
 	
-	void initValues();
+	LMRecorder(GestureStorageDriver*);
 	
 	void onConnect(const Leap::Controller&);
 
@@ -51,8 +34,6 @@ public:
 	
 	void addListener(LMRecorderListener*);
 	
-	void notifyListeners();
-	
 	static Leap::Controller& getController() 
 	{
 		static Leap::Controller s_controller;
@@ -61,7 +42,25 @@ public:
 	}
 
 private:
-	CriticalSection mutex;
+	const static std::string TEMP_PATH;
+
+	GestureStorageDriver *gestureStorageDriver;
+
+	CriticalSection frameMutex;
+	CriticalSection closingMutex;
+	
+	int count;
+    	timespec t1, t2;
+    	double timestamp;
+    	long lastTime;
+    	
+    	vector<LMRecorderListener*> listeners;
+    	GestureFrame *currentFrame;
+    	
+    	void initValues();
+    	void prepareData(const Leap::Frame frame, GestureFrame *currentFrame, double timestamp);
+    	float getPointDistanceFromPlane(Vertex point, Vertex planePos, Vertex planeNormal);
+    	void notifyListeners();
 };
 
 #endif // LMRECORDER_H_INCLUDED
