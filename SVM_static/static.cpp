@@ -95,7 +95,7 @@ vector<double> features2(LMReader *r, ofstream& svm_gesture) {
 
 	for (int i = 0; i < 10; i++) {
 		row.push_back(angles[i]);
-		svm_gesture << i + 2 << ":" << angles[i] << " ";
+		svm_gesture << i +	 2 << ":" << angles[i] << " ";
 	}
 
 	// Distances between tips
@@ -515,7 +515,7 @@ int main(int argc, char **argv) {
 			// j + 1
 			svm_gesture << j + 1 << " ";
 
-			row = features5(r[j], svm_gesture);
+			row = features6(r[j], svm_gesture);
 
 
 			svm_gesture << endl;
@@ -523,6 +523,7 @@ int main(int argc, char **argv) {
 			feature[j].push_back(row);
 			setSize[j]++;
 		}
+		delete r[j];
 
 	}
 	svm_gesture.close();
