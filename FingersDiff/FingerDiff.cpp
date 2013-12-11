@@ -6,10 +6,8 @@
 
 using namespace std;
 
-bool myfunction(double i, double j) {
-	return (i > j);
-}
-
+// This is optimal. Change only in special cases
+const int TRAIN_TEST_PERCENT = 50;
 
 vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 
@@ -25,8 +23,6 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 		GestureFinger tempFinger = tempHand.getFinger(j);
 		Vertex baseFingerPosition = tempFinger.getTipPosition() - tempFinger.getLength()*tempFinger.getDirection().getNormalized();
 	}
-
-
 
 		// Defining the set of features
 		vector<double> row;
@@ -83,10 +79,38 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 	return row;
 }
 
-int main(int argc, char **argv) {
+void createFeaturesDataSets(const int& NUMBER_OF_CLASSES,
+		int& classSize[NUMBER_OF_CLASSES], char** argv,
+		vector<vector<double> >& featuresInSamples[NUMBER_OF_CLASSES]) {
+	cout <<"createFeaturesDataSets - entry"<< endl;
 
-	// This is optimal. Change only in special cases
-	const int TRAIN_TEST_PERCENT = 50;
+	GestureStorageDriver* gestureStorageDriver = new BinaryFileStorageDriver();
+	ofstream svm_gesture;
+	svm_gesture.open("svm_gesture.dat");
+	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
+		classSize[i] = 0;
+		gestureStorageDriver->openConnection(argv[i + 1], false);
+		GestureFrame currGestureFrame;
+		while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
+			// Defining the set of features
+			vector<double> row;
+			// sequence number of class
+			svm_gesture << i + 1 << " ";
+			row = features1(&currGestureFrame, svm_gesture);
+			svm_gesture << endl;
+			featuresInSamples[i].push_back(row);
+			classSize[i]++;
+		}
+		gestureStorageDriver->closeConnection();
+	}
+
+	svm_gesture.close();
+	delete gestureStorageDriver;
+
+	cout <<"createFeaturesDataSets - end"<< endl;
+}
+
+int main(int argc, char **argv) {
 
 	if (argc < 3) {
 		printf("Usage: %s file_class1 file_class2 ...\n", argv[0]);
@@ -94,45 +118,17 @@ int main(int argc, char **argv) {
 	}
 	const int NUMBER_OF_CLASSES = argc - 1;
 
-	GestureStorageDriver* gestureStorageDriver =
-
-	// create Reader object and read given file
-	LMReader *r[NUMBER_OF_CLASSES];
-	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
-		r[i] = new LMReader(argv[i + 1]);
-	}
 	// For every class we have a matrix:
 	//  - in which each row is a row of features for 1 example
 	//  - number of rows = number of samples
-	vector<vector<double> > feature[NUMBER_OF_CLASSES];
+	vector<vector<double> > featuresInSamples[NUMBER_OF_CLASSES];
 
-	// storing the size of each class
-	int setSize[NUMBER_OF_CLASSES];
-	memset(setSize, 0, sizeof(int) * NUMBER_OF_CLASSES);
+	// Storing the size of each class
+	int classSize[NUMBER_OF_CLASSES];
 
-	ofstream svm_gesture;
-	svm_gesture.open("svm_gesture.dat");
-	for (int j = 0; j < NUMBER_OF_CLASSES; j++) {
-
-		while (r[j]->nextFrame()) {
-			// Defining the set of features
-			vector<double> row;
-
-			// j + 1
-			svm_gesture << j + 1 << " ";
-
-			row = features6(r[j], svm_gesture);
-
-
-			svm_gesture << endl;
-
-			feature[j].push_back(row);
-			setSize[j]++;
-		}
-		delete r[j];
-
-	}
-	svm_gesture.close();
+	// Create features data sets
+	createFeaturesDataSets(NUMBER_OF_CLASSES, classSize, argv,
+			featuresInSamples);
 
 	cout << "Preprocessing" << endl;
 	return 0;
@@ -152,30 +148,31 @@ int main(int argc, char **argv) {
 
 	 feature[0].erase( feature[0].begin());
 	 */
+
 	cout << "Learning" << endl;
 	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
-		cout << setSize[i] << endl;
+		cout << classSize[i] << endl;
 	}
 
-// Separation of data into learning and testing sets
+	// Separation of data into learning and testing sets
 	int trainSetSize = 0;
 	int testSetSize = 0;
 
 	vector<int> trainLabel, testLabel;
 	vector<vector<double> > trainFeatures, testFeatures;
 	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
-		int class_train_size = (setSize[i] * TRAIN_TEST_PERCENT) / 100;
-		int class_test_size = setSize[i] - class_train_size;
+		int class_train_size = (classSize[i] * TRAIN_TEST_PERCENT) / 100;
+		int class_test_size = classSize[i] - class_train_size;
 		trainSetSize += class_train_size;
 		testSetSize += class_test_size;
 
 		for (int j = 0; j < class_train_size; j++) {
 			trainLabel.push_back(i + 1);
-			trainFeatures.push_back(feature[i][j]);
+			trainFeatures.push_back(featuresInSamples[i][j]);
 		}
-		for (int j = class_train_size; j < setSize[i]; j++) {
+		for (int j = class_train_size; j < classSize[i]; j++) {
 			testLabel.push_back(i + 1);
-			testFeatures.push_back(feature[i][j]);
+			testFeatures.push_back(featuresInSamples[i][j]);
 		}
 	}
 
@@ -210,4 +207,5 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
+
 
