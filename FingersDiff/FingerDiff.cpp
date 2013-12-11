@@ -35,7 +35,6 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 		attributeCounter++;
 		svmGesture << attributeCounter << ":" << 0 << " ";
 	}
-<<<<<<< HEAD
 
 	//ratio of the finger thickness to the maximal finger thickness
 	float fingersThickness [fingerCount];
@@ -71,8 +70,6 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 		attributeCounter++;
 		svmGesture << attributeCounter << ":" << 0 << " ";
 	}
-=======
->>>>>>> branch 'master' of https://github.com/kaathleen/projekt-inzynierski
 
 		// Defining the set of features
 		vector<double> row;
