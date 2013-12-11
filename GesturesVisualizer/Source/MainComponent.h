@@ -1,29 +1,25 @@
 #ifndef MAINCOMPONENT_H_INCLUDED
 #define MAINCOMPONENT_H_INCLUDED
 
-#include "GestureFrame.h"
+#include "Model/GestureFrame.h"
+#include "StorageDriver/GestureStorageDriver.h"
+#include "StorageDriver/BinaryFileStorageDriver.h"
 #include "MainToolbarItemFactory.h"
 #include "LMRecorder.h"
 #include "LMRecorderListener.h"
 
-//========================================================================== ====
-/*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
 class MainComponent : public Component, public OpenGLRenderer,
 	public ButtonListener, public ComboBoxListener, public SliderListener,
 	public Timer, public LMRecorderListener
 {
 public:
-    //==============================================================================
-    MainComponent();
+	MainComponent();
 	MainComponent(vector<string>&);
 
-    ~MainComponent();
+	~MainComponent();
 
-    void paint (Graphics&);
-    void resized();
+	void paint (Graphics&);
+	void resized();
 
 	void timerCallback();
 
@@ -47,8 +43,7 @@ public:
 	}
 
 private:
-    //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 	
 	// CONSTANTS
 	static const float m_fPointableRadius;
@@ -59,7 +54,8 @@ private:
 	enum  { kNumColors = 256 };
 
 	// VARIABLES
-	LMRecorder lmRecorder;
+	GestureStorageDriver* gestureStorageDriver;
+	LMRecorder *lmRecorder;
 	
 	Toolbar toolbar;
 	MainToolbarItemFactory *factory;
@@ -88,14 +84,10 @@ private:
 
 	void setGesturesPaths(vector<string>);
 
-	bool parseFile(String filePath);
-	bool parseLine(GestureFrame&, string);
-	bool parseFinger(GestureFrame&, string);
-
 	void setupScene();
 	void resetCamera();
 	void drawFrame(int);
-	void drawGestureFrame(GestureFrame);
+	void drawGestureFrame(GestureFrame*);
 	
 	void startRecording();
 	void stopRecording();

@@ -1,62 +1,105 @@
 #include "LMRecorder.h"
-	
+
+const std::string LMRecorder::TEMP_PATH = "temp.lmr";
+
+LMRecorder::LMRecorder(GestureStorageDriver *gestureStorageDriver)
+{
+	this->gestureStorageDriver = gestureStorageDriver;
+	initValues();
+}
+
 void LMRecorder::initValues() {
 	currentFrame = NULL;
 	count = 0;
-	diffx = 0;
-	diffy = 0;
 	lastTime = 0;
 }
 
 void LMRecorder::onConnect(const Leap::Controller&) {
-	outfile = fopen("temp.lmr", "w");
+	gestureStorageDriver->openConnection(TEMP_PATH, true);
 	clock_gettime(CLOCK_REALTIME, &t1);
 }
 
 void LMRecorder::onFrame(const Leap::Controller& c) {
-	ScopedLock renderLock(mutex);
+	ScopedLock frameLock(frameMutex);
+	ScopedLock closingLock(closingMutex);
 	if (currentFrame !=NULL) {
 		delete currentFrame;
+		currentFrame = NULL;
 	}
 	currentFrame = new GestureFrame();
 	
-	frame = c.frame();
-	finger = frame.fingers().leftmost();
-
 	clock_gettime(CLOCK_REALTIME, &t2);
-	czas = (double)(t2.tv_sec - t1.tv_sec) + 1.e-9*(t2.tv_nsec - t1.tv_nsec);
-	czas *= 1000;
+	timestamp = (double)(t2.tv_sec - t1.tv_sec) + 1.e-9*(t2.tv_nsec - t1.tv_nsec);
+	timestamp *= 1000;
+	
+	prepareData(c.frame(), currentFrame, timestamp);
+	
+	gestureStorageDriver->saveGestureFrame(*currentFrame);
 
-	if(frame.fingers().count())
-		fprintf(outfile, "%.4f", czas);
+	printf("F: %d T: %dms FPS: %.2f FPS_AVG: %.2f\n", count, (int)(timestamp), 1000.0/(timestamp-lastTime), 1000*count/timestamp);
 
-	// add all fingers
-	for(i=0; i<frame.fingers().count(); i++) {
-		finger = frame.fingers()[i];
-		fprintf(outfile, "#%f;%f;%f;", finger.tipPosition().x, finger.tipPosition().y, finger.tipPosition().z);
-		fprintf(outfile, "%f;%f;%f", finger.direction().x, finger.direction().y, finger.direction().z);
-		
-		Vertex fingerTipPos(finger.tipPosition().x, finger.tipPosition().y, finger.tipPosition().z);
-		Vertex fingerTipVect(finger.direction().x, finger.direction().y, finger.direction().z);
-		currentFrame->addFinger(fingerTipPos, fingerTipVect);
-	}
-
-	// if there were any fingers, add newline (avoids empty lines)
-	if(frame.fingers().count())
-		fprintf(outfile, "\n");
-
-
-	printf("F: %d T: %dms FPS: %.2f FPS_AVG: %.2f\n", count, (int)(czas), 1000.0/(czas-lastTime), 1000*count/czas);
-
-	lastTime = czas;
+	lastTime = timestamp;
 	count++;
 
 	notifyListeners();
 }
 
-void LMRecorder::onDisconnect(const Leap::Controller& c) {
-	fclose(outfile);
+void LMRecorder::prepareData(const Leap::Frame frame, GestureFrame *currFrame, double timestamp)
+{
+	currFrame->setTimestamp(timestamp);	
 
+	Leap::HandList handsInFrame = frame.hands();
+	for(int handIndex=0; handIndex<handsInFrame.count(); handIndex++)
+	{
+		Leap::Hand currHand = handsInFrame[handIndex];
+		
+		//create GestureHand
+		GestureHand gestureHand(
+			currHand.id(),
+			Vertex(currHand.palmPosition().x, currHand.palmPosition().y, currHand.palmPosition().z),
+			Vertex(0, 0, 0/*currHand.stabilizedPalmPosition().x, currHand.stabilizedPalmPosition().y, currHand.stabilizedPalmPosition().z*/),
+			Vertex(currHand.palmNormal().x, currHand.palmNormal().y, currHand.palmNormal().z),
+			Vertex(currHand.direction().x, currHand.direction().y, currHand.direction().z)
+		);
+		gestureHand.setOrderValue(currHand.palmPosition().x);
+		
+		Vertex planeNormalVec = gestureHand.getDirection().crossProduct(gestureHand.getPalmNormal()).getNormalized();
+		
+		Leap::FingerList fingersInCurrHand = currHand.fingers();
+		for (int fingerIndex=0; fingerIndex<fingersInCurrHand.count(); fingerIndex++)
+		{
+			Leap::Finger currFinger = fingersInCurrHand[fingerIndex];
+		
+			Leap::Vector leapFingerTipPos = currFinger.tipPosition();
+			Vertex fingerTipPos(leapFingerTipPos.x, leapFingerTipPos.y, leapFingerTipPos.z);
+			float distance = getPointDistanceFromPlane(fingerTipPos, gestureHand.getPalmPosition(), planeNormalVec);
+			
+			//create GestureFinger
+			GestureFinger gestureFinger(
+				currFinger.id(),
+				fingerTipPos,
+				Vertex(currFinger.stabilizedTipPosition().x, currFinger.stabilizedTipPosition().y, currFinger.stabilizedTipPosition(). z),
+				Vertex(currFinger.direction().x, currFinger.direction().y, currFinger.direction().z),
+				currFinger.length(),
+				currFinger.width()
+			);
+			gestureFinger.setOrderValue(distance);
+			
+			gestureHand.addFinger(gestureFinger);
+		}		
+		gestureHand.sortFingers();
+		
+		currFrame->addHand(gestureHand);
+	}
+	currFrame->sortHands();
+}
+
+float LMRecorder::getPointDistanceFromPlane(Vertex point, Vertex planePos, Vertex planeNormal)
+{
+	return -(planeNormal.dotProduct(point - planePos));
+}
+
+void LMRecorder::onDisconnect(const Leap::Controller& c) {
 }
 
 void LMRecorder::startRecording() {
@@ -66,8 +109,10 @@ void LMRecorder::startRecording() {
 }
 
 void LMRecorder::stopRecording() {
+	ScopedLock closingLock(closingMutex);
 	printf("Stop recording\n");
 	getController().removeListener(*this);
+	gestureStorageDriver->closeConnection();
 }
 
 void LMRecorder::saveRecording(string path) {
@@ -77,7 +122,7 @@ void LMRecorder::saveRecording(string path) {
 		path += ".lmr";
 	}
 	
-	std::ifstream  src("temp.lmr", std::ios::binary);
+	std::ifstream  src(TEMP_PATH.c_str(), std::ios::binary);
 	std::ofstream  dst(path.c_str(),   std::ios::binary);
 
 	dst << src.rdbuf();
@@ -91,7 +136,7 @@ bool LMRecorder::getCurrentFrame(GestureFrame &gestureFrame)
 		      return false;
 	}
 	
-	ScopedLock renderLock(mutex);
+	ScopedLock frameLock(frameMutex);
 	if (currentFrame != NULL) {
 		gestureFrame = *currentFrame;
 		return true;
