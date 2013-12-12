@@ -17,6 +17,7 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 	int fingerCount = tempHand.getFingerCount();
 	int attributeCounter = 1;
 
+	//fingerCount
 	svmGesture << attributeCounter << ":" << fingerCount << " ";
 
 	//distance between two nearest base points of a finger
@@ -61,6 +62,8 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 	for(int i=1; i<fingerCount; i++)
 	{
 		Vertex rightFingerDirection = tempHand.getFinger(0)->getDirection();
+
+		float angle = abs(acos(leftFingerDirection.dotProduct(rightFingerDirection)/(leftFingerDirection.getMagnitude()*rightFingerDirection.getMagnitude())));
 		attributeCounter++;
 		svmGesture << attributeCounter << ":" << (float) fingersThickness[i]/maxFingerThickness << " ";
 		leftFingerDirection = rightFingerDirection;
@@ -71,60 +74,24 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 		svmGesture << attributeCounter << ":" << 0 << " ";
 	}
 
-		// Defining the set of features
-		vector<double> row;
-		// 1 feature -> number of fingers
-		row.push_back(r->fingerCount);
+	// angles between finger and first finger
+	Vertex leftBaseFingerPalmPosition = (tempHand.getFinger(0)->getTipPosition() - tempHand.getFinger(0)->getLength()*tempHand.getFinger(0)->getDirection().getNormalized())-tempHand.getPalmPosition();
+	for(int i=1; i<fingerCount; i++)
+	{
+		GestureFinger tempFinger = tempHand.getFinger(i);
+		Vertex rightBaseFingerPalmPosition = (tempHand.getFinger(i)->getTipPosition() - tempHand.getFinger(i)->getLength()*tempHand.getFinger(i)->getDirection().getNormalized())-tempHand.getPalmPosition();
+		float angle = abs(acos(leftBaseFingerPalmPosition.dotProduct(rightBaseFingerPalmPosition)/(leftBaseFingerPalmPosition.getMagnitude()*rightBaseFingerPalmPosition.getMagnitude())));
+		attributeCounter++;
+		svmGesture << attributeCounter << ":" << angle << " ";
+		leftBaseFingerPalmPosition = rightBaseFingerPalmPosition;
+	}
+	for(int i=0; i<(MAX_FINGER_COUNT-fingerCount);i++)
+	{
+		attributeCounter++;
+		svmGesture << attributeCounter << ":" << 0 << " ";
+	}
 
-		svm_gesture << "1:" << r->fingerCount << " ";
-w.push_back(r->fingerCount);
-
-		// angles between fingers
-		vector<double> angles(15, 0.0);
-		for (int i = 0; i < r->fingerCount; i++) {
-			double x = r->getFinger(i, DIRX);
-			double y = r->getFinger(i, DIRY);
-			double z = r->getFinger(i, DIRZ);
-			for (int k = i + 1; k < r->fingerCount; k++) {
-				double x2 = r->getFinger(k, DIRX);
-				double y2 = r->getFinger(k, DIRY);
-				double z2 = r->getFinger(k, DIRZ);
-
-				angles.push_back(abs(x * x2 + y * y2 + z * z2));
-			}
-		}
-		sort(angles.begin(), angles.end(), myfunction);
-
-		for (int i = 0; i < 5; i++) {
-			row.push_back(angles[i]);
-			svm_gesture << i + 2 << ":" << angles[i] << " ";
-		}
-
-		// Distances between tips
-		vector<double> dist(15, 0.0);
-
-		for (int i = 0; i < r->fingerCount; i++) {
-			double x = r->getFinger(i, TIPX);
-			double y = r->getFinger(i, TIPY);
-			double z = r->getFinger(i, TIPZ);
-			for (int k = i + 1; k < r->fingerCount; k++) {
-				double x2 = r->getFinger(k, TIPX);
-				double y2 = r->getFinger(k, TIPY);
-				double z2 = r->getFinger(k, TIPZ);
-
-				double wyn = sqrt(
-						(x - x2) * (x - x2) + (y - y2) * (y - y2)
-								+ (z - z2) * (z - z2));
-				dist.push_back(wyn);
-			}
-		}
-		sort(dist.begin(), dist.end(), myfunction);
-
-		for (int i = 0; i < 5; i++) {
-			row.push_back(dist[i]);
-			svm_gesture << i + 7 << ":" << dist[i] << " ";
-		}
-	return row;
+	return vector<double>();
 }
 
 void createFeaturesDataSets(const int& NUMBER_OF_CLASSES,
