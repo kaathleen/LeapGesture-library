@@ -53,10 +53,12 @@ public:
 	
 	Vertex operator+ (Vertex other);
     	
-    	Vertex operator- (Vertex other);
-    	
-    	float operator* (Vertex other);
+	Vertex operator- (Vertex other);
+
+	float operator* (Vertex other);
 	
+	Vertex operator* (float scalar);
+
 	friend std::ostream& operator<<(std::ostream& os, const Vertex& vertex);
 
 private:

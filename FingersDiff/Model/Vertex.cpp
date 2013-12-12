@@ -65,6 +65,13 @@ float Vertex::operator* (Vertex other)
 	return dotProduct(other);
 }
 
+Vertex Vertex::operator* (float scalar)
+{
+	return Vertex(getX() * scalar,
+			getY() * scalar,
+			getZ() * scalar);
+}
+
 std::ostream& operator<<(std::ostream& os, const Vertex& vertex)
 {
 	os<<vertex.getX()<<";";
