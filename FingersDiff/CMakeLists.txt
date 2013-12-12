@@ -5,5 +5,5 @@ project(FingersDiff)
 set(LibSVM_LIBRARIES svm)
 
 
-add_executable (SVMstatic LMReader.cpp SVMclassificator.cpp static.cpp)
-target_link_libraries(SVMstatic ${LibSVM_LIBRARIES})
+add_executable (FingersDiff FingerDiff.cpp SVMclassificator.cpp Model/GestureFinger.cpp Model/GestureFrame.cpp Model/GestureHand.cpp Model/Vertex.cpp StorageDriver/BinaryFileStorageDriver.cpp)
+target_link_libraries(FingersDiff ${LibSVM_LIBRARIES})

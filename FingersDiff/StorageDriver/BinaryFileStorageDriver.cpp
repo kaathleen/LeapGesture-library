@@ -63,16 +63,20 @@ bool BinaryFileStorageDriver::saveGestureFrame(GestureFrame gestureFrame)
 
 bool BinaryFileStorageDriver::loadGestureFrame(GestureFrame &gestureFrame)
 {
-	if (file.is_open() && !file.eof())
+	if (file.is_open())
 	{	
 		std::string gFrameLine;
 		std::getline(file, gFrameLine);
+
+		if (file.eof())
+			return false;
+
 		gFrameLine += '\n';
 		
 		bool isEnd = false;
 			
 		this->currState = TIMESTAMP_STATE;
-		
+
 		for (int i=0; i<gFrameLine.size() && !isEnd; i++)
 		{	
 			char currSign = gFrameLine[i];
@@ -214,9 +218,9 @@ bool BinaryFileStorageDriver::loadGestureFrame(GestureFrame &gestureFrame)
 					    break;
 				}
 			}
-			catch(std::string e)
+			catch(std::string & e)
 			{
-				std::cout<<e;
+				std::cout<<e<<std::endl;
 				return false;
 			}
 		}
@@ -269,7 +273,7 @@ int BinaryFileStorageDriver::strToInt(std::string value)
 	int result;
 	if (!(ss >> result))
 	{
-		throw std::string("Cannot convert to int value: ") + value;
+		throw std::string("Cannot convert to int value: \"") + value + "\"";
 	}
 	
 	return result;
@@ -281,7 +285,7 @@ float BinaryFileStorageDriver::strToFloat(std::string value)
 	float result;
 	if (!(ss >> result))
 	{
-		throw std::string("Cannot convert to float value: ") + value;
+		throw std::string("Cannot convert to float value: \"") + value + "\"";
 	}
 	
 	return result;
