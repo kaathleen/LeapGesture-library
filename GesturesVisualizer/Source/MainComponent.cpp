@@ -571,9 +571,6 @@ void MainComponent::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
 	{
         	frameList.clear();         
 		string path = gestures[comboBoxThatHasChanged->getSelectedId()-1];
-		AlertWindow::showMessageBoxAsync (AlertWindow::InfoIcon,
-                                          "Alert Box",
-                                          path);
 		if(gestureStorageDriver->loadAllGestureFrames(path, frameList) == false)
 		{
 			AlertWindow::showMessageBoxAsync (AlertWindow::InfoIcon,
