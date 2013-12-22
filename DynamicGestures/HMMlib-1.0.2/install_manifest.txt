@@ -1,0 +1,9 @@
+/usr/local/include/HMMlib/float_traits.hpp
+/usr/local/include/HMMlib/hmm.hpp
+/usr/local/include/HMMlib/operator_traits.hpp
+/usr/local/include/HMMlib/sse_operator_traits.hpp
+/usr/local/include/HMMlib/allocator_traits.hpp
+/usr/local/include/HMMlib/hmm_table.hpp
+/usr/local/include/HMMlib/hmm_vector.hpp
+/usr/local/include/HMMlib/hmm_matrix.hpp
+/usr/local/lib/python/pyhmmlib.so

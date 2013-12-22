@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -Wconversion -O3  -msse4    CMakeFiles/hmm_test.dir/hmm_test.cpp.o  -o hmm_test -rdynamic -L/home/smi/HMMlib-1.0.2 -Wl,-Bstatic -lboost_unit_test_framework-mt -lboost_python -Wl,-Bdynamic -lpython2.7 -Wl,-rpath,/home/smi/HMMlib-1.0.2 

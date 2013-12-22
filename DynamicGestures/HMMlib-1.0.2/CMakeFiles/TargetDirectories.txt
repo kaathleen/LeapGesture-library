@@ -1,0 +1,5 @@
+/home/smi/HMMlib-1.0.2/CMakeFiles/dist.dir
+/home/smi/HMMlib-1.0.2/tests/CMakeFiles/hmm_matrix_test.dir
+/home/smi/HMMlib-1.0.2/tests/CMakeFiles/hmm_test.dir
+/home/smi/HMMlib-1.0.2/tests/CMakeFiles/hmm_vector_test.dir
+/home/smi/HMMlib-1.0.2/python/CMakeFiles/pyhmmlib.dir

@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -Wall -Wconversion -O3  -msse4   -shared -Wl,-soname,pyhmmlib.so -o pyhmmlib.so CMakeFiles/pyhmmlib.dir/hmmlib_python.cpp.o -Wl,-Bstatic -lboost_unit_test_framework-mt -lboost_python -Wl,-Bdynamic -lpython2.7 

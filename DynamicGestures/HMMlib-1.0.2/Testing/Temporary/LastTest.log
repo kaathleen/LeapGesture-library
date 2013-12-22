@@ -1,0 +1,57 @@
+Start testing: Dec 06 17:36 CET
+----------------------------------------------------------
+1/3 Testing: hmm_matrix_test
+1/3 Test: hmm_matrix_test
+Command: "/home/smi/HMMlib-1.0.2/tests/hmm_matrix_test"
+Directory: /home/smi/HMMlib-1.0.2/tests
+"hmm_matrix_test" start time: Dec 06 17:36 CET
+Output:
+----------------------------------------------------------
+Running 41 test cases...
+
+*** No errors detected
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"hmm_matrix_test" end time: Dec 06 17:36 CET
+"hmm_matrix_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/3 Testing: hmm_vector_test
+2/3 Test: hmm_vector_test
+Command: "/home/smi/HMMlib-1.0.2/tests/hmm_vector_test"
+Directory: /home/smi/HMMlib-1.0.2/tests
+"hmm_vector_test" start time: Dec 06 17:36 CET
+Output:
+----------------------------------------------------------
+Running 12 test cases...
+
+*** No errors detected
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"hmm_vector_test" end time: Dec 06 17:36 CET
+"hmm_vector_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/3 Testing: hmm_test
+3/3 Test: hmm_test
+Command: "/home/smi/HMMlib-1.0.2/tests/hmm_test"
+Directory: /home/smi/HMMlib-1.0.2/tests
+"hmm_test" start time: Dec 06 17:36 CET
+Output:
+----------------------------------------------------------
+Running 62 test cases...
+
+*** No errors detected
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"hmm_test" end time: Dec 06 17:36 CET
+"hmm_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 06 17:36 CET

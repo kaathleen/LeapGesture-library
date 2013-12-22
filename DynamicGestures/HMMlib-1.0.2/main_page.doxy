@@ -1,0 +1,14 @@
+/**
+ * \mainpage HMMlib version 1.0
+ * \authors 
+ *  Andreas Sand (asand@cs.au.dk), Asbjørn Tølbøl Brask, Christian N.S. Pedersen and Thomas Mailund
+ *
+ * \section Description 
+ *
+ * HMMlib is a C++ library for constructing and analyzing general
+ * hidden Markov models. The library consists of a number of template
+ * classes and generic functions, parameterized with the precision of
+ * floating point types and different types of hardware acceleration.
+ *
+ * \see http://birc.au.dk/~asand/papers/HiBi10_hmmlib.pdf
+ */
