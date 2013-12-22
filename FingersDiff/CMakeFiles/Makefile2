@@ -44,44 +44,44 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kuba/Pobrane/projekt-inzynierski-master/SVM_static
+CMAKE_SOURCE_DIR = /home/kuba/git/projekt-inzynierski/FingersDiff
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kuba/Pobrane/projekt-inzynierski-master/SVM_static
+CMAKE_BINARY_DIR = /home/kuba/git/projekt-inzynierski/FingersDiff
 
 #=============================================================================
-# Target rules for target CMakeFiles/SVMstatic.dir
+# Target rules for target CMakeFiles/FingersDiff.dir
 
 # All Build rule for target.
-CMakeFiles/SVMstatic.dir/all:
-	$(MAKE) -f CMakeFiles/SVMstatic.dir/build.make CMakeFiles/SVMstatic.dir/depend
-	$(MAKE) -f CMakeFiles/SVMstatic.dir/build.make CMakeFiles/SVMstatic.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kuba/Pobrane/projekt-inzynierski-master/SVM_static/CMakeFiles  1 2 3
-	@echo "Built target SVMstatic"
-.PHONY : CMakeFiles/SVMstatic.dir/all
+CMakeFiles/FingersDiff.dir/all:
+	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/depend
+	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles  1 2 3 4 5 6 7
+	@echo "Built target FingersDiff"
+.PHONY : CMakeFiles/FingersDiff.dir/all
 
 # Include target in all.
-all: CMakeFiles/SVMstatic.dir/all
+all: CMakeFiles/FingersDiff.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/SVMstatic.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/Pobrane/projekt-inzynierski-master/SVM_static/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/SVMstatic.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/Pobrane/projekt-inzynierski-master/SVM_static/CMakeFiles 0
-.PHONY : CMakeFiles/SVMstatic.dir/rule
+CMakeFiles/FingersDiff.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles 7
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/FingersDiff.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles 0
+.PHONY : CMakeFiles/FingersDiff.dir/rule
 
 # Convenience name for target.
-SVMstatic: CMakeFiles/SVMstatic.dir/rule
-.PHONY : SVMstatic
+FingersDiff: CMakeFiles/FingersDiff.dir/rule
+.PHONY : FingersDiff
 
 # clean rule for target.
-CMakeFiles/SVMstatic.dir/clean:
-	$(MAKE) -f CMakeFiles/SVMstatic.dir/build.make CMakeFiles/SVMstatic.dir/clean
-.PHONY : CMakeFiles/SVMstatic.dir/clean
+CMakeFiles/FingersDiff.dir/clean:
+	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/clean
+.PHONY : CMakeFiles/FingersDiff.dir/clean
 
 # clean rule for target.
-clean: CMakeFiles/SVMstatic.dir/clean
+clean: CMakeFiles/FingersDiff.dir/clean
 .PHONY : clean
 
 #=============================================================================

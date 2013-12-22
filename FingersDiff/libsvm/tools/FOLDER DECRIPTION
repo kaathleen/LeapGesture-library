@@ -1,0 +1,8 @@
+dataX represent data sets (defined in Run.sh) that have been used to learning svm.
+After the semicolon are located information about chosen features
+1 fingerCount
+2 distance between two nearest base points of a finger
+2b ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
+3 ratio of the finger thickness to the maximal finger thickness
+4 angles between fingers
+5 angles between finger and first finger relative to palmPosition

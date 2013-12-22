@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 #include "SVMclassificator.h"
 
@@ -11,6 +12,8 @@
 
 #include "StorageDriver/BinaryFileStorageDriver.h"
 #include "StorageDriver/GestureStorageDriver.h"
+
+#include "PathUtil.h"
 
 using namespace std;
 
@@ -28,13 +31,11 @@ void addAttribute(float attributeValue, int& attributeCounter,
 
 void fingerCountAttribute(int& fingerCount, int& attributeCounter,
 		vector<double>& result, ofstream& svmGesture) {
-	svmGesture<<"FCA";
 	addAttribute(fingerCount, attributeCounter, result, svmGesture);
 }
 
 void nearestFingersDistancesAttribute(GestureHand* tempHand, int fingerCount,
 		int& attributeCounter, vector<double>& result, ofstream& svmGesture) {
-	svmGesture<<"NFDA";
 	//distance between two nearest base points of a finger
 	if (tempHand != NULL && fingerCount > 1) {
 		Vertex firstBaseFingerPosition =
@@ -47,7 +48,7 @@ void nearestFingersDistancesAttribute(GestureHand* tempHand, int fingerCount,
 					- tempFinger->getDirection().getNormalized()
 							* tempFinger->getLength();
 			float distance =
-					(firstBaseFingerPosition - baseFingerPosition).getMagnitude();
+					abs((firstBaseFingerPosition - baseFingerPosition).getMagnitude());
 			addAttribute(distance, attributeCounter, result, svmGesture);
 			firstBaseFingerPosition = baseFingerPosition;
 		}
@@ -58,9 +59,47 @@ void nearestFingersDistancesAttribute(GestureHand* tempHand, int fingerCount,
 	}
 }
 
+void nearestFingersDistancesRatiosAttribute(GestureHand* tempHand, int fingerCount,
+		int& attributeCounter, vector<double>& result, ofstream& svmGesture) {
+	//distance between two nearest base points of a finger
+	if (tempHand != NULL && fingerCount > 1) {
+		float minimalDistance = 0;
+		vector<double> distances;
+		Vertex firstBaseFingerPosition =
+				tempHand->getFinger(0)->getTipPosition()
+						- tempHand->getFinger(0)->getDirection().getNormalized()
+								* tempHand->getFinger(0)->getLength();
+		for (int i = 1; i < fingerCount; i++) {
+			GestureFinger *tempFinger = tempHand->getFinger(i);
+			Vertex baseFingerPosition = tempFinger->getTipPosition()
+					- tempFinger->getDirection().getNormalized()
+							* tempFinger->getLength();
+			float distance =
+					abs((firstBaseFingerPosition - baseFingerPosition).getMagnitude());
+			if ((minimalDistance == 0 || distance < minimalDistance) && distance > 0)
+			{
+				minimalDistance = distance;
+			}
+
+			distances.push_back(distance);
+			firstBaseFingerPosition = baseFingerPosition;
+		}
+		for (int i = 0; i < distances.size(); i++) {
+			float distanceRatio = 0;
+			if (minimalDistance > 0)
+				distanceRatio = distances[i] / minimalDistance;
+
+			addAttribute(distanceRatio, attributeCounter, result, svmGesture);
+		}
+	}
+	fingerCount = (fingerCount == 0) ? 1 : fingerCount;
+	for (int i = 0; i < (MAX_FINGER_COUNT - fingerCount); i++) {
+		addAttribute(0, attributeCounter, result, svmGesture);
+	}
+}
+
 void fingerThicknessRatiosAttribute(int& fingerCount, GestureHand* tempHand,
 		int& attributeCounter, vector<double>& result, ofstream& svmGesture) {
-	svmGesture<<"FTRA";
 	//ratio of the finger thickness to the maximal finger thickness
 	float fingersThickness[fingerCount];
 	float maxFingerThickness = 0;
@@ -84,7 +123,6 @@ void fingerThicknessRatiosAttribute(int& fingerCount, GestureHand* tempHand,
 
 void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 		int& attributeCounter, vector<double>& result, ofstream& svmGesture) {
-	svmGesture<<"ABFA";
 	// angles between fingers
 	if (tempHand != NULL && fingerCount > 1) {
 		Vertex leftFingerDirection = tempHand->getFinger(0)->getDirection();
@@ -112,7 +150,6 @@ void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 void anglesBetweenFingersRelativeToPalmPosAttribute(GestureHand* tempHand,
 		int fingerCount, int attributeCounter, vector<double>& result,
 		ofstream& svmGesture) {
-	svmGesture<<"ABFRTPPA";
 	// angles between finger and first finger relative to palmPosition
 	if (tempHand != NULL && fingerCount > 1) {
 		Vertex leftBaseFingerPalmPosition =
@@ -158,31 +195,55 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 	/*nearestFingersDistancesAttribute(tempHand, fingerCount, attributeCounter,
 			result, svmGesture);*/
 
+	//ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
+	nearestFingersDistancesRatiosAttribute(tempHand, fingerCount, attributeCounter,
+			result, svmGesture);
+
 	//ratio of the finger thickness to the maximal finger thickness
-	/*fingerThicknessRatiosAttribute(fingerCount, tempHand, attributeCounter,
-			result, svmGesture);*/
+	fingerThicknessRatiosAttribute(fingerCount, tempHand, attributeCounter,
+			result, svmGesture);
 
 	// angles between fingers
-	/*anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
-			result, svmGesture);*/
+	anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
+			result, svmGesture);
 
 	// angles between finger and first finger relative to palmPosition
-	/*anglesBetweenFingersRelativeToPalmPosAttribute(tempHand, fingerCount,
-			attributeCounter, result, svmGesture);*/
+	anglesBetweenFingersRelativeToPalmPosAttribute(tempHand, fingerCount,
+			attributeCounter, result, svmGesture);
 
 	return result;
 }
 
-void createFeaturesDataSets(const int& NUMBER_OF_CLASSES,
-		int *classSize, char** argv,
-		vector<vector<double> > *featuresInSamples) {
+int getIndexOfClassName(vector<string> &classNames, string name)
+{
+	for (int i=0; i<classNames.size(); i++)
+	{
+		if (classNames[i].compare(name) == 0)
+			return i;
+	}
+
+	return -1;
+}
+
+void createFeaturesDataSets(const int& NUMBER_OF_CLASSES, char** argv,
+		vector<vector<vector<double> > > &featuresInSamplesInClasses,
+		vector<string> &classNames) {
 	cout << "createFeaturesDataSets - entry" << endl;
 
 	GestureStorageDriver* gestureStorageDriver = new BinaryFileStorageDriver();
 	ofstream svm_gesture;
 	svm_gesture.open("svm_gesture.dat");
 	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
-		classSize[i] = 0;
+		string fileName = getFileNameFromPath(argv[i + 1]);
+		cout<<"<"<<fileName<<"> ";
+		int classNameIndex = getIndexOfClassName(classNames, fileName);
+		if (classNameIndex < 0)
+		{
+			classNames.push_back(fileName);
+			classNameIndex = classNames.size()-1;
+			featuresInSamplesInClasses.push_back(vector<vector<double> >());
+		}
+
 		gestureStorageDriver->openConnection(argv[i + 1], false);
 		cout << "Open connection for "<<argv[i + 1]<< endl;
 		GestureFrame currGestureFrame;
@@ -190,11 +251,11 @@ void createFeaturesDataSets(const int& NUMBER_OF_CLASSES,
 			// Defining the set of features
 			vector<double> row;
 			// sequence number of class
-			svm_gesture << i + 1 << " ";
+			svm_gesture << classNameIndex + 1 << " ";
 			row = features1(&currGestureFrame, svm_gesture);
 			svm_gesture << endl;
-			featuresInSamples[i].push_back(row);
-			classSize[i]++;
+
+			featuresInSamplesInClasses[classNameIndex].push_back(row);
 
 			currGestureFrame.clear();
 		}
@@ -214,22 +275,22 @@ int main(int argc, char **argv) {
 		printf("Usage: %s file_class1 file_class2 ...\n", argv[0]);
 		exit(1);
 	}
-	const int NUMBER_OF_CLASSES = argc - 1;
+	const int NUMBER_OF_FILES = argc - 1;
 
 	// For every class we have a matrix:
 	//  - in which each row is a row of features for 1 example
 	//  - number of rows = number of samples
-	vector<vector<double> > featuresInSamples[NUMBER_OF_CLASSES];
+	vector<vector<vector<double> > > featuresInSamplesInClasses;
 
-	// Storing the size of each class
-	int classSize[NUMBER_OF_CLASSES];
+	vector<string> classNames;
 
 	// Create features data sets
-	createFeaturesDataSets(NUMBER_OF_CLASSES, classSize, argv,
-			featuresInSamples);
+	createFeaturesDataSets(NUMBER_OF_FILES, argv,
+			featuresInSamplesInClasses, classNames);
+
+	return 0;
 
 	cout << "Preprocessing" << endl;
-	//return 0;
 	/*int window_size = 5;
 	 for (int i=0;i<NUMBER_OF_CLASSES;i++)
 	 {
@@ -247,9 +308,12 @@ int main(int argc, char **argv) {
 	 feature[0].erase( feature[0].begin());
 	 */
 
+	// Number of class
+	const int NUMBER_OF_CLASS = featuresInSamplesInClasses.size();
+
 	cout << "Learning" << endl;
-	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
-		cout << classSize[i] << endl;
+	for (int i = 0; i < NUMBER_OF_CLASS; i++) {
+		cout << featuresInSamplesInClasses[i].size() << endl;
 	}
 
 	// Separation of data into learning and testing sets
@@ -258,19 +322,19 @@ int main(int argc, char **argv) {
 
 	vector<int> trainLabel, testLabel;
 	vector<vector<double> > trainFeatures, testFeatures;
-	for (int i = 0; i < NUMBER_OF_CLASSES; i++) {
-		int class_train_size = (classSize[i] * TRAIN_TEST_PERCENT) / 100;
-		int class_test_size = classSize[i] - class_train_size;
+	for (int i = 0; i < NUMBER_OF_CLASS; i++) {
+		int class_train_size = (featuresInSamplesInClasses[i].size() * TRAIN_TEST_PERCENT) / 100;
+		int class_test_size = featuresInSamplesInClasses[i].size() - class_train_size;
 		trainSetSize += class_train_size;
 		testSetSize += class_test_size;
 
 		for (int j = 0; j < class_train_size; j++) {
 			trainLabel.push_back(i + 1);
-			trainFeatures.push_back(featuresInSamples[i][j]);
+			trainFeatures.push_back(featuresInSamplesInClasses[i][j]);
 		}
-		for (int j = class_train_size; j < classSize[i]; j++) {
+		for (int j = class_train_size; j < featuresInSamplesInClasses[i].size(); j++) {
 			testLabel.push_back(i + 1);
-			testFeatures.push_back(featuresInSamples[i][j]);
+			testFeatures.push_back(featuresInSamplesInClasses[i][j]);
 		}
 	}
 
@@ -278,17 +342,17 @@ int main(int argc, char **argv) {
 			<< endl;
 
 	cout << "Prepared test set" << endl;
-// Creating an object responsible for learning
+	// Creating an object responsible for learning
 	SVMclassificator SVM;
 
-// Learning the classifier
-	SVM.train(trainFeatures, trainLabel, NUMBER_OF_CLASSES);
+	// Learning the classifier
+	SVM.train(trainFeatures, trainLabel, NUMBER_OF_CLASS);
 
 	cout << "Model learned" << endl;
-// Predicting the labels on the other TRAIN_TEST_PERCENT
+	// Predicting the labels on the other TRAIN_TEST_PERCENT
 	vector<int> pred = SVM.classify(testFeatures);
 
-// Counting the number of correctly recognized labels
+	// Counting the number of correctly recognized labels
 	int count = 0;
 	for (int i = 0; i < testSetSize; i++) {
 		if (pred[i] == testLabel[i]) {
@@ -296,7 +360,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-// Printing results
+	// Printing results
 	cout << endl << "-------- Result --------" << endl;
 	cout << "Recognition rate [%] : " << (count * 1.0 / testSetSize * 100.0)
 			<< "%" << endl;

@@ -1,1 +1,1 @@
-/home/kuba/Pobrane/projekt-inzynierski-master/SVM_static/CMakeFiles/SVMstatic.dir
+/home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles/FingersDiff.dir
