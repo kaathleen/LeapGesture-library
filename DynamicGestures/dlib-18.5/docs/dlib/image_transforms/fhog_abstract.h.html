@@ -1,0 +1,178 @@
+<html><!-- Created using the cpp_pretty_printer from the dlib C++ library.  See http://dlib.net for updates. --><head><title>dlib C++ Library - fhog_abstract.h</title></head><body bgcolor='white'><pre>
+<font color='#009900'>// Copyright (C) 2013  Davis E. King (davis@dlib.net)
+</font><font color='#009900'>// License: Boost Software License   See LICENSE.txt for the full license.
+</font><font color='#0000FF'>#undef</font> DLIB_fHOG_ABSTRACT_H__
+<font color='#0000FF'>#ifdef</font> DLIB_fHOG_ABSTRACT_H__
+
+<font color='#0000FF'>#include</font> "<a style='text-decoration:none' href='../matrix/matrix_abstract.h.html'>../matrix/matrix_abstract.h</a>"
+<font color='#0000FF'>#include</font> "<a style='text-decoration:none' href='../array2d/array2d_kernel_abstract.h.html'>../array2d/array2d_kernel_abstract.h</a>"
+<font color='#0000FF'>#include</font> "<a style='text-decoration:none' href='../array/array_kernel_abstract.h.html'>../array/array_kernel_abstract.h</a>"
+
+<font color='#0000FF'>namespace</font> dlib
+<b>{</b>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type, 
+        <font color='#0000FF'>typename</font> T, 
+        <font color='#0000FF'>typename</font> mm
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='extract_fhog_features'></a>extract_fhog_features</b><font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type<font color='#5555FF'>&amp;</font> img, 
+        array2d<font color='#5555FF'>&lt;</font>matrix<font color='#5555FF'>&lt;</font>T,<font color='#979000'>31</font>,<font color='#979000'>1</font><font color='#5555FF'>&gt;</font>,mm<font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> hog, 
+        <font color='#0000FF'><u>int</u></font> cell_size <font color='#5555FF'>=</font> <font color='#979000'>8</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - cell_size &gt; 0
+            - in_image_type  == is an implementation of array2d/array2d_kernel_abstract.h
+            - img contains some kind of pixel type. 
+              (i.e. pixel_traits&lt;typename in_image_type::type&gt; is defined)
+            - T should be float or double
+        ensures
+            - This function implements the HOG feature extraction method described in 
+              the paper:
+                Object Detection with Discriminatively Trained Part Based Models by
+                P. Felzenszwalb, R. Girshick, D. McAllester, D. Ramanan
+                IEEE Transactions on Pattern Analysis and Machine Intelligence, Vol. 32, No. 9, Sep. 2010
+              This means that it takes an input image img and outputs Felzenszwalb's
+              31 dimensional version of HOG features, which are stored into #hog.
+            - The input image is broken into cells that are cell_size by cell_size pixels
+              and within each cell we compute a 31 dimensional FHOG vector.  This vector
+              describes the gradient structure within the cell.  
+            - #hog.nr() is approximately equal to img.nr()/cell_size.
+            - #hog.nc() is approximately equal to img.nc()/cell_size.
+            - for all valid r and c:
+                - #hog[r][c] == the FHOG vector describing the cell centered at the pixel
+                  location fhog_to_image(point(c,r),cell_size) in img.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type,
+        <font color='#0000FF'>typename</font> T, 
+        <font color='#0000FF'>typename</font> mm1, 
+        <font color='#0000FF'>typename</font> mm2
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='extract_fhog_features'></a>extract_fhog_features</b><font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type<font color='#5555FF'>&amp;</font> img, 
+        dlib::array<font color='#5555FF'>&lt;</font>array2d<font color='#5555FF'>&lt;</font>T,mm1<font color='#5555FF'>&gt;</font>,mm2<font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> hog, 
+        <font color='#0000FF'><u>int</u></font> cell_size <font color='#5555FF'>=</font> <font color='#979000'>8</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - cell_size &gt; 0
+            - in_image_type  == is an implementation of array2d/array2d_kernel_abstract.h
+            - img contains some kind of pixel type. 
+              (i.e. pixel_traits&lt;typename in_image_type::type&gt; is defined)
+            - T should be float or double
+        ensures
+            - This function is identical to the above extract_fhog_features() routine
+              except that it outputs the results in a planar format rather than the
+              interlaced format used above.  That is, each element of the hog vector is
+              placed into one of 31 images inside #hog.  To be precise, if vhog is the
+              output of the above interlaced version of extract_fhog_features() then we
+              will have, for all valid r and c:
+                - #hog[i][r][c] == vhog[r][c](i)
+                  (where 0 &lt;= i &lt; 31)
+            - #hog.size() == 31
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>inline</font> point <b><a name='image_to_fhog'></a>image_to_fhog</b> <font face='Lucida Console'>(</font>
+        point p,
+        <font color='#0000FF'><u>int</u></font> cell_size <font color='#5555FF'>=</font> <font color='#979000'>8</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - cell_size &gt; 0
+        ensures
+            - When using extract_fhog_features(), each FHOG cell is extracted from a
+              certain region in the input image.  image_to_fhog() returns the identity of
+              the FHOG cell containing the image pixel at location p.  Or in other words,
+              let P == image_to_fhog(p) and hog be a FHOG feature map output by
+              extract_fhog_features(), then hog[P.y()][P.x()] == the FHOG vector/cell
+              containing the point p in the input image.  Note that some image points
+              might not have corresponding feature locations.  E.g. border points or points
+              outside the image.  In these cases the returned point will be outside the
+              input image.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>inline</font> point <b><a name='fhog_to_image'></a>fhog_to_image</b> <font face='Lucida Console'>(</font>
+        point p,
+        <font color='#0000FF'><u>int</u></font> cell_size <font color='#5555FF'>=</font> <font color='#979000'>8</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - cell_size &gt; 0
+        ensures
+            - Maps a pixel in a FHOG image (produced by extract_fhog_features()) back to the
+              corresponding original input pixel.  Note that since FHOG images are
+              spatially downsampled by aggregation into cells the mapping is not totally
+              invertible.  Therefore, the returned location will be the center of the cell
+              in the original image that contained the FHOG vector at position p.  Moreover,
+              cell_size should be set to the value used by the call to extract_fhog_features().
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> T, 
+        <font color='#0000FF'>typename</font> mm1, 
+        <font color='#0000FF'>typename</font> mm2
+        <font color='#5555FF'>&gt;</font>
+    matrix<font color='#5555FF'>&lt;</font><font color='#0000FF'><u>unsigned</u></font> <font color='#0000FF'><u>char</u></font><font color='#5555FF'>&gt;</font> <b><a name='draw_fhog'></a>draw_fhog</b><font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> dlib::array<font color='#5555FF'>&lt;</font>array2d<font color='#5555FF'>&lt;</font>T,mm1<font color='#5555FF'>&gt;</font>,mm2<font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> hog,
+        <font color='#0000FF'>const</font> <font color='#0000FF'><u>long</u></font> cell_draw_size <font color='#5555FF'>=</font> <font color='#979000'>15</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - cell_draw_size &gt; 0
+            - hog.size() == 31
+        ensures
+            - Interprets hog as a FHOG feature map output by extract_fhog_features() and
+              converts it into an image suitable for display on the screen.  In particular,
+              we draw all the hog cells into a grayscale image in a way that shows the
+              magnitude and orientation of the gradient energy in each cell.  The result is
+              then returned.
+            - The size of the cells in the output image will be rendered as cell_draw_size 
+              pixels wide and tall.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> T, 
+        <font color='#0000FF'>typename</font> mm
+        <font color='#5555FF'>&gt;</font>
+    matrix<font color='#5555FF'>&lt;</font><font color='#0000FF'><u>unsigned</u></font> <font color='#0000FF'><u>char</u></font><font color='#5555FF'>&gt;</font> <b><a name='draw_fhog'></a>draw_fhog</b><font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> array2d<font color='#5555FF'>&lt;</font>matrix<font color='#5555FF'>&lt;</font>T,<font color='#979000'>31</font>,<font color='#979000'>1</font><font color='#5555FF'>&gt;</font>,mm<font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> hog,
+        <font color='#0000FF'>const</font> <font color='#0000FF'><u>long</u></font> cell_draw_size <font color='#5555FF'>=</font> <font color='#979000'>15</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - cell_draw_size &gt; 0
+        ensures
+            - Interprets hog as a FHOG feature map output by extract_fhog_features() and
+              converts it into an image suitable for display on the screen.  In particular,
+              we draw all the hog cells into a grayscale image in a way that shows the
+              magnitude and orientation of the gradient energy in each cell.  The result is 
+              then returned.
+            - The size of the cells in the output image will be rendered as cell_draw_size 
+              pixels wide and tall.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+<b>}</b>
+
+<font color='#0000FF'>#endif</font> <font color='#009900'>// DLIB_fHOG_ABSTRACT_H__
+</font>
+
+
+</pre></body></html>

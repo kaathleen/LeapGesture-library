@@ -1,0 +1,1 @@
+/usr/bin/c++    -DDLIB_PNG_SUPPORT -DDLIB_JPEG_SUPPORT -O3 -DNDEBUG    CMakeFiles/sequence_segmenter_ex.dir/sequence_segmenter_ex.cpp.o  -o sequence_segmenter_ex -rdynamic dlib_build/libdlib.a -lpthread -lnsl -lSM -lICE -lX11 -lXext -lpng -ljpeg -lsqlite3 -lfftw3 

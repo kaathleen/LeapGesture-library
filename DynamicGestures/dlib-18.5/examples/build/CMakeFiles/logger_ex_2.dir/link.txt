@@ -1,0 +1,1 @@
+/usr/bin/c++    -DDLIB_PNG_SUPPORT -DDLIB_JPEG_SUPPORT -O3 -DNDEBUG    CMakeFiles/logger_ex_2.dir/logger_ex_2.cpp.o  -o logger_ex_2 -rdynamic dlib_build/libdlib.a -lpthread -lnsl -lSM -lICE -lX11 -lXext -lpng -ljpeg -lsqlite3 -lfftw3 

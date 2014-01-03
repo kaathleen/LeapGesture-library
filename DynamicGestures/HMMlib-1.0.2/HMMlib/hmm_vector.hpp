@@ -159,7 +159,7 @@ namespace hmmlib {
   template<typename float_type, typename sse_float_type>
   inline HMMVector<float_type, sse_float_type> &
   HMMVector<float_type, sse_float_type>::operator=(float_type val) {
-    reset(val);
+    this->reset(val);
     return *this;
   }
 	

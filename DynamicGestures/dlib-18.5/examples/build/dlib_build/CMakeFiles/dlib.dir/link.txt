@@ -1,0 +1,2 @@
+/usr/bin/ar cr libdlib.a  CMakeFiles/dlib.dir/all/source.o
+/usr/bin/ranlib libdlib.a

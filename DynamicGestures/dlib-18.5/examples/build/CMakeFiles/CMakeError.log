@@ -1,0 +1,20 @@
+Determining if the function cblas_ddot exists failed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/dlib-18.5/examples/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1256249947/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1256249947.dir/build.make CMakeFiles/cmTryCompileExec1256249947.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/dlib-18.5/examples/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/dlib-18.5/examples/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1256249947.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=cblas_ddot   -o CMakeFiles/cmTryCompileExec1256249947.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1256249947
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1256249947.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=cblas_ddot    CMakeFiles/cmTryCompileExec1256249947.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1256249947 -rdynamic -lblas 
+CMakeFiles/cmTryCompileExec1256249947.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x15): undefined reference to `cblas_ddot'
+collect2: error: ld returned 1 exit status
+make[1]: *** [cmTryCompileExec1256249947] Błąd 1
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/dlib-18.5/examples/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec1256249947/fast] Błąd 2
+
+

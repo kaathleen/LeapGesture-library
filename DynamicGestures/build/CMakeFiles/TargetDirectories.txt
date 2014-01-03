@@ -1,0 +1,2 @@
+/home/smi/Desktop/InzInformatyka/DynamicGestures/build/dlib_build/CMakeFiles/dlib.dir
+/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir

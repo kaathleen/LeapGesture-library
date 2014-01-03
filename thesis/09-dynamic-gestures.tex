@@ -1,0 +1,70 @@
+\chapter{Detection of dynamic gestures}
+
+\section{Proposed methods}
+
+The dynamic gesture recognition problem is a problem, where the input data consist of several consecutive positions and orientations of hand and fingers. 
+Moreover, the important factor for recognition is the time dependencies between data frames. The slower and faster gestures should be recognized as the same dynamic gesture.
+
+The proposed solution utilizes parts of the solution used for recognition of the static gestures.
+Each frame of the captured data is described by the same features as in the static recognition part.
+The set of features for each frame is then processed by the Hidden Markov Model scheme. 
+
+\subsubsection{Hidden Markov Model}
+
+Hidde Markov Models can be represented by the set:
+$ ( , , , , , )$
+
+where $O$ is set of observations, $X$ is a set of states, $Y$ is a matrix defining the probabilities of transitions between states, $Z$ is a matrix defining the probabilities of observations from each state.
+The best way to represent HMM is to use the structure of the graph with two types of vertices. 
+This way, each state is represented by one type of vertices while observations can be shown as second type of vertices.
+The edges between states contain and are an equivalent to the e$Y$ matrix. 
+There are no edges between vertices representing observations.
+The edges between states and observations also contain probabilities from the $Z$ matrix.
+The problem of recognizing the dynamic gesture can be understood as a problem of finding the path of states in HMM which maximizes the combined probability given set of observations. It can be written as:
+$ xx $
+There are three main algorithms connected with HMM:
+\begin{itemize}
+\item Forward-Backward algorithm, 
+\item Viterbi algorithm,
+\item Baum-Welch algorithm.
+\end{itemize}
+
+The Forward-Backward algorithm is used to find the state that maximizes the likelihood given the set of observations.
+It achieves that by performing two operations. First of them **** .
+
+The Viterbi algorithm is used the path of connected states that best explain the set of observations. 
+It is algorithm based on the Forward-Backward, which also can understood as the usage of the Expected Maximization approach.
+
+The Baum-Welch algorithm is the algorithm used to train the HMM.
+For each training example, the algorithms changes the probability and transition matrices to maximize the likelihood of observation.
+
+In dynamic gesture recognition problem, each gesture can be modelled by the sequence of $n$ states in which $kths$ state is connected by the edges to the $k$ and $(k+1)$ state and to the all observations.
+The proposed architecture can be seen at fig. *. 
+Having the problem of distinguishing $m$ gestures translates to the $m$ sequential graphs.
+
+
+
+
+
+
+
+\section{Evaluation methodology}
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+The proposed solution utilizes Hidden Markov Model[] 
+
+
+
+\section{Experiments}

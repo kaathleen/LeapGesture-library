@@ -1,0 +1,542 @@
+<html><!-- Created using the cpp_pretty_printer from the dlib C++ library.  See http://dlib.net for updates. --><head><title>dlib C++ Library - interpolation_abstract.h</title></head><body bgcolor='white'><pre>
+<font color='#009900'>// Copyright (C) 2012  Davis E. King (davis@dlib.net)
+</font><font color='#009900'>// License: Boost Software License   See LICENSE.txt for the full license.
+</font><font color='#0000FF'>#undef</font> DLIB_INTERPOlATION_ABSTRACT_
+<font color='#0000FF'>#ifdef</font> DLIB_INTERPOlATION_ABSTRACT_ 
+
+<font color='#0000FF'>#include</font> "<a style='text-decoration:none' href='../pixel.h.html'>../pixel.h</a>"
+
+<font color='#0000FF'>namespace</font> dlib
+<b>{</b>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>class</font> <b><a name='interpolate_nearest_neighbor'></a>interpolate_nearest_neighbor</b>
+    <b>{</b>
+        <font color='#009900'>/*!
+            WHAT THIS OBJECT REPRESENTS
+                This object is a tool for performing nearest neighbor interpolation
+                on an image.  
+        !*/</font>
+
+    <font color='#0000FF'>public</font>:
+
+        <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+            <font color='#0000FF'>typename</font> image_type, 
+            <font color='#0000FF'>typename</font> pixel_type
+            <font color='#5555FF'>&gt;</font>
+        <font color='#0000FF'><u>bool</u></font> <b><a name='operator'></a>operator</b><font face='Lucida Console'>(</font><font face='Lucida Console'>)</font> <font face='Lucida Console'>(</font>
+            <font color='#0000FF'>const</font> image_type<font color='#5555FF'>&amp;</font> img,
+            <font color='#0000FF'>const</font> dlib::point<font color='#5555FF'>&amp;</font> p,
+            pixel_type<font color='#5555FF'>&amp;</font> result
+        <font face='Lucida Console'>)</font> <font color='#0000FF'>const</font>;
+        <font color='#009900'>/*!
+            requires
+                - image_type == is an implementation of array2d/array2d_kernel_abstract.h
+                - pixel_traits&lt;typename image_type::type&gt;::has_alpha == false
+                - pixel_traits&lt;pixel_type&gt; is defined
+            ensures
+                - if (p is located inside img) then
+                    - #result == img[p.y()][p.x()]
+                      (This assignment is done using assign_pixel(#result, img[p.y()][p.x()]), 
+                      therefore any necessary color space conversion will be performed)
+                    - returns true
+                - else
+                    - returns false
+        !*/</font>
+
+    <b>}</b>;
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>class</font> <b><a name='interpolate_bilinear'></a>interpolate_bilinear</b>
+    <b>{</b>
+
+        <font color='#009900'>/*!
+            WHAT THIS OBJECT REPRESENTS
+                This object is a tool for performing bilinear interpolation
+                on an image.  This is performed by looking at the 4 pixels
+                nearest to a point and deriving an interpolated value from them.
+        !*/</font>
+
+    <font color='#0000FF'>public</font>:
+
+        <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+            <font color='#0000FF'>typename</font> T, 
+            <font color='#0000FF'>typename</font> image_type,
+            <font color='#0000FF'>typename</font> pixel_type
+            <font color='#5555FF'>&gt;</font>
+        <font color='#0000FF'><u>bool</u></font> <b><a name='operator'></a>operator</b><font face='Lucida Console'>(</font><font face='Lucida Console'>)</font> <font face='Lucida Console'>(</font>
+            <font color='#0000FF'>const</font> image_type<font color='#5555FF'>&amp;</font> img,
+            <font color='#0000FF'>const</font> dlib::vector<font color='#5555FF'>&lt;</font>T,<font color='#979000'>2</font><font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> p,
+            pixel_type<font color='#5555FF'>&amp;</font> result
+        <font face='Lucida Console'>)</font> <font color='#0000FF'>const</font>;
+        <font color='#009900'>/*!
+            requires
+                - image_type == is an implementation of array2d/array2d_kernel_abstract.h
+                - pixel_traits&lt;typename image_type::type&gt;::has_alpha == false
+                - pixel_traits&lt;pixel_type&gt; is defined
+            ensures
+                - if (there is an interpolatable image location at point p in img) then
+                    - #result == the interpolated pixel value from img at point p.
+                    - assign_pixel() will be used to write to #result, therefore any
+                      necessary color space conversion will be performed.
+                    - returns true
+                    - if img contains RGB pixels then the interpolation will be in color.
+                      Otherwise, the interpolation will be performed in a grayscale mode.
+                - else
+                    - returns false
+        !*/</font>
+    <b>}</b>;
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>class</font> <b><a name='interpolate_quadratic'></a>interpolate_quadratic</b>
+    <b>{</b>
+        <font color='#009900'>/*!
+            WHAT THIS OBJECT REPRESENTS
+                This object is a tool for performing quadratic interpolation
+                on an image.  This is performed by looking at the 9 pixels
+                nearest to a point and deriving an interpolated value from them.
+        !*/</font>
+
+    <font color='#0000FF'>public</font>:
+
+        <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+            <font color='#0000FF'>typename</font> T, 
+            <font color='#0000FF'>typename</font> image_type,
+            <font color='#0000FF'>typename</font> pixel_type
+            <font color='#5555FF'>&gt;</font>
+        <font color='#0000FF'><u>bool</u></font> <b><a name='operator'></a>operator</b><font face='Lucida Console'>(</font><font face='Lucida Console'>)</font> <font face='Lucida Console'>(</font>
+            <font color='#0000FF'>const</font> image_type<font color='#5555FF'>&amp;</font> img,
+            <font color='#0000FF'>const</font> dlib::vector<font color='#5555FF'>&lt;</font>T,<font color='#979000'>2</font><font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> p,
+            pixel_type<font color='#5555FF'>&amp;</font> result
+        <font face='Lucida Console'>)</font> <font color='#0000FF'>const</font>;
+        <font color='#009900'>/*!
+            requires
+                - image_type == is an implementation of array2d/array2d_kernel_abstract.h
+                - pixel_traits&lt;typename image_type::type&gt;::has_alpha == false
+                - pixel_traits&lt;pixel_type&gt; is defined
+            ensures
+                - if (there is an interpolatable image location at point p in img) then
+                    - #result == the interpolated pixel value from img at point p
+                    - assign_pixel() will be used to write to #result, therefore any
+                      necessary color space conversion will be performed.
+                    - returns true
+                    - if img contains RGB pixels then the interpolation will be in color.
+                      Otherwise, the interpolation will be performed in a grayscale mode.
+                - else
+                    - returns false
+        !*/</font>
+    <b>}</b>;
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font><font color='#009900'>// ----------------------------------------------------------------------------------------
+</font><font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>class</font> <b><a name='black_background'></a>black_background</b>
+    <b>{</b>
+        <font color='#009900'>/*!
+            WHAT THIS OBJECT REPRESENTS
+                This is a function object which simply sets a pixel 
+                to have a black value.
+        !*/</font>
+
+    <font color='#0000FF'>public</font>:
+        <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font><font color='#0000FF'>typename</font> pixel_type<font color='#5555FF'>&gt;</font>
+        <font color='#0000FF'><u>void</u></font> <b><a name='operator'></a>operator</b><font face='Lucida Console'>(</font><font face='Lucida Console'>)</font> <font face='Lucida Console'>(</font> pixel_type<font color='#5555FF'>&amp;</font> p<font face='Lucida Console'>)</font> <font color='#0000FF'>const</font> <b>{</b> <font color='#BB00BB'>assign_pixel</font><font face='Lucida Console'>(</font>p, <font color='#979000'>0</font><font face='Lucida Console'>)</font>; <b>}</b>
+    <b>}</b>;
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>class</font> <b><a name='white_background'></a>white_background</b>
+    <b>{</b>
+        <font color='#009900'>/*!
+            WHAT THIS OBJECT REPRESENTS
+                This is a function object which simply sets a pixel 
+                to have a white value.
+        !*/</font>
+
+    <font color='#0000FF'>public</font>:
+        <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font><font color='#0000FF'>typename</font> pixel_type<font color='#5555FF'>&gt;</font>
+        <font color='#0000FF'><u>void</u></font> <b><a name='operator'></a>operator</b><font face='Lucida Console'>(</font><font face='Lucida Console'>)</font> <font face='Lucida Console'>(</font> pixel_type<font color='#5555FF'>&amp;</font> p<font face='Lucida Console'>)</font> <font color='#0000FF'>const</font> <b>{</b> <font color='#BB00BB'>assign_pixel</font><font face='Lucida Console'>(</font>p, <font color='#979000'>255</font><font face='Lucida Console'>)</font>; <b>}</b>
+    <b>}</b>;
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>class</font> <b><a name='no_background'></a>no_background</b>
+    <b>{</b>
+        <font color='#009900'>/*!
+            WHAT THIS OBJECT REPRESENTS
+                This is a function object which does nothing.  It is useful
+                when used with the transform_image() routine defined below
+                if no modification of uninterpolated output pixels is desired.
+        !*/</font>
+    <font color='#0000FF'>public</font>:
+        <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font><font color='#0000FF'>typename</font> pixel_type<font color='#5555FF'>&gt;</font>
+        <font color='#0000FF'><u>void</u></font> <b><a name='operator'></a>operator</b><font face='Lucida Console'>(</font><font face='Lucida Console'>)</font> <font face='Lucida Console'>(</font> pixel_type<font color='#5555FF'>&amp;</font> <font face='Lucida Console'>)</font> <font color='#0000FF'>const</font> <b>{</b> <b>}</b>
+    <b>}</b>;
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font><font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> interpolation_type,
+        <font color='#0000FF'>typename</font> point_mapping_type,
+        <font color='#0000FF'>typename</font> background_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='transform_image'></a>transform_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'>const</font> interpolation_type<font color='#5555FF'>&amp;</font> interp,
+        <font color='#0000FF'>const</font> point_mapping_type<font color='#5555FF'>&amp;</font> map_point,
+        <font color='#0000FF'>const</font> background_type<font color='#5555FF'>&amp;</font> set_background,
+        <font color='#0000FF'>const</font> rectangle<font color='#5555FF'>&amp;</font> area
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - interpolation_type == interpolate_nearest_neighbor, interpolate_bilinear, 
+              interpolate_quadratic, or a type with a compatible interface.
+            - map_point should be a function which takes dlib::vector&lt;T,2&gt; objects and
+              returns dlib::vector&lt;T,2&gt; objects.  An example is point_transform_affine.
+            - set_background should be a function which can take a single argument of
+              type image_type2::type.  Examples are black_background, white_background,
+              and no_background.
+            - get_rect(out_img).contains(area) == true
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - The map_point function defines a mapping from pixels in out_img to pixels
+              in in_img.  transform_image() uses this mapping, along with the supplied
+              interpolation routine interp, to fill the region of out_img defined by
+              area with an interpolated copy of in_img.  
+            - This function does not change the size of out_img.
+            - Only pixels inside the region defined by area in out_img are modified.
+            - For all locations r and c such that area.contains(c,r) but have no corresponding 
+              locations in in_img:
+                - set_background(out_img[r][c]) is invoked
+                  (i.e. some parts of out_img might correspond to areas outside in_img and
+                  therefore can't supply interpolated values.  In these cases, these
+                  pixels can be assigned a value by the supplied set_background() routine)
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> interpolation_type,
+        <font color='#0000FF'>typename</font> point_mapping_type,
+        <font color='#0000FF'>typename</font> background_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='transform_image'></a>transform_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'>const</font> interpolation_type<font color='#5555FF'>&amp;</font> interp,
+        <font color='#0000FF'>const</font> point_mapping_type<font color='#5555FF'>&amp;</font> map_point,
+        <font color='#0000FF'>const</font> background_type<font color='#5555FF'>&amp;</font> set_background
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - interpolation_type == interpolate_nearest_neighbor, interpolate_bilinear, 
+              interpolate_quadratic, or a type with a compatible interface.
+            - map_point should be a function which takes dlib::vector&lt;T,2&gt; objects and
+              returns dlib::vector&lt;T,2&gt; objects.  An example is point_transform_affine.
+            - set_background should be a function which can take a single argument of
+              type image_type2::type.  Examples are black_background, white_background,
+              and no_background.
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - performs: 
+              transform_image(in_img, out_img, interp, map_point, set_background, get_rect(out_img));
+              (i.e. runs transform_image() on the entire out_img)
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> interpolation_type,
+        <font color='#0000FF'>typename</font> point_mapping_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='transform_image'></a>transform_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'>const</font> interpolation_type<font color='#5555FF'>&amp;</font> interp,
+        <font color='#0000FF'>const</font> point_mapping_type<font color='#5555FF'>&amp;</font> map_point
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - interpolation_type == interpolate_nearest_neighbor, interpolate_bilinear, 
+              interpolate_quadratic, or a type with a compatible interface.
+            - map_point should be a function which takes dlib::vector&lt;T,2&gt; objects and
+              returns dlib::vector&lt;T,2&gt; objects.  An example is point_transform_affine.
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - performs: 
+              transform_image(in_img, out_img, interp, map_point, black_background(), get_rect(out_img));
+              (i.e. runs transform_image() on the entire out_img and sets non-interpolated
+              pixels to black)
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> interpolation_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='rotate_image'></a>rotate_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'><u>double</u></font> angle,
+        <font color='#0000FF'>const</font> interpolation_type<font color='#5555FF'>&amp;</font> interp
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - interpolation_type == interpolate_nearest_neighbor, interpolate_bilinear, 
+              interpolate_quadratic, or a type with a compatible interface.
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - #out_img == a copy of in_img which has been rotated angle radians counter clockwise.
+              The rotation is performed with respect to the center of the image.  
+            - Parts of #out_img which have no corresponding locations in in_img are set to black.
+            - uses the supplied interpolation routine interp to perform the necessary
+              pixel interpolation.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='rotate_image'></a>rotate_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'><u>double</u></font> angle
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - pixel_traits&lt;typename image_type1::type&gt;::has_alpha == false
+            - pixel_traits&lt;typename image_type2::type&gt; is defined
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - #out_img == a copy of in_img which has been rotated angle radians counter clockwise.
+              The rotation is performed with respect to the center of the image.  
+            - Parts of #out_img which have no corresponding locations in in_img are set to black.
+            - uses the interpolate_quadratic object to perform the necessary pixel interpolation.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> interpolation_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='resize_image'></a>resize_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'>const</font> interpolation_type<font color='#5555FF'>&amp;</font> interp
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - interpolation_type == interpolate_nearest_neighbor, interpolate_bilinear, 
+              interpolate_quadratic, or a type with a compatible interface.
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - #out_img == A copy of in_img which has been stretched so that it 
+              fits exactly into out_img.   
+            - The size of out_img is not modified.  I.e. 
+                - #out_img.nr() == out_img.nr()
+                - #out_img.nc() == out_img.nc()
+            - uses the supplied interpolation routine interp to perform the necessary
+              pixel interpolation.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='resize_image'></a>resize_image</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - pixel_traits&lt;typename image_type1::type&gt;::has_alpha == false
+            - pixel_traits&lt;typename image_type2::type&gt; is defined
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - #out_img == A copy of in_img which has been stretched so that it 
+              fits exactly into out_img.   
+            - The size of out_img is not modified.  I.e. 
+                - #out_img.nr() == out_img.nr()
+                - #out_img.nc() == out_img.nc()
+            - Uses the bilinear interpolation to perform the necessary pixel interpolation.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='flip_image_left_right'></a>flip_image_left_right</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - pixel_traits&lt;typename image_type1::type&gt; is defined
+            - pixel_traits&lt;typename image_type2::type&gt; is defined
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - #out_img.nr() == in_img.nr()
+            - #out_img.nc() == in_img.nc()
+            - #out_img == a copy of in_img which has been flipped from left to right.  
+              (i.e. it is flipped as if viewed though a mirror)
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='add_image_left_right_flips'></a>add_image_left_right_flips</b> <font face='Lucida Console'>(</font>
+        dlib::array<font color='#5555FF'>&lt;</font>image_type<font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> images,
+        std::vector<font color='#5555FF'>&lt;</font>std::vector<font color='#5555FF'>&lt;</font>rectangle<font color='#5555FF'>&gt;</font> <font color='#5555FF'>&gt;</font><font color='#5555FF'>&amp;</font> objects
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type == is an implementation of array2d/array2d_kernel_abstract.h
+            - pixel_traits&lt;typename image_type::type&gt; is defined
+            - images.size() == objects.size()
+        ensures
+            - This function computes all the left/right flips of the contents of images and
+              then appends them onto the end of the images array.  It also finds the
+              left/right flips of the rectangles in objects and similarly appends them into
+              objects.  That is, we assume objects[i] is the set of bounding boxes in
+              images[i] and we flip the bounding boxes so that they still bound the same
+              objects in the new flipped images.
+            - #images.size() == images.size()*2
+            - #objects.size() == objects.size()*2
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='flip_image_up_down'></a>flip_image_up_down</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - pixel_traits&lt;typename image_type1::type&gt; is defined
+            - pixel_traits&lt;typename image_type2::type&gt; is defined
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - #out_img.nr() == in_img.nr()
+            - #out_img.nc() == in_img.nc()
+            - #out_img == a copy of in_img which has been flipped upside down.  
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> pyramid_type,
+        <font color='#0000FF'>typename</font> interpolation_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='pyramid_up'></a>pyramid_up</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'>const</font> pyramid_type<font color='#5555FF'>&amp;</font> pyr,
+        <font color='#0000FF'><u>unsigned</u></font> <font color='#0000FF'><u>int</u></font> levels,
+        <font color='#0000FF'>const</font> interpolation_type<font color='#5555FF'>&amp;</font> interp
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - pyramid_type == a type compatible with the image pyramid objects defined 
+              in dlib/image_transforms/image_pyramid_abstract.h
+            - interpolation_type == interpolate_nearest_neighbor, interpolate_bilinear, 
+              interpolate_quadratic, or a type with a compatible interface.
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - This function inverts the downsampling transformation performed by pyr().
+              In particular, it attempts to make an image, out_img, which would result
+              in in_img when downsampled with pyr().  
+            - #out_img == An upsampled copy of in_img.  In particular, downsampling
+              #out_img levels times with pyr() should result in a final image which
+              looks like in_img.
+            - uses the supplied interpolation routine interp to perform the necessary
+              pixel interpolation.
+            - Note that downsampling an image with pyr() and then upsampling it with 
+              pyramid_up() will not necessarily result in a final image which is
+              the same size as the original.  This is because the exact size of the
+              original image cannot be determined based on the downsampled image.
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+    <font color='#0000FF'>template</font> <font color='#5555FF'>&lt;</font>
+        <font color='#0000FF'>typename</font> image_type1,
+        <font color='#0000FF'>typename</font> image_type2,
+        <font color='#0000FF'>typename</font> pyramid_type
+        <font color='#5555FF'>&gt;</font>
+    <font color='#0000FF'><u>void</u></font> <b><a name='pyramid_up'></a>pyramid_up</b> <font face='Lucida Console'>(</font>
+        <font color='#0000FF'>const</font> image_type1<font color='#5555FF'>&amp;</font> in_img,
+        image_type2<font color='#5555FF'>&amp;</font> out_img,
+        <font color='#0000FF'>const</font> pyramid_type<font color='#5555FF'>&amp;</font> pyr,
+        <font color='#0000FF'><u>unsigned</u></font> <font color='#0000FF'><u>int</u></font> levels <font color='#5555FF'>=</font> <font color='#979000'>1</font>
+    <font face='Lucida Console'>)</font>;
+    <font color='#009900'>/*!
+        requires
+            - image_type1 == is an implementation of array2d/array2d_kernel_abstract.h
+            - image_type2 == is an implementation of array2d/array2d_kernel_abstract.h
+            - pyramid_type == a type compatible with the image pyramid objects defined 
+              in dlib/image_transforms/image_pyramid_abstract.h
+            - is_same_object(in_img, out_img) == false
+        ensures
+            - performs: pyramid_up(in_img, out_img, pyr, levels, interpolate_quadratic());
+    !*/</font>
+
+<font color='#009900'>// ----------------------------------------------------------------------------------------
+</font>
+<b>}</b>
+
+<font color='#0000FF'>#endif</font> <font color='#009900'>// DLIB_INTERPOlATION_ABSTRACT_
+</font>
+
+</pre></body></html>

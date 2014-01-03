@@ -1,0 +1,719 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="dlib-icon.ico"><meta name="verify-v1" content="02MiiaFNVzS5/u0eQhsy3/knioFHsia1X3DXRpHkE6I="><meta name="google-site-verification" content="DGSSJMKDomaDaDTIRJ8jDkv0YMx9Cz7OESbXHjjr6Jw"><title>dlib C++ Library
+   - Release notes</title><script language="JavaScript">
+
+// ---------------------------------------------
+// --- Name:    Easy DHTML Treeview           --
+// --- Author:  D.D. de Kerf                  --
+// --- Version: 0.2          Date: 13-6-2001  --
+// ---------------------------------------------
+function Toggle(node)
+{
+   // Unfold the branch if it isn't visible
+   var next_node = node.nextSibling;
+   if (next_node.style.display == 'none')
+   {
+      // Change the image (if there is an image)
+      if (node.childNodes.length > 0)
+      {
+         if (node.childNodes.length > 0)
+         { 
+            if (node.childNodes.item(0).nodeName == "IMG")
+            {
+               node.childNodes.item(0).src = "minus.gif";
+            }
+         }
+      }
+
+      next_node.style.display = 'block';
+   }
+   // Collapse the branch if it IS visible
+   else
+   {
+      // Change the image (if there is an image)
+      if (node.childNodes.length > 0)
+      {
+         if (node.childNodes.length > 0)
+         { 
+            if (node.childNodes.item(0).nodeName == "IMG")
+            {
+               node.childNodes.item(0).src = "plus.gif";
+            }
+         }
+      }
+
+      next_node.style.display = 'none';
+   }
+
+}
+function BigToggle(node)
+{
+   // Unfold the branch if it isn't visible
+   var next_node = node.nextSibling;
+   if (next_node.style.display == 'none')
+   {
+      // Change the image (if there is an image)
+      if (node.childNodes.length > 0)
+      {
+         if (node.childNodes.length > 0)
+         { 
+            if (node.childNodes.item(0).nodeName == "IMG")
+            {
+               node.childNodes.item(0).src = "bigminus.gif";
+            }
+         }
+      }
+
+      next_node.style.display = 'block';
+   }
+   // Collapse the branch if it IS visible
+   else
+   {
+      // Change the image (if there is an image)
+      if (node.childNodes.length > 0)
+      {
+         if (node.childNodes.length > 0)
+         { 
+            if (node.childNodes.item(0).nodeName == "IMG")
+            {
+               node.childNodes.item(0).src = "bigplus.gif";
+            }
+         }
+      }
+
+      next_node.style.display = 'none';
+   }
+
+}
+</script><style type="text/css">
+   body {margin:0px;}
+   pre {margin:0px;}
+
+   ul.tree  li { list-style: none;  margin-left:10px;} 
+   ul.tree  { margin:0px; padding:0px; margin-left:5px; font-size:0.95em; }
+   ul.tree  li ul { margin-left:10px; padding:0px; }
+
+   li#term { list-style: none; }
+
+   div#component {
+      background-color:white; 
+      border: 2px solid rgb(102,102,102); 
+      text-align:left;
+      margin-top: 1.5em;
+      padding: 0.7em;
+   }
+
+   div#question {
+      background-color:white; 
+      border: 2px solid rgb(102,102,102); 
+      text-align:left;
+      margin-top: 1.5em;
+      margin-bottom: 90%;
+      padding: 0.7em;
+   }
+
+   div#function {
+      background-color:white; 
+      border: 2px solid rgb(102,102,255); 
+      text-align:left;
+      margin-top: 0.3em;
+      padding: 0.3em;
+   }
+
+   div#class {
+      background-color:white; 
+      border: 2px solid rgb(255,102,102); 
+      text-align:left;
+      margin-top: 0.3em;
+      padding: 0.3em;
+   }
+
+   div#extension {
+      background-color:#FDFDFD; 
+      border: 1px solid rgb(102,102,102); 
+      text-align:left;
+      margin-top: 1.0em;
+      padding: 0.7em;
+   }
+
+   div#logb {
+      text-align:left;
+      padding: 0.0em;
+      float: left;
+      background-color:#c0c0c0; 
+      border: double ; 
+      margin: 0.5em;
+   }
+
+   div#name {
+      float: left;
+   }
+   div#line1 {
+      float:left;
+      width:100%;
+      background-color:#dfdfdf; 
+   }
+   div#line2 {
+      float:left;
+      width:100%;
+   }
+   div#inc {
+      float: right;
+   }
+
+
+   .code_box
+   {
+      color: black;
+      margin: 1em 0.25in;
+      padding: 0.5em;
+      background: rgb(240,240,240);
+      border-top: black dotted 1px;
+      border-left: black dotted 1px;
+      border-right: black solid 2px;
+      border-bottom: black solid 2px;
+   }
+
+
+
+   .bdotted {border-bottom: 1px dotted}
+   .bdashed {border-bottom: 1px dashed}
+   .bsolid {border-bottom: 1px solid}
+   .bdouble {border-bottom: 1px double}
+   .bgroove {border-bottom: 1px groove}
+   .bridge {border-bottom: 1px ridge}
+   .binset {border-bottom: 1px inset}
+   .boutset {border-bottom: 1px outset}
+
+   div#row1 {
+      background-color:#dfdfdf; 
+   }
+   div#row2 {
+      background-color:#f2f2f2; 
+   }
+
+   div#typedefs {
+      margin-left: 1.5em;
+      margin-top: 0.2em;
+      border: 1px dotted;
+      width: 52em;
+   }
+
+   div#tdn {
+      width: 10em;
+   }
+
+   .fullhr {
+      clear: both;
+   }
+
+   body {
+      text-align: center;
+   }
+
+   div#entire_page {
+      width:62.5em;  
+      text-align: left;
+      margin-top: 0.4em;
+      margin-left: auto;
+      margin-right: auto;
+   }
+</style></head><body bgcolor="#EDF3EE"><a name="top"></a><div id="entire_page"><a href="http://dlib.net"><img src="dlib-logo.png"></a><table bgcolor="white" height="100%" bordercolor="#EDF3EE" CELLSPACING="0" CELLPADDING="10" style="border:0px;margin-top:2px"><tr height="100%"><td BGCOLOR="#F5F5F5" style="padding:7px; border: 1px solid rgb(102,102,102);" VALIGN="TOP" height="100%"><br><table WIDTH="145" height="100%"><tr><td VALIGN="TOP"><b>The Library</b><ul class="tree"><li><a href="algorithms.html">Algorithms</a></li><li><a href="api.html">API Wrappers</a></li><li><a href="bayes.html">Bayesian Nets</a></li><li><a href="compression.html">Compression</a></li><li><a href="containers.html">Containers</a></li><li><a href="graph_tools.html">Graph Tools</a></li><li><a href="imaging.html">Image Processing</a></li><li><a href="linear_algebra.html">Linear Algebra</a></li><li><a href="ml.html">Machine Learning</a></li><li><a href="metaprogramming.html">Metaprogramming</a></li><li><a href="other.html">Miscellaneous</a></li><li><a href="network.html">Networking</a></li><li><a href="optimization.html">Optimization</a></li><li><a href="parsing.html">Parsing</a></li></ul><br><b>Help/Info</b><ul class="tree"><li><a onclick="Toggle(this)" style="cursor: pointer;margin-left:-9px"><img src="plus.gif"><font color="green"><u>Examples: C++</u></font></a><ul style="display:none;"><li><a href="assignment_learning_ex.cpp.html">Assignment_Learning</a></li><li><a href="file_to_code_ex.cpp.html">Base64_Encoder</a></li><li><a href="bayes_net_ex.cpp.html">Bayesian_Network</a></li><li><a href="bayes_net_from_disk_ex.cpp.html">Bayesian_Network_From_Disk</a></li><li><a href="bayes_net_gui_ex.cpp.html">Bayesian_Network_GUI</a></li><li><a href="bridge_ex.cpp.html">Bridge</a></li><li><a href="bsp_ex.cpp.html">BSP</a></li><li><a href="compress_stream_ex.cpp.html#_top">Cmd_Line_Parser</a></li><li><a href="compress_stream_ex.cpp.html">Compress_Stream</a></li><li><a href="config_reader_ex.cpp.html">Config_File_Reader</a></li><li><a href="custom_trainer_ex.cpp.html">Custom_Trainers</a></li><li><a href="dir_nav_ex.cpp.html">Directory_Navigation</a></li><li><a href="empirical_kernel_map_ex.cpp.html">Empirical_Kernel_Map</a></li><li><a href="fhog_ex.cpp.html">FHOG_Feature_Extraction</a></li><li><a href="graph_labeling_ex.cpp.html">Graph_Labeling</a></li><li><a href="gui_api_ex.cpp.html">GUI</a></li><li><a href="server_http_ex.cpp.html">HTTP_Server</a></li><li><a href="image_ex.cpp.html">Image</a></li><li><a href="iosockstream_ex.cpp.html">IO Socket Streams</a></li><li><a href="server_iostream_ex.cpp.html">IO Streams Server</a></li><li><a href="kcentroid_ex.cpp.html">Kernel_Centroid</a></li><li><a href="kkmeans_ex.cpp.html">Kernel_K-Means_Clustering</a></li><li><a href="krr_regression_ex.cpp.html">Kernel_Ridge_Regression</a></li><li><a href="krls_filter_ex.cpp.html">Kernel_RLS_Filtering</a></li><li><a href="krls_ex.cpp.html">Kernel_RLS_Regression</a></li><li><a href="krr_classification_ex.cpp.html">KRR_Classification</a></li><li><a href="linear_manifold_regularizer_ex.cpp.html">Linear_Manifold_Regularizer</a></li><li><a href="logger_ex.cpp.html">Logger</a></li><li><a href="logger_ex_2.cpp.html">Logger_Advanced</a></li><li><a href="matrix_ex.cpp.html">Matrix</a></li><li><a href="matrix_expressions_ex.cpp.html">Matrix_Expressions</a></li><li><a href="member_function_pointer_ex.cpp.html">Member_Function_Pointer</a></li><li><a href="model_selection_ex.cpp.html">Model_Selection</a></li><li><a href="multiclass_classification_ex.cpp.html">Multiclass_Classification</a></li><li><a href="multithreaded_object_ex.cpp.html">Multithreaded_Object</a></li><li><a href="mlp_ex.cpp.html">Neural_Network</a></li><li><a href="least_squares_ex.cpp.html">Non-Linear Least Squares</a></li><li><a href="integrate_function_adapt_simp_ex.cpp.html">Numerical_Integration</a></li><li><a href="object_detector_ex.cpp.html">Object_Detector</a></li><li><a href="object_detector_advanced_ex.cpp.html">Object_Detector_Advanced</a></li><li><a href="one_class_classifiers_ex.cpp.html">One_Class_Classifiers</a></li><li><a href="svm_pegasos_ex.cpp.html">Online_SVM</a></li><li><a href="optimization_ex.cpp.html">Optimization</a></li><li><a href="parallel_for_ex.cpp.html">Parallel_For_Loops</a></li><li><a href="pipe_ex.cpp.html">Pipe</a></li><li><a href="pipe_ex_2.cpp.html">Pipe_2</a></li><li><a href="quantum_computing_ex.cpp.html">Quantum_Computing</a></li><li><a href="queue_ex.cpp.html">Queue</a></li><li><a href="rank_features_ex.cpp.html">Rank_Features</a></li><li><a href="rvm_ex.cpp.html">Relevance_Vector_Classification</a></li><li><a href="rvm_regression_ex.cpp.html">Relevance_Vector_Regression</a></li><li><a href="running_stats_ex.cpp.html">Running_Stats</a></li><li><a href="sequence_labeler_ex.cpp.html">Sequence_Labeling</a></li><li><a href="sequence_segmenter_ex.cpp.html">Sequence_Segmentation</a></li><li><a href="sockets_ex.cpp.html">Sockets</a></li><li><a href="sockstreambuf_ex.cpp.html">Sockstreambuf</a></li><li><a href="svm_sparse_ex.cpp.html">Sparse_Vectors</a></li><li><a href="std_allocator_ex.cpp.html">Std_C++_Allocator</a></li><li><a href="svm_struct_ex.cpp.html">Structural_Support_Vector_Machines</a></li><li><a href="svm_ex.cpp.html">Support_Vector_Machine</a></li><li><a href="svr_ex.cpp.html">Support_Vector_Regression</a></li><li><a href="surf_ex.cpp.html">SURF</a></li><li><a href="svm_rank_ex.cpp.html">SVM-Rank</a></li><li><a href="threaded_object_ex.cpp.html">Threaded_Object</a></li><li><a href="threads_ex.cpp.html">Threads</a></li><li><a href="thread_function_ex.cpp.html">Thread_Function</a></li><li><a href="thread_pool_ex.cpp.html">Thread_Pool</a></li><li><a href="timer_ex.cpp.html">Timer</a></li><li><a href="train_object_detector.cpp.html">Train_Object_Detector</a></li><li><a href="using_custom_kernels_ex.cpp.html">Using_Custom_Kernels</a></li><li><a href="xml_parser_ex.cpp.html">XML_Parser</a></li></ul></li><li><a onclick="Toggle(this)" style="cursor: pointer;margin-left:-9px"><img src="plus.gif"><font color="green"><u>Examples: Python</u></font></a><ul style="display:none;"><li><a href="max_cost_assignment.py.html">Linear_Assignment_Problems</a></li><li><a href="sequence_segmenter.py.html">Sequence_Segmenter</a></li><li><a href="svm_struct.py.html">Structural_Support_Vector_Machines</a></li><li><a href="svm_rank.py.html">SVM-Rank</a></li></ul></li><li><a href="faq.html">FAQ</a></li><li><a href="index.html">Home</a></li><li><a href="compile.html">How to compile</a></li><li><a href="howto_contribute.html">How to contribute</a></li><li><a href="term_index.html">Index</a></li><li><a href="intro.html">Introduction</a></li><li><a href="license.html">License</a></li><li><a href="python/index.html">Python API</a></li><li><a href="books.html">Suggested Books</a></li></ul><br><b>Current Release</b><ul class="tree"><li><a href="change_log.html">Change Log</a></li><li><a href="release_notes.html">Release Notes</a></li><li>Version: 18.5</li></ul><br></td><td width="1"></td></tr><tr><td valign="bottom"><br><br><br><br><br><br><br><br><br>
+      Last Modified:<br>Oct 22, 2013<br><br></td></tr></table></td><td VALIGN="TOP" width="100%" style="border: 1px solid rgb(102,102,102);"><center><h1>Release notes</h1></center><h1 style="margin:0px;">Release 18.5</h1><u>Release date</u>: Oct 22, 2013<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Added routines for performing BFGS and L-BFGS optimization with box constraints.  
+     See the new find_min_box_constrained() and find_max_box_constrained() routines.
+   - Added vector_normalizer_frobmetric.  This is a tool for learning a
+     Mahalanobis distance metric.
+   - The user can now set different loss values for false alarming vs getting a
+     correct detection when using the structural_sequence_segmentation_trainer.
+   - Added an overload of clamp() that lets you use matrix valued lower/upper bounds.
+   - New image processing tools:
+      - Added the scan_image_custom object, split_array(), and add_image_left_right_flips().
+      - Added extract_fhog_features(), this is a function for computing
+        Felzenszwalb's 31 channel HOG image representation.  
+
+Non-Backwards Compatible Changes:
+   - Refactored the image pyramid code. Now there is just one templated object called
+     pyramid_down and you give it the downsampling amount as a template argument.  To make
+     old code work with this change use the following substitutions:
+       change pyramid_down to pyramid_down&lt;2&gt;
+       change pyramid_down_3_2 to pyramid_down&lt;3&gt;
+       change pyramid_down_4_3 to pyramid_down&lt;4&gt;
+       change pyramid_down_5_4 to pyramid_down&lt;5&gt;
+
+Bug fixes:
+
+Other:
+   - Made the structural SVM solver slightly faster.
+   - Moved the python C++ utility headers from tools/python/src into dlib/python.
+   - The PNG loader is now able to load grayscale images with an alpha channel.
+   - Removed checks that prevented users from using references to functions with the
+     optimization code and forced the use of function pointers. This was to avoid
+     triggering a bug in gcc 4.0.  Since that compiler is no longer officially supported
+     by dlib I've removed these checks to increase usability.
+   - Made resize_image() use bilinear interpolation by default and also added a special
+     version of it that is optimized for this case.
+   - Dlib's cmake files will now automatically link to the Intel MKL on MS Windows
+     platforms if the MKL is installed.
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 18.4</h1><u>Release date</u>: Aug 14, 2013<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Added Python interfaces to dlib's structural support vector machine solver and
+     Hungarian algorithm implementation.
+   - Added running_cross_covariance
+   - Added order_by_descending_distance()
+   - Added is_finite()
+   - Added the csv IO manipulator that lets you print a matrix in comma separated value
+     format.
+
+Non-Backwards Compatible Changes:
+   - Changed the object detector testing functions to output average precision instead of
+     mean average precision.
+   - Added an option to weight the features from a hashed_feature_image relative to the
+     number of times they occur in an image.  I also made it the default behavior to use
+     this relative weighting and changed the serialization format to accommodate this.
+
+Bug fixes:
+   - Fixed typo in learn_platt_scaling(). The method wasn't using the exact prior
+     suggested by Platt's paper.
+   - Fixed a bug in running_scalar_covariance that caused the covariance() and
+     correlation() methods to output the wrong answer if the covariance was negative.
+
+Other:
+   - Gave the image_window the ability to tie the mouse and keyboard events together such
+     that it is possible for a user to listen for both simultaneously.
+   - A number of changes were made to the structural_svm_problem's code which make it 
+     significantly faster in some cases.
+   - Added Steven Van Ingelgem's patch to the HTTP server which makes operations on HTTP
+     headers case-insensitive.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 18.3</h1><u>Release date</u>: June 21, 2013<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Machine Learning:
+      - Added the svr_linear_trainer, a tool for solving large scale support vector 
+        regression problems.
+      - Added a tool for working with BIO and BILOU style sequence taggers/segmenters.  
+        This is the new sequence_segmenter object and its associated 
+        structural_sequence_segmentation_trainer object.
+      - Added a python interface to some of the machine learning tools.  These
+        include the svm_c_trainer, svm_c_linear_trainer, svm_rank_trainer, and
+        structural_sequence_segmentation_trainer objects as well as the cca()
+        routine.  
+   - Added point_transform_projective and find_projective_transform().
+   - Added a function for numerically integrating arbitrary functions, this is the 
+     new integrate_function_adapt_simpson() routine which was contributed by 
+     Steve Taylor
+   - Added jet(), a routine for coloring images with the jet color scheme.
+
+Non-Backwards Compatible Changes:
+
+Bug fixes:
+   - Fixed a bug in hysteresis_threshold() that caused it to produce incorrect
+     outputs in some cases.
+   - Fixed a segmentation fault in the eigenvalue_decomposition object which
+     could occur when NaN valued inputs were given.
+
+Other:
+   - Made image saving routines work on matrix objects in addition to array2d objects.
+   - The machine learning page now contains a flow chart to help new users
+     select a machine learning tool appropriate for their task.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 18.2</h1><u>Release date</u>: May 30, 2013<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Object Detection Tools:
+      - Added another image scanning tool similar to scan_image_pyramid.  This
+        is the new scan_image_boxes object.  It allows a user to easily specify
+        an arbitrary set of object boxes which should be checked by an object
+        detector rather than scanning a fixed sized window over the image as is
+        done by the scan_image_pyramid tool.  This allows more flexible scanning 
+        strategies.  For example, it is now possible to use the selective search 
+        method implemented by the new find_candidate_object_locations() routine.  
+      - Added the binned_vector_feature_image.
+      - Upgraded the object_detector so that you can use the adjust_threshold
+        argument for all versions of the operator() method.
+      - Added remove_unobtainable_rectangles()
+   - Hashing Tools:
+      - Added a set of new locality sensitive hashing functions meant for use
+        with larger vectors and higher bit sizes than the current LSH tools.
+        These are the new hash_similar_angles_xxx objects.
+      - Added find_k_nearest_neighbors_lsh() and hash_samples()
+      - Added create_max_margin_projection_hash()
+   - New Matrix Routines: linpiece(), fft(), and ifft()
+   - Added numeric constants and additional statistics to the running_stats
+     object.  This code was contributed by Steve Taylor.
+   - Added the image_window::get_next_keypress() routine.  This tool allows a
+     user to easily find out which keyboard key the user is pressing.
+
+Non-Backwards Compatible Changes:
+   - Changed the object_detector interface slightly.  In particular, it no
+     longer adds the adjust_threshold argument to the output scores.    
+   - The object detector testing functions now output mean average precision in
+     addition to precision and recall.
+   - Changed how dlib does serialization in a number of ways:
+      - The running_stats and scan_image_pyramid objects have had their
+        serialization format changed in a way that breaks backwards
+        compatibility.  This means serialized versions of these objects can't be
+        loaded by the new version of dlib.
+      - Changed the format dlib uses when it serializes floating point values.
+        Previously, we used an ASCII based format.  Dlib now uses a much more
+        efficient binary format. However, the deserialization routines have
+        been made backwards compatible with the previous format. So dlib can
+        still deserialize older data but older software won't be able to read
+        the new format.
+      - Changed the serialization formats for the matrix and array2d objects so
+        that either object can be deserialized into the other. This was done in a
+        way that is backwards compatible with previous versions of dlib. That is,
+        we can still load data serialized by previous dlib versions. However,
+        older versions of dlib can't load the new serialization format.
+
+Bug fixes:
+   - Fixed a bug in save_dng() that happened sometimes when saving images with
+     unsigned char pixels.
+   - The test_ranking_function() and cross_validate_ranking_trainer() routines
+     computed incorrect MAP scores when the learned function output a constant
+     value for all samples.  This has been fixed.
+
+Other:
+   - Gave load_image_dataset() the ability to skip images that don't have any
+     ground truth boxes.
+   - Changed average_precision() to use interpolated precision. So now it uses
+     the same metric as the one used by the Pascal VOC challenge.
+   - Upgraded the dng image format so it can natively store floating point
+     pixel types without any information loss.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 18.1</h1><u>Release date</u>: Mar 25, 2013<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Added svd_fast(), a routine for computing a singular value decomposition of very 
+     large matrices.
+   - Added cca(), a routine for doing canonical correlation analysis on very large 
+     and high-dimensional datasets.
+   - Added tools for creating parallel for loops, see parallel_for().
+   - Added some features to the image display widgets to let the user easily
+     get information about where the user is clicking.  This is the new 
+     get_next_double_click() routine.
+   - Added an operator&gt;&gt; for matrix objects which allows you to read in ASCII
+     matrices using the format used by operator&lt;&lt;.
+   - Added serialization support for std::vector&lt;bool&gt;.
+   - Added the following new minor objects and routines: average_precision(), 
+     make_sparse_vector_inplace(), orthogonalize(), count_bits(), draw_surf_points(),
+     hamming_distance(), cosine_distance, and negative_dot_product_distance.
+
+Non-Backwards Compatible Changes:
+   - Changed ranking evaluation functions to return the mean average precision
+     in addition to just raw ranking accuracy. This changes their return types
+     from double to matrix&lt;double,1,2&gt;.
+   - Generalized segment_image() so it works on any pixel type or array of
+     vectors.  I also changed its interface slightly.  In particular, I removed
+     the min_diff parameter and replaced it with an explicit min_size parameter.
+   - Changed how the SURF descriptor is computed slightly to improve its
+     accuracy.  The interface to the user has not been changed, however, the
+     number and position of detected SURF points might be different than in
+     previous dlib versions.
+
+Bug fixes:
+   - Fixed an endianness bug in the PNG I/O functions which occurred when 16bit
+     grayscale PNGs were used. 
+   - Fixed a bug which could potentially occur when empty std::vector&lt;char&gt; or
+     std::vector&lt;unsigned char&gt; were serialized.
+   - There was a bug in the version of draw_line() that draws directly onto an
+     array2d type image (not the one that draws onto a GUI canvas object). The
+     bug triggered whenever a perfectly horizontal or vertical line that extended
+     outside the image was drawn. This has been fixed.
+   - Fixed a bug in the Windows implementation of the signaler object, which
+     was found by Isaac Peterson. The bug caused the program to deadlock if
+     signal() or broadcast() was called at exactly the same time a
+     wait_or_timeout() function timed out.
+   - Fixed a bug in the image_window and image_display GUI tools which caused
+     them to not redraw overlay lines correctly in certain cases involving
+     non-default zoom levels.
+   - Switched randomly_color_image() to use the non-pointer based version of
+     murmur_hash3() to avoid violation of the strict aliasing rule. In
+     particular, the previous version didn't work correctly in gcc 4.7.2 when
+     optimizations were enabled.
+   - Visual Studio 2012's iostreams library has a bug which caused the
+     iosockstream to crash on use.  This version of dlib has been changed to
+     avoid triggering this bug.
+
+Other:
+   - Refactored the Platt scaling code a little. Now there is a function,
+     learn_platt_scaling(), that allows you to directly call the Platt scaling
+     code without supplying a trainer object.
+   - Optimized the oca and structural SVM solvers.  They are now a little bit faster 
+     than in previous dlib releases.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 18.0</h1><u>Release date</u>: Feb 04, 2013<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Machine Learning
+      - Added svm_rank_trainer, an optimized implementation of the SVM-Rank algorithm.
+      - Added rank_unlabeled_training_samples(), an implementation of the SVM Active
+        Learning algorithm.
+      - Added svm_c_linear_dcd_trainer, a warm-startable SVM solver using the dual 
+        coordinate descent algorithm used by liblinear.
+      - Added the ability to force the last element of a weight vector to 1 to the
+        following objects: svm_c_linear_trainer, svm_c_linear_dcd_trainer,
+        svm_rank_trainer, and oca.
+      - Added the ability to learn non-negative weight vectors to the
+        structural_sequence_labeling_trainer object.
+   - Networking
+      - Added an iosockstream object.
+      - Added a method to the server object that lets a user set the graceful close timeout
+        time to something other than the default of 500ms.
+   - Linear Algebra
+      - Added the gaussian_randm() function.
+      - Added the find_affine_transform() function.
+      - Added the mat() function.  It combines the array_to_matrix(), vector_to_matrix(),
+        pointer_to_column_vector(), and pointer_to_matrix() methods all into one convenient
+        interface.   mat() also works for Armadillo and Eigen matrices.
+      - Added STL style begin() and end() methods to matrix and matrix_exp.
+      - Added an overload of sparse_matrix_vector_multiply() that multiplies a dense matrix
+        with a sparse vector.
+      - Made toMat() work with the matrix object in addition to array2d style images.
+   - Graphical User Interface Tools
+      - Added draw_solid_convex_polygon().
+      - Added an overload of draw_image() that's useful for drawing images and doing
+        interpolation at the same time.
+      - Added the on_view_changed() callback to zoomable_region and scrollable_region widgets.
+   - Added parse_trees_to_string() and parse_trees_to_string_tagged().
+   - Added lambda function support to the timeout object.
+   - Added the vectorstream object.
+   - Added the parse_xml() routines.
+   - Added a group name feature to the command line parser.  Now it is possible to make
+     print_options() print related options in named groups. 
+   - Added the following new hashing functions: murmur_hash3_128bit_3(),
+     murmur_hash3_2(), murmur_hash3_3(), uniform_random_hash(), gaussian_random_hash() 
+     as well as hash() overloads for uint32, uint64, and std::pair.
+
+Non-Backwards Compatible Changes:
+   - Made the svm_c_linear_trainer use the risk gap to decide when to stop.  This was done
+     because it is how all the other OCA based SVM tools in dlib decide when to stop.  
+     However, it might cause the outputs to be slightly different in this version of dlib.  
+   - It is now illegal to call unlock() on a mutex when the mutex is not owned by the
+     calling thread.  The most likely reason for doing this was to unlock early in an area
+     locked by an auto_mutex.  Old code that does this can be fixed by calling auto_mutex's
+     unlock() function instead.  
+   - Removed the structural_assignment_trainer::learns_nonnegative_weights() routine 
+     and moved its functionality into the feature extraction interface used by this object. 
+
+Bug fixes:
+   - Fixed a bug in find_max_factor_graph_nmplp() which caused it to not work properly on
+     some compilers.
+   - Fixed a bug pointed out by Joel Nelson in the version of md5() that took an istream.
+     The bug caused the function to crash on strings longer than 56 characters.
+
+Other:
+   - dlib now has an excellent new logo thanks to Yasser Asmi. 
+   - Added a new documentation page for the various linear algebra tools.
+   - The following objects were turned into single implementation components:
+     sockstreambuf, timeout, member_function_pointer, xml_parser, linker,
+     bound_function_pointer, and timer.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 17.49</h1><u>Release date</u>: Dec 18, 2012<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Machine Learning
+      - Added the ability to learn non-negative weight vectors to the
+        structural_assignment_trainer object.
+      - Added two new graph clustering algorithms: Chinese Whispers and Newman's modularity
+        clustering.
+      - Added a number of new graph manipulation tools: sparse_matrix_vector_multiply(),
+        is_ordered_by_index(), find_neighbor_ranges(), convert_unordered_to_ordered(),
+        remove_duplicate_edges(), and the ordered_sample_pair object.
+   - Networking
+      - Added a set of tools for creating applications using the Bulk Synchronous Parallel
+        computing model.  See the new bsp_ex.cpp example program for an introduction.
+      - Added a routine that lets a user disable Nagle's algorithm on a TCP connection.
+      - Added an asynchronous start routine to the server object.  This is the new
+        start_async() method.
+      - Added the network_address object.
+      - Added connect_to() to the bridge interface.
+   - Added find_max_parse_cky(), a method implementing the well known CKY algorithm for
+     parsing probabilistic context free grammars.
+   - Added the ability to label parts of objects with the mouse to the image_display
+     widget.
+   - Added the ability to put overlay circles and full_object_detections into the
+     image_window widget.
+   - Added a stddev() for matrix objects.
+   - Added operator+() for running_stats and running_scalar_covariance.
+   - Added an overload of murmur_hash3_128bit() that takes 4 integers instead of a block of
+     memory.
+   - Added rand::get_random_64bit_number().
+
+Non-Backwards Compatible Changes:
+   - Changed the image_dataset_metadata XML reading tools to use a map of strings to points
+     to represent object parts. This change removes the old head point from a box since
+     this information can now be represented in the parts map.
+   - The syntax for passing order_by_distance and order_by_index to std::sort() is now
+     slightly different since these functions are now templates.  However, this change
+     allows them to work on any kind of sample_pair or ordered_sample_pair object.
+   - The default distance value of a sample_pair is now initialized to 1 instead of
+     infinity.
+
+Bug fixes:
+   - Added a patch, contributed by Martin Müllenhaupt, to fix a minor bug in the SQLite
+     bindings.
+   - Fixed a typo which would prevent code that called running_stats::max_n() from
+     compiling.
+
+Other:
+   - Added a new documentation page for the various graph tools in dlib.
+   - Added support for Visual Studio 2012.
+   - Switched the sample_pair object to use double to store its distance value instead of
+     float.
+   - Added William Sobel's patch to the web server that improves its flexibility and
+     security.
+   - Changed the server object so you don't have to use the server::kernel_1a syntax to
+     declare it anymore.  Now you just say server, server_iostream, or server_http
+     depending on which one you want.
+   - Changed the cmd_line_parser so you don't have to use the ::kernel_1a syntax anymore.
+     Now it is declared like a normal single implementation object.
+   - Set the default max number of connections a server will accept at a time to 1000
+     rather than the previous default of infinity.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 17.48</h1><u>Release date</u>: Oct 18, 2012<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+  - Added more overloads of find_max_factor_graph_potts() to make applying it 
+    over a Markov random field of image pixels really simple.
+  - Added overloads of serialize()/deserialize() so that they can serialize
+    Google protocol buffer objects.
+  - Image Processing:
+      - Added find_points_above_thresh()
+      - Added max_filter() 
+      - Added scan_image_movable_parts()
+      - Added sum_filter_assign()
+      - Added the full_object_detection object.
+      - Added the ability to model objects with movable parts into the
+        scan_image_pyramid object.  This update also includes all the needed tools
+        to train movable part models using the structural_object_detection_trainer.
+  - Machine Learning:
+      - Added a per node loss option to the structural_svm_graph_labeling_problem's
+        interface.
+      - Added Emanuele Cesena's implementation of Sammon's nonlinear dimensionality
+        reduction method.
+
+Non-Backwards Compatible Changes:
+  - To support movable part models, the serialization format of scan_image_pyramid
+    objects was modified.  This breaks backwards compatibility with the previous
+    format for scan_image_pyramid objects as well as object_detector instances
+    that use the scan_image_pyramid.
+
+Bug fixes:
+  - Fixed a bug in auto_threshold_image() that caused it to give bad outputs 
+    when used with very large images.
+
+Other:
+  - Updated find_max_factor_graph_potts() to correctly say you can use infinite
+    weights for the factor_value_disagreement() values since the code actually
+    supports this.
+  - Made integer serialization about 3 times faster.
+
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 17.47</h1><u>Release date</u>: Jun 15, 2012<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Improvements to linear algebra tools:
+      - Added the lowerbound() and upperbound() routines for thresholding dense 
+        matrices.
+      - Refined the tools for working with sparse vectors.  In particular, 
+        the following functions were added: min(), max(), make_sparse_vector(),
+        add(), and subtract().  A number of existing routines were also updated
+        to work with both sparse and dense vectors so that templated code which 
+        works on both vector types is simpler to write.
+      - Added the += and -= operators to the set_subm(), set_rowm(), and set_colm()
+        tools for operating on submatrices.
+   - Optimization:
+      - Added a new quadratic program solver, solve_qp4_using_smo().  This new
+        solver is useful for solving quadratic programs corresponding to
+        non-negative constrained primal quadratic programs.
+      - Added an optional non-negativity constraint to the oca optimizer.
+      - Added the min_cut object.  It provides a method to find the minimum weight 
+        cut on a graph.  
+      - Added tools for finding the maximum probability assignment in a Potts 
+        style Markov random field.  See the find_max_factor_graph_potts() routine 
+        for details.
+   - Machine Learning:
+      - Added structural SVM tools for learning the parameters of a Potts style
+        Markov random field.  See the structural_graph_labeling_trainer and
+        graph_labeler objects as well as their associated example program for 
+        details.
+      - Added the ability to learn only non-negative weights to the 
+        svm_c_linear_trainer.
+   - Improved Integration with OpenCV: 
+      - Updated the cv_image object so it works with cv::Mat as well as IplImage.
+      - Added the toMat() routine for converting from a dlib style image to an
+        OpenCV cv::Mat image.
+
+Non-Backwards Compatible Changes:
+   - Removed the dlib::sparse_vector namespace.  Everything from this namespace 
+     was moved into the normal dlib:: namespace so that code which works with 
+     both sparse and dense vectors is more cohesive.
+
+Bug fixes:
+   - Fixed a bug in find_max_factor_graph_viterbi() which sometimes occurred when 
+     the model order was larger than the number of variables.
+   - Fixed a bug which caused a compiler error if you tried to call dot() on two 
+     1x1 matrices which were statically dimensioned.
+
+Other:
+   - Improved existing documentation: added pictures of the gui widgets, 
+     added documentation of the dlib::bridge protocol, and other minor 
+     usability improvements.
+</pre></td></tr></table><hr><h1 style="margin:0px;">Release 17.46</h1><u>Release date</u>: Apr 11, 2012<br><u>Major Changes in this Release</u>:
+            <table cellspacing="5" cellpadding="0" width="100%"><tr><td width="15"></td><td><pre>
+New Features:
+   - Image Processing:
+      - Added the option to make the features generated by poly_image rotationally 
+        invariant. 
+      - Added a set of routines for warping, scaling, and resizing images.
+        See the new "Scaling and Rotating" section of the image processing
+        documentation for details.
+      - Added the heatmap() routine for converting an image into a heatmap.
+   - Machine Learning
+      - Updated the sequence labeling trainer to allow the user to set different 
+        loss values for different labels.
+      - Added the rls object.  It is an implementation of the linear recursive 
+        least squares algorithm.
+   - Added the get_option() routines which slightly simplify option parsing 
+     from the command line and config files.
+   - Added the 128bit version of Murmur hash.
+   - Added the kalman_filter and rls_filter objects.  These are tools for 
+     performing Kalman filtering and recursive least squares filtering.
+   - Added the circular_buffer object. 
+
+Non-Backwards Compatible Changes:
+   - The poly_image generates slightly different features in this new release.
+     Therefore, classifiers trained using the previous version will need to be
+     retrained if they are switched to the new version of poly_image.
+   - Changed the xcorr() functions so they take the complex conjugate of the right
+     hand arguments if they are complex numbers.  This way they do a proper
+     cross-correlation and also mirror the behavior of MATLAB.  However, this
+     breaks backwards compatibility with the previous behavior of xcorr().
+   - Previously, dlib included two versions of dlib::array.  However, to
+     simplify the user interface, dlib now includes only the contiguous
+     memory implementation of dlib::array.  This change should only affect
+     you if you wrote code which assumed dlib::array::set_max_size() only
+     allocated a small amount of RAM.  The new behavior is similar to the
+     std::vector::reserve() routine.  That is, dlib::array::set_max_size()
+     will allocate the requested amount of memory immediately.
+
+Bug fixes:
+   - Fixed a bug which caused certain matrix expressions to not compile
+     when the BLAS bindings were enabled.  In particular, expressions which
+     involved a 1x1 matrix sometimes didn't compile.
+
+Other:
+   - Made the matrix routines min(), max(), sum() and mean() work with 
+     complex numbers. 
+   - Turned the array object into a single implementation object.  Now arrays 
+     can be created using the normal array&lt;type&gt; obj; syntax.  Additionally, 
+     all extensions were merged into the array object. 
+   - Added an example program which better documents how to create training
+     data for the object detection tools as well as how this data can be used.
+     See the train_object_detector.cpp example for details.
+
+</pre></td></tr></table><br><br><br><center><a href="old_release_notes.html">Old Release Notes</a></center><br></td></tr></table></div></body></html>
