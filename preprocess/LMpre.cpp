@@ -171,9 +171,10 @@ GestureHand LMpre::copyHand(GestureHand *source) {
 }
 
 
-LMpre::LMpre(char *filepath, int radius) {
+LMpre::LMpre(vector<GestureFrame> frames, int radius) {
 
-	input.loadAllGestureFrames(filepath, frames);
+	//input.loadAllGestureFrames(filepath, frames);
+	this->frames = frames;
 	this->radius = radius;
 
 }

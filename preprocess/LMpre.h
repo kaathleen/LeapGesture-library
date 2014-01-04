@@ -28,16 +28,14 @@ using namespace std;
 class LMpre {
 
 public:
-	LMpre(char *filepath, int radius);
+	LMpre(vector<GestureFrame> frames, int radius);
 	vector<GestureFrame> process();
 	void displayRes();
 	vector<GestureFrame> outFrames;
 
 private:
 	vector<GestureFrame> frames;
-
 	BinaryFileStorageDriver input;
-	BinaryFileStorageDriver output;
 	vector < vector<int> > fids;
 	set<int> uniqueFingers;
 
