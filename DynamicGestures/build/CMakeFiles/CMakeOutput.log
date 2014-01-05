@@ -421,3 +421,183 @@ Linking CXX executable cmTryCompileExec795511573
 make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
 
 
+Determining if the function XOpenDisplay exists in the /usr/lib64/libX11.so;/usr/lib64/libXext.so passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3186726741/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3186726741.dir/build.make CMakeFiles/cmTryCompileExec3186726741.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3186726741.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTryCompileExec3186726741.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3186726741
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3186726741.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=XOpenDisplay    CMakeFiles/cmTryCompileExec3186726741.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3186726741 -rdynamic -lX11 -lXext 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3615474191/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3615474191.dir/build.make CMakeFiles/cmTryCompileExec3615474191.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3615474191.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTryCompileExec3615474191.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3615474191
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3615474191.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=gethostbyname    CMakeFiles/cmTryCompileExec3615474191.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3615474191 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1451430620/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1451430620.dir/build.make CMakeFiles/cmTryCompileExec1451430620.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1451430620.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTryCompileExec1451430620.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1451430620
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1451430620.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=connect    CMakeFiles/cmTryCompileExec1451430620.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1451430620 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2813062980/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2813062980.dir/build.make CMakeFiles/cmTryCompileExec2813062980.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2813062980.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTryCompileExec2813062980.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2813062980
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2813062980.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=remove    CMakeFiles/cmTryCompileExec2813062980.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2813062980 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1501355818/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1501355818.dir/build.make CMakeFiles/cmTryCompileExec1501355818.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1501355818.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTryCompileExec1501355818.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1501355818
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1501355818.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=shmat    CMakeFiles/cmTryCompileExec1501355818.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1501355818 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1570423123/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1570423123.dir/build.make CMakeFiles/cmTryCompileExec1570423123.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1570423123.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTryCompileExec1570423123.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1570423123
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1570423123.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    CMakeFiles/cmTryCompileExec1570423123.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1570423123 -rdynamic -lICE 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2234442756/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2234442756.dir/build.make CMakeFiles/cmTryCompileExec2234442756.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2234442756.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2234442756.dir/CheckIncludeFile.c.o   -c /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2234442756
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2234442756.dir/link.txt --verbose=1
+/usr/bin/cc         CMakeFiles/cmTryCompileExec2234442756.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2234442756 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3919852374/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3919852374.dir/build.make CMakeFiles/cmTryCompileExec3919852374.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3919852374.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3919852374.dir/CheckIncludeFile.c.o   -c /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec3919852374
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3919852374.dir/link.txt --verbose=1
+/usr/bin/cc         CMakeFiles/cmTryCompileExec3919852374.dir/CheckIncludeFile.c.o  -o cmTryCompileExec3919852374 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3180945336/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3180945336.dir/build.make CMakeFiles/cmTryCompileExec3180945336.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3180945336.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3180945336.dir/CheckIncludeFile.c.o   -c /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec3180945336
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3180945336.dir/link.txt --verbose=1
+/usr/bin/cc         CMakeFiles/cmTryCompileExec3180945336.dir/CheckIncludeFile.c.o  -o cmTryCompileExec3180945336 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining size of void* passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3052975643/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3052975643.dir/build.make CMakeFiles/cmTryCompileExec3052975643.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3052975643.dir/SIZE_OF_VOID_PTR.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3052975643.dir/SIZE_OF_VOID_PTR.c.o   -c /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CheckTypeSize/SIZE_OF_VOID_PTR.c
+Linking C executable cmTryCompileExec3052975643
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3052975643.dir/link.txt --verbose=1
+/usr/bin/cc         CMakeFiles/cmTryCompileExec3052975643.dir/SIZE_OF_VOID_PTR.c.o  -o cmTryCompileExec3052975643 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the CXX compiler has std namespace passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec937971728/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec937971728.dir/build.make CMakeFiles/cmTryCompileExec937971728.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec937971728.dir/TestForSTDNamespace.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec937971728.dir/TestForSTDNamespace.cxx.o -c /usr/share/cmake-2.8/Modules/TestForSTDNamespace.cxx
+Linking CXX executable cmTryCompileExec937971728
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec937971728.dir/link.txt --verbose=1
+/usr/bin/c++          CMakeFiles/cmTryCompileExec937971728.dir/TestForSTDNamespace.cxx.o  -o cmTryCompileExec937971728 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file iostream exists passed with the following output:
+Change Dir: /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec458636976/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec458636976.dir/build.make CMakeFiles/cmTryCompileExec458636976.dir/build
+make[1]: Wejście do katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec458636976.dir/CheckIncludeFile.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec458636976.dir/CheckIncludeFile.cxx.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp/CheckIncludeFile.cxx
+Linking CXX executable cmTryCompileExec458636976
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec458636976.dir/link.txt --verbose=1
+/usr/bin/c++          CMakeFiles/cmTryCompileExec458636976.dir/CheckIncludeFile.cxx.o  -o cmTryCompileExec458636976 -rdynamic 
+make[1]: Opuszczenie katalogu `/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/CMakeTmp'
+
+

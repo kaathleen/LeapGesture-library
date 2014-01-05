@@ -20,7 +20,7 @@
 
 #include "PathUtil.h"
 
-
+#include "preprocess/LMpre.h"
 
 using namespace hmmlib;
 using namespace std;
@@ -211,9 +211,8 @@ void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 			Vertex fingerDirection = tempHand->getFinger(i)->getDirection();
 
 			for (int j= i+1 ;j < fingerCount; j++) {
-
 				Vertex fingerDirection2 = tempHand->getFinger(j)->getDirection();
-				float angle = fingerDirection.dotProduct(fingerDirection2);
+				float angle = fingerDirection.dotProduct(fingerDirection);
 				angles.push_back(angle);// Can be acos if somebody want it
 			}
 		}
@@ -233,6 +232,35 @@ void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 	}
 }
 
+
+void anglesFingersPalmAttribute(GestureHand* tempHand, int& fingerCount,
+		int& attributeCounter, vector<double>& result) {
+
+	// If Hand exists and we have fingers
+	if (tempHand != NULL && fingerCount > 1) {
+
+		vector<float> angles(3, 0.0);
+
+		// For all combinations of finger configurations
+		for (int i = 0; i < fingerCount; i++) {
+			Vertex fingerDirection = tempHand->getFinger(i)->getDirection();
+			float angle = fingerDirection.dotProduct(tempHand->getPalmNormal());
+			angles.push_back(angle);	// Can be acos if somebody want it
+		}
+
+		sort(angles.begin(), angles.end(), std::greater<float>());
+
+		for (int i = 0; i < 6; i++) {
+			addAttribute(angles[i], attributeCounter, result);
+		}
+	}
+	// There are no fingers in the captured data
+	else {
+		for (int i = 0; i < 6; i++) {
+			addAttribute(0.0, attributeCounter, result);
+		}
+	}
+}
 
 void distancesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 		int& attributeCounter, vector<double>& result) {
@@ -284,6 +312,10 @@ vector<double> computeFeatureSet(GestureFrame *gestureFrame) {
 	// Adding the finger count to the feature set
 	fingerCountAttribute(fingerCount, attributeCounter, result);
 
+	// Adding 3 angles to the palm normal
+	anglesFingersPalmAttribute(tempHand, fingerCount, attributeCounter,
+				result);
+
 	// Adding the 6 highest angles to the feature set
 	anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
 			result);
@@ -292,17 +324,48 @@ vector<double> computeFeatureSet(GestureFrame *gestureFrame) {
 	distancesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
 			result);
 
+
+
 	return result;
 }
 
+
+void columnScaling(vector< vector<double > >& data ) {
+
+	int trainSetSize = data.size();
+	int featureSize = data[0].size();
+	double ** scaling = new double*[2];
+	scaling[0] = new double [ featureSize ];
+	scaling[1] = new double [ featureSize ];
+
+	for (int j = 0; j < featureSize; j++) {
+		double min_val = data[0][j], max_val = data[0][j];
+		for (int i = 0; i < trainSetSize; i++) {
+			if (data[i][j] < min_val) {
+				min_val = data[i][j];
+			}
+			if (data[i][j] > max_val) {
+				max_val = data[i][j];
+			}
+		}
+		scaling[0][j] = min_val;
+		scaling[1][j] = max_val - min_val;
+
+		if ( scaling[1][j] > 0.1)
+		{
+			for (int i = 0; i < trainSetSize; i++) {
+				data[i][j] = (data[i][j] - scaling[0][j]) / (scaling[1][j]);
+			}
+		}
+	}
+}
 
 int main(int argc, char **argv) {
 
 	GestureStorageDriver* gestureStorageDriver = new BinaryFileStorageDriver();
 
-	// Saving all possible gestures as feature sets
-	vector< vector<double> > dataset;
-
+	// Reading data in
+	vector<GestureFrame> frames;
 	for (int i=1;i<argc;i++)
 	{
 		string fileName = getFileNameFromPath(argv[1]);
@@ -312,10 +375,7 @@ int main(int argc, char **argv) {
 		GestureFrame currGestureFrame;
 
 		while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
-			vector<double> row;
-			row = computeFeatureSet(&currGestureFrame);
-
-			dataset.push_back(row);
+			frames.push_back(currGestureFrame);
 			currGestureFrame.clear();
 		}
 		gestureStorageDriver->closeConnection();
@@ -323,19 +383,55 @@ int main(int argc, char **argv) {
 	}
 	delete gestureStorageDriver;
 
+	// Preprocessing
+	LMpre::LMpre pre(frames, 10);
+	frames = pre.process();
+
+	// Saving all possible gestures as feature sets
+	vector< vector<double> > dataset;
+	for (int i = 0; i < frames.size(); i++) {
+		vector<double> row;
+		row = computeFeatureSet(&frames[i]);
+		dataset.push_back(row);
+
+
+	}
+
+
+	// Data normalizaion in columns
+	columnScaling(dataset);
+
+
+	// Saving for tool
+	ofstream zapis("out.csv");
+	for (int i = 0; i < dataset.size(); i++) {
+		if (i == 0) {
+			for (int j = 0; j < dataset[i].size(); j++) {
+				zapis << '"' << j << '"' << ';';
+			}
+			zapis << endl;
+		}
+
+		zapis << '"' << i << '"' << ";";
+		for (int j = 0; j < dataset[i].size(); j++) {
+			zapis << dataset[i][j] << ";";
+		}
+		zapis << endl;
+	}
+	zapis.close();
 
 	// dataset contains all positions remember as featureSet
 	cout<<"Size of dataset: " << dataset[0].size() << " x " << dataset.size()<<endl;
 
 
 	cout<<endl<<"!!!!!!! KMEANS !!!!!!" << endl;
-	kmeans(dataset);
+	//kmeans(dataset, 11);
 	cout<<endl<<"!!!!!!! KMEANS SIMPLER !!!!!!" << endl;
-	kmeansSimple(dataset);
+	kmeansSimple(dataset, 11);
 	cout<<endl<<"!!!!!!! CHINESE WHISPERS !!!!!!" << endl;
-	chinese_whispers(dataset);
+	//chinese_whispers(dataset);
 	cout<<endl<<"!!!!!!! NEWMAN CLUSTERING !!!!!!" << endl;
-	newman_cluster(dataset);
+	//newman_cluster(dataset);
 
 
 	return 0;

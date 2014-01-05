@@ -52,9 +52,32 @@ include CMakeFiles/dyn.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/dyn.dir/flags.make
 
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: CMakeFiles/dyn.dir/flags.make
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/LMpre.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.cpp
+
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dyn.dir/preprocess/LMpre.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.cpp > CMakeFiles/dyn.dir/preprocess/LMpre.cpp.i
+
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dyn.dir/preprocess/LMpre.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.cpp -o CMakeFiles/dyn.dir/preprocess/LMpre.cpp.s
+
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.requires:
+.PHONY : CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.requires
+
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.provides: CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.requires
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.provides.build
+.PHONY : CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.provides
+
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.provides.build: CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o
+
 CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o: ../Model/GestureFinger.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/GestureFinger.cpp
 
@@ -77,7 +100,7 @@ CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o.provides.build: CMakeFiles/dyn.dir/
 
 CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o: ../Model/GestureFrame.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/GestureFrame.cpp
 
@@ -100,7 +123,7 @@ CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o.provides.build: CMakeFiles/dyn.dir/M
 
 CMakeFiles/dyn.dir/Model/GestureHand.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/Model/GestureHand.cpp.o: ../Model/GestureHand.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/Model/GestureHand.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/Model/GestureHand.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/GestureHand.cpp
 
@@ -123,7 +146,7 @@ CMakeFiles/dyn.dir/Model/GestureHand.cpp.o.provides.build: CMakeFiles/dyn.dir/Mo
 
 CMakeFiles/dyn.dir/Model/Vertex.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/Model/Vertex.cpp.o: ../Model/Vertex.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/Model/Vertex.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/Model/Vertex.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/Vertex.cpp
 
@@ -146,7 +169,7 @@ CMakeFiles/dyn.dir/Model/Vertex.cpp.o.provides.build: CMakeFiles/dyn.dir/Model/V
 
 CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o: ../StorageDriver/BinaryFileStorageDriver.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/StorageDriver/BinaryFileStorageDriver.cpp
 
@@ -169,7 +192,7 @@ CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o.provides.build: C
 
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../dynamicGestureRecognition.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/dynamicGestureRecognition.cpp
 
@@ -192,6 +215,7 @@ CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o.provides.build: CMakeFiles/dy
 
 # Object files for target dyn
 dyn_OBJECTS = \
+"CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o" \
 "CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o" \
 "CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o" \
 "CMakeFiles/dyn.dir/Model/GestureHand.cpp.o" \
@@ -202,6 +226,7 @@ dyn_OBJECTS = \
 # External object files for target dyn
 dyn_EXTERNAL_OBJECTS =
 
+dyn: CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o
 dyn: CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o
 dyn: CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o
 dyn: CMakeFiles/dyn.dir/Model/GestureHand.cpp.o
@@ -228,6 +253,7 @@ dyn: CMakeFiles/dyn.dir/link.txt
 CMakeFiles/dyn.dir/build: dyn
 .PHONY : CMakeFiles/dyn.dir/build
 
+CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o.requires
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o.requires
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o.requires
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/Model/GestureHand.cpp.o.requires

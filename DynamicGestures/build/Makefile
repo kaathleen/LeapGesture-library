@@ -271,6 +271,30 @@ dynamicGestureRecognition.cpp.s:
 	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.s
 .PHONY : dynamicGestureRecognition.cpp.s
 
+preprocess/LMpre.o: preprocess/LMpre.cpp.o
+.PHONY : preprocess/LMpre.o
+
+# target to build an object file
+preprocess/LMpre.cpp.o:
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o
+.PHONY : preprocess/LMpre.cpp.o
+
+preprocess/LMpre.i: preprocess/LMpre.cpp.i
+.PHONY : preprocess/LMpre.i
+
+# target to preprocess a source file
+preprocess/LMpre.cpp.i:
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/preprocess/LMpre.cpp.i
+.PHONY : preprocess/LMpre.cpp.i
+
+preprocess/LMpre.s: preprocess/LMpre.cpp.s
+.PHONY : preprocess/LMpre.s
+
+# target to generate assembly for a file
+preprocess/LMpre.cpp.s:
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/preprocess/LMpre.cpp.s
+.PHONY : preprocess/LMpre.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -299,6 +323,9 @@ help:
 	@echo "... dynamicGestureRecognition.o"
 	@echo "... dynamicGestureRecognition.i"
 	@echo "... dynamicGestureRecognition.s"
+	@echo "... preprocess/LMpre.o"
+	@echo "... preprocess/LMpre.i"
+	@echo "... preprocess/LMpre.s"
 .PHONY : help
 
 

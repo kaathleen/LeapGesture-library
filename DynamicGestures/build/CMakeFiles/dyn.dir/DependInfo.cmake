@@ -10,6 +10,7 @@ SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/smi/Desktop/InzInformatyka/DynamicGestures/Model/Vertex.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/Model/Vertex.cpp.o"
   "/home/smi/Desktop/InzInformatyka/DynamicGestures/StorageDriver/BinaryFileStorageDriver.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o"
   "/home/smi/Desktop/InzInformatyka/DynamicGestures/dynamicGestureRecognition.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o"
+  "/home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

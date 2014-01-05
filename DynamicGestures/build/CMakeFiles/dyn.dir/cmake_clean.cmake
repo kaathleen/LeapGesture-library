@@ -1,4 +1,5 @@
 FILE(REMOVE_RECURSE
+  "CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o"
   "CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o"
   "CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o"
   "CMakeFiles/dyn.dir/Model/GestureHand.cpp.o"

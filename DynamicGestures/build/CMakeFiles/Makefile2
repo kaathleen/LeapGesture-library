@@ -62,7 +62,7 @@ CMAKE_BINARY_DIR = /home/smi/Desktop/InzInformatyka/DynamicGestures/build
 CMakeFiles/dyn.dir/all: dlib_build/CMakeFiles/dlib.dir/all
 	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/depend
 	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles  2 3 4 5 6 7
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles  2 3 4 5 6 7 8
 	@echo "Built target dyn"
 .PHONY : CMakeFiles/dyn.dir/all
 
@@ -72,7 +72,7 @@ all: CMakeFiles/dyn.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/dyn.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/dyn.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles 0
 .PHONY : CMakeFiles/dyn.dir/rule

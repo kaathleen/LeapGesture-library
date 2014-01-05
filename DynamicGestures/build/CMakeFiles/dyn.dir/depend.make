@@ -281,4 +281,16 @@ CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../StorageDriver/../Model/Ge
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../StorageDriver/BinaryFileStorageDriver.h
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../StorageDriver/GestureStorageDriver.h
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../dynamicGestureRecognition.cpp
+CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../preprocess/../StorageDriver/BinaryFileStorageDriver.h
+CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../preprocess/../StorageDriver/GestureStorageDriver.h
+CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../preprocess/LMpre.h
+
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/../Model/GestureFinger.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/../Model/GestureFrame.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/../Model/GestureHand.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/../Model/Vertex.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/../StorageDriver/BinaryFileStorageDriver.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/../StorageDriver/GestureStorageDriver.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/LMpre.cpp
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o: ../preprocess/LMpre.h
 

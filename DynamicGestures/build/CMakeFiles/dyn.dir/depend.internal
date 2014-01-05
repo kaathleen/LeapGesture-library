@@ -282,3 +282,15 @@ CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o
  /home/smi/Desktop/InzInformatyka/DynamicGestures/StorageDriver/BinaryFileStorageDriver.h
  /home/smi/Desktop/InzInformatyka/DynamicGestures/StorageDriver/GestureStorageDriver.h
  /home/smi/Desktop/InzInformatyka/DynamicGestures/dynamicGestureRecognition.cpp
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../StorageDriver/BinaryFileStorageDriver.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../StorageDriver/GestureStorageDriver.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.h
+CMakeFiles/dyn.dir/preprocess/LMpre.cpp.o
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../Model/GestureFinger.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../Model/GestureFrame.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../Model/GestureHand.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../Model/Vertex.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../StorageDriver/BinaryFileStorageDriver.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/../StorageDriver/GestureStorageDriver.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.cpp
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/preprocess/LMpre.h
