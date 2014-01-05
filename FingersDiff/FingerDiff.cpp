@@ -225,6 +225,13 @@ int getIndexOfClassName(vector<string> &classNames, string name)
 	return -1;
 }
 
+std::vector<GestureFrame>& preprocessGestureFrames(std::vector<GestureFrame>& gestureFrameVector) {
+	LMpre::LMpre preprocessing(gestureFrameVector, 4);
+	std::vector < GestureFrame > preGestureFrameVector;
+	preGestureFrameVector = preprocessing.process();
+	return preGestureFrameVector;
+}
+
 void createFeaturesDataSets(const int& NUMBER_OF_CLASSES, char** argv,
 		vector<vector<vector<double> > > &featuresInSamplesInClasses,
 		vector<string> &classNames) {
@@ -243,24 +250,28 @@ void createFeaturesDataSets(const int& NUMBER_OF_CLASSES, char** argv,
 			classNameIndex = classNames.size()-1;
 			featuresInSamplesInClasses.push_back(vector<vector<double> >());
 		}
-
-		gestureStorageDriver->openConnection(argv[i + 1], false);
-		cout << "Open connection for "<<argv[i + 1]<< endl;
-		GestureFrame currGestureFrame;
-		while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
+		std::vector<GestureFrame> gestureFrameVector;
+		gestureStorageDriver->loadAllGestureFrames(argv[i + 1], gestureFrameVector);
+		std::vector < GestureFrame > preGestureFrameVector = preprocessGestureFrames(gestureFrameVector);
+		//gestureStorageDriver->openConnection(argv[i + 1], false);
+		//cout << "Open connection for "<<argv[i + 1]<< endl;
+		//GestureFrame currGestureFrame;
+		//while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
+		for(int i=0; i<preGestureFrameVector.size(); i++)
+		{
 			// Defining the set of features
 			vector<double> row;
 			// sequence number of class
 			svm_gesture << classNameIndex + 1 << " ";
-			row = features1(&currGestureFrame, svm_gesture);
+			row = features1(&preGestureFrameVector[i], svm_gesture);
 			svm_gesture << endl;
 
 			featuresInSamplesInClasses[classNameIndex].push_back(row);
 
-			currGestureFrame.clear();
+			//currGestureFrame.clear();
 		}
-		gestureStorageDriver->closeConnection();
-		cout << "Close connection" << endl;
+		//gestureStorageDriver->closeConnection();
+		//cout << "Close connection" << endl;
 	}
 
 	svm_gesture.close();

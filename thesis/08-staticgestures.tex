@@ -5,7 +5,7 @@ As was already mentioned, the detected gestures can be divided into two groups: 
 The static gestures can be understood as a chosen position and orientation of the fingers and hand in a single moment, while dynamic gestures are defined as a movement of the hand and fingers in time. 
 The problem of recognition of those gestures is a subject of following chapter. 
 Firstly, the proposed approach is presented, followed by the introduction to the evaluation scheme. 
-In last section, the performed experiments are performed to examine the effectiveness in task of static gesture recognition.
+In last section, the performed experiments are descriebed, which were used to examine the effectiveness of proposed static gesture recognition approach.
 
 \section{Proposed methods}
 
@@ -17,6 +17,15 @@ While for most 2D gesture recognition problems simple classification algorithms 
 While dealing with 3D data, the position and orientation of hand can be easily affected by the height of the hand above the sensor or small change in the orientation of the hand with respect to the sensor's coordinate system. 
 It is intuitively understood, that the system should recognize those gestures as the one as they are similar.
 To meet those requirement, one need to define what is meant by the ,,small'' change in orientation resulting in treating the static gestures as the same.
+
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=0.6\columnwidth]{figures/SVM.png}
+ \caption[]{SVM is a technique searching for the hiperplane that maximizes the margin between classes\footnotemark}
+ \label{svmmargin}
+\end{figure}
+
+
 
 To meet those requirements, the Support Vector Machines \cite{Cortes:SVM} were used as a classification algorithm.
 The SVMs were chosen as there exist a solid mathematical background supporting the simple idea of maximalizing the margin between classes.
@@ -31,6 +40,8 @@ The typical kernel functions:
 \item sigmoid: $K(x_i, x_j) = tanh(\gamma x_i^Tx_j+r)$.
 \end{itemize}
 where $\gamma$, $r$, and $d$ are kernel parameters. According to the authors of the library, linear kernels should be used for linearly separable problems, while RBF kernel is the most versatile one.
+
+\footnotetext{\url{http://en.wikipedia.org/wiki/File:Svm_max_sep_hyperplane_with_margin.png}}
 
 The problem of classification assumes that each sample consists of set of features, which describe this sample and can be used to distinguish it from the other samples.
 Additionally, each sample has a known or unknown label, which defined the membership of sample to the class. 
@@ -49,6 +60,14 @@ In case of library, it is assumed that the learning process can be done offline,
 To meet those requirements the Support Vector Machine is introduced[]. 
 The SVM classification is commonly used technique in multiple areas of research as biology, robotics or IT for solving data classification problems [].
 Additional advantage of the SVM is possibility to use C++ library libSVM[], which provides an easy interface to utilize this classification methods in different problems.
+
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=1\columnwidth]{figures/StaticGestures.png}
+ \caption[]{Proposed solution blocks for learning and recognitnion parts of static gestures recognition problem}
+ \label{svmmargin}
+\end{figure}
+
 
 While presented approach can be treated as state-of-the-art approach it still cannot be used without defining proper feature sets for gesture recognition.
 The naive solution would be to use the raw data from Leap motion sensor as the feature set.
@@ -82,11 +101,11 @@ To propose and test the quality of the features twelve static gestures were chos
 \item the peace sign,
 \item a fist,
 \item full hand with space between each finger,
-\item the sign X made with the forefingers of both hands,
-\item the sing ``Time'' used e.g. by coaches in basketball games.
 \item American Sign Language: ``I love you'' sign,
 \item sign ``gun'' created by putting thumb and forefinger up, while holding the rest fingers in a fist,
 \item all fingers in a fist with exception of thumb, which is up,
+\item the sign X made with the forefingers of both hands,
+\item the sing ``Time'' used e.g. by coaches in basketball games.
 \item sign simulating rotating a knob by two fingers,
 \item sign simulating rotating a knob by five fingers.
 \end{enumerate} 
@@ -94,7 +113,7 @@ The gestures are also presented at fig.~\ref{staticgestures}.
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=0.6\columnwidth]{figures/static_gestures.jpg}
+ \includegraphics[width=1.0\columnwidth]{figures/static_gestures.png}
  \caption{Figures chosen for the comparison of different classification approaches}
  \label{staticgestures}
 \end{figure}
@@ -115,9 +134,11 @@ The percent of correctly recognized labels to the total size of the testing set 
 The first proposed vector of features consisted of:
 \begin{itemize}
 \item number of fingers in frame,
+\item the absolute angles between fingers and the normal of the hand,
 \item the absolute angles between consecutive fingers,
 \item the euclidean distance between consecutive finger's tips.
 \end{itemize} 
+
 After approach allowed to achieve XXX\% of recognition rate and was unsatisfying from the perspective of feature application. 
 Analysis of the finger numbering revealed that the fingers are numbered accordingly to the position in Z axis of the tip of the finger.
 This means that when features are approximately on the same position in Z axis, the numbering can change rapidly and proposed features compare different fingers.

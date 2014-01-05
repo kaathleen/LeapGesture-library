@@ -7,6 +7,8 @@
 #include <string.h>
 #include <vector>
 
+#include "KFoldCrossValidation.h"
+
 #include <dlib/clustering.h>
 #include <dlib/rand.h>
 
@@ -423,6 +425,22 @@ int main(int argc, char **argv) {
 	// dataset contains all positions remember as featureSet
 	cout<<"Size of dataset: " << dataset[0].size() << " x " << dataset.size()<<endl;
 
+	/*
+	// save dataset for counting number of clusters
+	std::fstream datasetFile;
+	datasetFile.open("DATASET_FILE", std::fstream::out | std::fstream::trunc);
+	for (int i=0; i<dataset.size(); i++)
+	{
+		int lastElement = dataset[i].size()-1;
+		for (int j=0; j<lastElement; j++)
+		{
+			datasetFile<<dataset[i][j]<<" ";
+		}
+
+		datasetFile<<dataset[i][lastElement]<<"\n";
+	}
+	datasetFile.close();
+	//
 
 	cout<<endl<<"!!!!!!! KMEANS !!!!!!" << endl;
 	//kmeans(dataset, 11);
@@ -434,7 +452,7 @@ int main(int argc, char **argv) {
 	//newman_cluster(dataset);
 
 
-	return 0;
+	return 0;*/
 
 
 	int K = 2; // number of states in one gesture
@@ -475,7 +493,7 @@ int main(int argc, char **argv) {
 	HMMMatrix<double> &E2 = *E2_ptr;
 
 	//std::cout << "obs : [0, 1, 0, 1]" << std::endl;
-	std::vector<sequence> learning_set;
+	std::vector<sequence> testDataset;
 
 	srand(time(0));
 	for (int k = 0; k < 10; k++) {
@@ -501,8 +519,11 @@ int main(int argc, char **argv) {
 		}
 
 		std::cout << "obs length: " << obs.size() << std::endl;
-		learning_set.push_back(obs);
+		testDataset.push_back(obs);
 	}
+
+	const int crossValK = 5;
+	KFoldCrossValidation<sequence> kFoldCV(testDataset, crossValK);
 
 	sequence hiddenseq(n);
 	HMM<double> *hmm;
@@ -517,53 +538,61 @@ int main(int argc, char **argv) {
 	int iteration_number = 10;
 	double total_best = 0.0;
 	double learn_test_percent = 0.5;
-	for (int i = 0; i < iteration_number; i++) {
-		for (int p = 0; p < learn_test_percent * learning_set.size(); p++) {
-			double loglik = hmm->viterbi(learning_set[p], hiddenseq);
-			std::cout << "-- log likelihood of hiddenseq: " << loglik
-					<< "\tLikelihood : " << exp(loglik) << std::endl;
-			//std::cout << "Running forward" << std::endl;
+	for (int i = 0; i < iteration_number; i++)
+	{
+		for (int foldNumber=0; foldNumber<kFoldCV.getK(); foldNumber++)
+		{
+			for (int elIndex = 0; elIndex<kFoldCV.getLearningSetSize(foldNumber); elIndex++)
+			{
+				sequence elValue = kFoldCV.getLearningSetElement(elIndex, foldNumber);
 
-			hmm->forward(learning_set[p], scales, F);
+				double loglik = hmm->viterbi(elValue, hiddenseq);
+				std::cout << "-- log likelihood of hiddenseq: " << loglik
+						<< "\tLikelihood : " << exp(loglik) << std::endl;
+				//std::cout << "Running forward" << std::endl;
 
-			//std::cout << "Running likelihood" << std::endl;
-			loglik = hmm->likelihood(scales);
+				hmm->forward(elValue, scales, F);
 
-			//std::cout << "Running backward" << std::endl;
-			hmm->backward(learning_set[p], scales, B);
+				//std::cout << "Running likelihood" << std::endl;
+				loglik = hmm->likelihood(scales);
 
-			//std::cout << "Running posterior decoding" << std::endl;
-			hmm->posterior_decoding(learning_set[p], F, B, scales, pd);
+				//std::cout << "Running backward" << std::endl;
+				hmm->backward(elValue, scales, B);
 
-			//std::cout << "Running Baum-Welch" << std::endl;
-			hmm->baum_welch(learning_set[p], F, B, scales, *pi2_ptr, *T2_ptr,
-					*E2_ptr);
+				//std::cout << "Running posterior decoding" << std::endl;
+				hmm->posterior_decoding(elValue, F, B, scales, pd);
 
-			delete hmm;
-			for (int j = 0; j < K; j++) {
-				pi(j) = pi2(j);
+				//std::cout << "Running Baum-Welch" << std::endl;
+				hmm->baum_welch(elValue, F, B, scales, *pi2_ptr, *T2_ptr,
+						*E2_ptr);
 
-				for (int k = 0; k < M; k++) {
-					E(k, j) = E2(k, j);
+				delete hmm;
+				for (int j = 0; j < K; j++) {
+					pi(j) = pi2(j);
+
+					for (int k = 0; k < M; k++) {
+						E(k, j) = E2(k, j);
+					}
+					for (int k = 0; k < K; k++) {
+						T(k, j) = T2(k, j);
+					}
 				}
-				for (int k = 0; k < K; k++) {
-					T(k, j) = T2(k, j);
-				}
+				hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
 			}
-			hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
+
+			double total_rec = 0;
+			for (int elIndex = 0; elIndex<kFoldCV.getTestingSetSize(foldNumber); elIndex++) {
+				sequence elValue = kFoldCV.getTestingSetElement(elIndex, foldNumber);
+
+				double loglik = hmm->viterbi(elValue, hiddenseq);
+				total_rec += exp(loglik);
+			}
+
+			if (total_rec <= total_best)
+				break;
+
+			total_best = total_rec;
 		}
-
-		double total_rec = 0;
-		for (int p = learn_test_percent * learning_set.size();
-				p < learning_set.size(); p++) {
-			double loglik = hmm->viterbi(learning_set[p], hiddenseq);
-			total_rec += exp(loglik);
-		}
-
-		if (total_rec <= total_best)
-			break;
-
-		total_best = total_rec;
 	}
 
 	std::cout << " ------ " << std::endl;
