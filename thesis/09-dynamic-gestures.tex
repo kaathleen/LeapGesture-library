@@ -110,16 +110,48 @@ The only remaining problem is the problem of preparing the set of ccured, 1-dime
 \subsection{HMM observation from Leap Motion data}
 
 Most of the proposed solutions in the literature assume that the observations are 1-dimensional.
-There were attempts to expand the HMM to the 2-dimensional observations [], but the raw data from Leap Motion is defined in higer-dimensional that any found solution.
+There were attempts to expand the HMM to the 2-dimensional observations [], but the raw data from Leap Motion is defined in higher-dimensional that any found solution.
 That is the reason, why the need to reduce the dimensionality of the observation of the single hand in the predefined moment in time.
 
-To do this, unsupervised clustering algorithms were used.
+To do this, unsupervised clustering algorithms were introduced. 
+For this task we examined 3 methods:
+\begin{itemize}
+\item Chinese whispers \cite{CW1, CW2},
+\item Girvan-Newman clustering \cite{Newman},
+\item k-means with additional methods to determine the number of clusters. \cite{kmeans1, kmeans2}.
+\end{itemize}
 
-***********************
-**************8
-Opisać algorytmy
-Opisać metody doboru liczby klas
-********
+Chinese whispers algorithm is an efficient randomized graph-clustering algorithm, which is time-linear in the number of edges.
+The algorithm was proposed in \cite{CW1} and thoroughly examined in Natural Language Processing problems. 
+The main advantage of the algorithm is the ability to independently determine the number of classes. 
+In tests, we used the implementation available in dLib-ml library\cite{dlib}, which provides multiple machine learning algorithms.
+
+Girvan-Newman clustering is a hierarchical algorithm used to detect clusters in a data represented as a graph.
+The algorithm progressively removes edges from the original network until it reaches the maximal number of iterations or the error condition is met.
+The solution iteratively calculates the eigenvalues of a created matrix using the power iteration method. 
+In case of a complete graph, this algorithm is relatively slow.
+
+The another proposed approach is a k-means clustering algorithm.
+The idea for the algorithm comes from polish mathematician Hugo Steinhaus \cite{kmeans1}, but the first practical application has been presented in \cite{kmeans2}.
+The algorithms initially randomly selects $k$ starting points and performs iteratively 2 steps utilizing the idea of expected-maximization \cite{expectedmaximization}:
+\begin{enumerate}
+\item For each data sample the algorithm calculates the distances to $k$ centroids and labels the samples with the label of the centroid with the smallest distance.
+\item For each class, the algorithm recalculates centroids position to the averaged position of all samples belonging to class.
+\end{enumerate} 
+The algorithm stops after maximum number of iterations or when the change between consecutive iterations is smaller then defined epsilon.
+Unfortunately, the algorithm requires the knowledge of the number of expected classes.
+Although there exists a heuristics methods aiding in correctly choosing the number of classes. 
+One of those methods is plotting the error sum of squares (SSE) within classes against the number of chosen classes. 
+In this plot the drastic drop of SSE is sough and the number of classes it happens is considered a good choice.
+Another, more formal approach introduces the measure of dissimilarity and is called Silhouette width \cite{silhouette}.
+Declaring $a(i)$ as the average dissimilarity with all the other data within the same cluster and $b(i)$ as the lowest average dissimilarity to any other cluster which $i$ is not a part of, we can write a measure:
+\begin{equation}
+s(i) = \frac{b(i) - a(i)}{\max{\{a(i),b(i)}\}}
+\end{equation}
+The big value of $s(i)$ implies good clustering, while small value of $s(i)$ suggests that the number of classes was not properly chosen.
+
+
+
 
 
 \begin{figure}[htb]
@@ -129,17 +161,17 @@ Opisać metody doboru liczby klas
  \label{dynamicgesturesflow}
 \end{figure}
 
-Finally, the whole processing flow has been desgined and is presented at fig.~\ref{dynamicgesturesflow}.
+Finally, the whole processing flow has been designed and is presented at fig.~\ref{dynamicgesturesflow}.
 The whole solution consists of two parts: offline learning and online recognition.
 For learning, the raw data is preprocessed and then the feature are extracted. 
-Similarly to the static gestures, the features set containing the finger count, angles between fingers and normal of hand, angles between fingers and distances between finger's tips were used. 
-In traning part, those features are extracted from all recorded positions for all dynamic gestures.
-Then one of the unsupervised clustering algorithms is used to find the classes of observations (usually 8-12 classes worked best).
+Similarly to the static gestures, the features set were computed. 
+In training part, those features are extracted from all recorded positions for all dynamic gestures.
+Then one of the unsupervised clustering algorithms is used to find the classes of observations.
 Knowledge of the classes is used to represent each dynamic gesture as a series of one-dimensional observations.
 After that for each dynamic gesture, the corresponding HMM is learned by running the Baum-Welch algorithm on the sequence of observations.
 To complete, the training process, the HMMs are combined into one HMM.
 
-In the online working, the raw data from leap motion is preprocessed, then each frame is labeled accordingly to the classes learnt by the unsupervised clustering algorithm.
+In the online working, the raw data from leap motion is preprocessed, then each frame is labelled accordingly to the classes learnt by the unsupervised clustering algorithm.
 The next step include providing the set of observations to HMM and running the Viterbi algorithm.
 The Viterbi algorithm finds the most likely sequence in one the parallel paths, which informs us about the number of the found gesture. 
 If the likelihood is above preset threshold, the gesture is assumed to be correctly recognized.
@@ -147,22 +179,90 @@ If the likelihood is above preset threshold, the gesture is assumed to be correc
 
 \section{Evaluation methodology}
 
-To evaluate proposed approach ... 
+To evaluate the quality of recognition achieved by proposed processing pipeline, 8 dynamic gesture were chosen for which the data was recorded.
+For each of those gestures, we recorded 120 samples (30 samples per each author).
+The recorded data were in different positions, with different speed to measure the wanted invariance.
+The chosen dynamic gestures are:
+\begin{enumerate}
+\item ,,number 8'' -- it's a number 8 made by one finger in the air,
+\item ,,letter Z'' -- it's a letter Z made by one finger in the air,
+\item open hand with 5 fingers going down in the direction of the sensor,
+\item ,,clearing'' -- open hand moving left and right and simulating the movement of clearing the screen,
+\item circle made by one finger in the air
+\item ,,letter A'' -- a letter A made by one finger in the air,
+\item ,,gun'' -- only the thumb and the index finger are not in the fist. The hand moves up simulating the movement during the firing from the gun.
+\item ,,swipe from right'' -- moving the hand from right to left, used e.g. in smartphones to move something out of the current view.
+\end{enumerate}
 
-
-
-
-
-
-  
-
-
-
-
-
-
-The proposed solution utilizes Hidden Markov Model[] 
-
+To test the proposed approach, similarly to the static gesture recognition problem, the $120\times8=960$ samples were divided into training and testing group. 
+The part of the gestures recorded by Katarzyna were used to find the proper number of clusters than could be used by form the observations for the HMMs. 
+The training set was used to train each HMM separately on the training data of each gesture. 
+To prevent overfitting of the data and achieve the measure when the training process should be stopped, the k-fold cross validation was utilized. 
 
 
 \section{Experiments}
+
+
+
+The performed experiments started with testing the unsupervised clustering methods to determine the correct number of observations.
+Based on the successful static gesture recognition, each of the hand poses was represented by the vector of values containing:
+\begin{itemize}
+\item number of detected fingers,
+\item 5 greatest angles between the finger tip vector and palm normal,
+\item 5 greatest angles between the fingers tip vectors,
+\item 5 greatest distances between the tip positions of fingers.
+\end{itemize}
+In order to compare different hand poses, the distance function was introduced as the L2 norm between feature vectors:
+\begin{equation}
+d(x,y) = \sqrt{ \sum_{i=1}^{16} (x_i - y_i)^2 }
+\end{equation}
+The Chinese whispers and Girven-Newman uses the similarity function, which was defined as: 
+\begin{equation}
+s(x,y) = \frac{1.0}{ \max{\{d(x,y), eps\}}}
+\end{equation}
+where $eps$ was the numerical epsilon.
+
+For the Chinese Whispers and Girven-Newman clustering the typical parameters from dlib-ml library were used --- the Chinese Whispers maximal iterations were set to $100$, while the Girven-Newman was run with maximal iterations equal to $2000$ and precision eps set to $1e-4$.
+For the SSE analysis for different cluster number, the publicly available script was used\cite{SSE}. 
+The script automatically calculates the k-means clustering algorithm for chosen range of $k$ values and presents the figures, which can be a help in determining the correct number of classes.
+For the Silhouette width analysis own, R script was written.
+
+
+
+\begin{figure}[htp!]
+\centering
+ \includegraphics[width=1.0\columnwidth]{figures/SSE1.png}
+ %\includegraphics[width=0.7\columnwidth]{figures/SSE2.png}
+ %\includegraphics[width=1\columnwidth]{figures/SSE.png}
+ \caption{Different representations of SSE as a function of number of clusters for the k-means algorithm}
+ \label{dynamicSSE}
+\end{figure}
+
+The SSE analysis usually does not yield the direct answer.
+The toll provides several plots, but the most interesting one is presented at fig.~\ref{dynamicSSE}. 
+Looking at this plot, there is a significant drop in SSE for the cluster number equal to $5$ and $10$.
+It is expected that either of those numbers is the correct choice when it comes to the number of classes for k-means algorithm.
+
+
+
+\begin{table}[ht]
+ \caption{Comparison of suggested number of clusters for the dataset containing all positions of hand in all dynamic gesture recordings made by Katarzyna}
+ \label{clusterwyn}
+    \begin{tabular}{ccccc}
+    \hline
+     & Girven-Newman & Chinese whispers   & SSE vs clusters & Silhouette width  \\ \hline
+    recordings \\by Katarzyna          & x      & xx & 5 or 10     & xx     \\ \hline
+    \end{tabular}
+\end{table}
+
+The proposed values of clusters for different methods are presented in the table~\ref{clusterwyn}.
+
+
+
+********8
+*********88
+*DYNAMICZNE TESTY
+********88
+********
+
+
