@@ -370,10 +370,10 @@ int main(int argc, char **argv) {
 	vector<GestureFrame> frames;
 	for (int i=1;i<argc;i++)
 	{
-		string fileName = getFileNameFromPath(argv[1]);
+		string fileName = getFileNameFromPath(argv[i]);
 
-		gestureStorageDriver->openConnection(argv[1], false);
-		cout << "Open connection for " << argv[1] << endl;
+		gestureStorageDriver->openConnection(argv[i], false);
+		cout << "Open connection for " << argv[i] << endl;
 		GestureFrame currGestureFrame;
 
 		while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
