@@ -155,12 +155,12 @@ The results achieved by those methods are presented in the table~\ref{staticfeat
     \begin{tabular}{|c|c|c|c|c|}
     \hline
     ~                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    feature set 1                     & ~      & ~           & ~       & ~           \\ \hline
-    feature set 2                     & ~      & ~           & ~       & ~          \\ \hline
-    feature set 3                     & ~      & ~           & ~       & ~           \\ \hline
-    feature set 4                     & ~      & ~           & ~       & ~           \\ \hline
-    feature set 5                     & ~      & ~           & ~       & ~          \\ \hline
-    feature set 6                     & ~      & ~           & ~       & ~           \\ \hline
+    feature set 1                     & 87.072\% & 87,943\% & 69.987\% & ~           \\ \hline
+    feature set 2                     & 87.072\% & 87,943\% & 69.987\% & ~          \\ \hline
+    feature set 3                     & 87.072\% & 87,943\% & 69.987\% & ~           \\ \hline
+    feature set 4                     & 80.976\% & ~  & 68.438\% & 68.630\%          \\ \hline
+    feature set 5                     & 84.623\% & ~  & 77.101\% & 77.518\%          \\ \hline
+    feature set 6                     & 92.762\% & 93,096\% & 80.543\% & 81.235\%           \\ \hline
     \end{tabular}
 \end{table}
 
@@ -215,12 +215,13 @@ The results are presented in tab.~\ref{staticpre}.
     \begin{tabular}{|c|c|c|c|c|}
     \hline
     preprocessing                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    off                     & x\% & x\%  & x\% & x\% \\ \hline
-    width = 2                     & x\% & x\%  & x\% & x\% \\ \hline
-    width = 5                     & x\% & x\%  & x\% & x\% \\ \hline
-    width = 10                     & x\% & x\%  & x\% & x\% \\ \hline
-    width = 15                     & x\% & x\%  & x\% & x\% \\ \hline
-    width = 20                     & x\% & x\% & x\% & x\% \\ \hline
+    off                     & 92.762\% & 93,096\%  & 80.543\% & x\% \\ \hline
+    width = 2               & 95.641\% & 96,527\%  & 82.331\% & x\% \\ \hline
+    width = 5               & 95.861\% & 96,650\%  & 82.745\% & x\% \\ \hline
+    width = 10              & 98.796\% & 98,965\%  & 83.224\% & x\% \\ \hline
+    width = 15              & 98.981\% & 99,150\%  & 83.662\% & x\% \\ \hline
+    width = 20              & 99.104\% & 99,242\%  & 83.865\% & x\% \\ \hline
+    width = 30              & 99.232\% & 99,385\%  & x\% & x\% \\ \hline
     \end{tabular}
     \end{center}
 \end{table}
@@ -257,10 +258,11 @@ The achieved results are presented in tab.~\ref{staticcom}.
 \begin{table}[htp!]
 \begin{center}
 	\label{staticcom}
-	\caption{The recognition rate achieved while using the time-window}
+	\caption{The recognition rate achieved while using the time-window, preprocessing = 10 and featureset 6}
     \begin{tabular}{|c|c|c|}
     \hline
    ~ &  5 gestures, test set &  10 gestures, test set \\ \hline
+    no window & &  98,965\% & x\%  \\ \hline
     sum of elements  & &  \\ 
     window width = $2$ & x\% & x\%  \\ \hline
     sum of elements & & \\ 

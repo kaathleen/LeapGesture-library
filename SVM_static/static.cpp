@@ -269,8 +269,8 @@ int main(int argc, char **argv) {
 	delete gestureStorageDriver;
 
 	// Preprocessing
-	//LMpre::LMpre pre(frames, 10);
-	//frames = pre.process();
+	LMpre::LMpre pre(frames, atoi(argv[1]));
+	frames = pre.process();
 
 	cout<<"After preprocessing"<<endl;
 
@@ -280,7 +280,7 @@ int main(int argc, char **argv) {
 	vector< vector<double> > feature;
 	for (int i = 0; i < frames.size(); i++) {
 		vector<double> row;
-		row = computeFeatureSet(&frames[i], atoi(argv[1]));
+		row = computeFeatureSet(&frames[i], 6);
 		feature.push_back(row);
 	}
 
