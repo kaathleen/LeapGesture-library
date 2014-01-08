@@ -12,7 +12,9 @@ The set of features for each frame is then processed by the Hidden Markov Model 
 
 \subsection{Hidden Markov Model}
 
-Hidde Markov Model is a finite, $N$-element set of states, which are associated with the probability distribution.
+Hidden Markov Model is model of a system with Markov property.
+The first introduction of HMM comes from the L. E. Baum et. al.\cite{hmmfirst}, who proposed the mathematical background for HMMs.
+A HMM can be considered a finite, $N$-element set of states, which are associated with the probability distribution.
 The transitions between states are represented by the transition probabilities usually stored in $N\times N$ matrix $T$.
 In every state, one of the observation from the finite, $K$-element observation set can be generated with observation probability usually represented by the $N\times K$ emission matrix $E$.
 The finite set of all possible observation is called the alphabet.
@@ -76,8 +78,8 @@ Finally, the problem can be understood as finding the $argmax_{x\in X}(V_{T,x})$
 The algorithm time complexity is the same as forward-backward $O(N^2 T)$.
 
 The Baum-Welch algorithm is the algorithm used to find the unknown parameters of the HMM.
-For each training example, the algorithms updates the state transition probabilities, observation probabilities in each state and intial probabilities to maximize the likelihood of observation.
-Having the set of sets of observations, the algorithm can be used to train HMM to detect the sequences similiar to the ones used in learning process.
+For each training example, the algorithms updates the state transition probabilities, observation probabilities in each state and initial probabilities to maximize the likelihood of observation.
+Having the set of sets of observations, the algorithm can be used to train HMM to detect the sequences similar to the ones used in learning process.
 
 \begin{figure}[htb]
 \centering
@@ -86,8 +88,8 @@ Having the set of sets of observations, the algorithm can be used to train HMM t
  \label{singlehmm}
 \end{figure}
 
-In the dynamic gesture recognition task, we adopted a structure of HMM with state having non-zero transition probabilites to self and to the next state in the sequence.
-The proposed structe is presented at fig.~\ref{singlehmm} 
+In the dynamic gesture recognition task, we adopted a structure of HMM with state having non-zero transition probabilities to self and to the next state in the sequence.
+The proposed structure is presented at fig.~\ref{singlehmm} and was firstly proposed in paper~\cite{hmm}.
 The states can be understood as the phases of hand movement and position that happen when the wanted gesture is performed.
 The self-transitions are used to model the different speeds of the gestures.
 This structure after training process can be used to measure the probability of that the dynamic gesture occured given the set of observations.
