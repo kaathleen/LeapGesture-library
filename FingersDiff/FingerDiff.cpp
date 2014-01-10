@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <string>
 
+#include "Preprocessing/LMpre.h"
+
 #include "SVMclassificator.h"
 
 #include "Model/GestureFinger.h"
@@ -196,16 +198,16 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 			result, svmGesture);*/
 
 	//ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
-	nearestFingersDistancesRatiosAttribute(tempHand, fingerCount, attributeCounter,
-			result, svmGesture);
+	/*nearestFingersDistancesRatiosAttribute(tempHand, fingerCount, attributeCounter,
+			result, svmGesture);*/
 
 	//ratio of the finger thickness to the maximal finger thickness
 	fingerThicknessRatiosAttribute(fingerCount, tempHand, attributeCounter,
 			result, svmGesture);
 
 	// angles between fingers
-	anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
-			result, svmGesture);
+	/*anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
+			result, svmGesture);*/
 
 	// angles between finger and first finger relative to palmPosition
 	anglesBetweenFingersRelativeToPalmPosAttribute(tempHand, fingerCount,
@@ -225,9 +227,10 @@ int getIndexOfClassName(vector<string> &classNames, string name)
 	return -1;
 }
 
-std::vector<GestureFrame>& preprocessGestureFrames(std::vector<GestureFrame>& gestureFrameVector) {
+std::vector<GestureFrame> preprocessGestureFrames(vector<GestureFrame>& gestureFrameVector)
+{
 	LMpre::LMpre preprocessing(gestureFrameVector, 4);
-	std::vector < GestureFrame > preGestureFrameVector;
+	vector < GestureFrame > preGestureFrameVector;
 	preGestureFrameVector = preprocessing.process();
 	return preGestureFrameVector;
 }
