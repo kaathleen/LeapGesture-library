@@ -155,25 +155,29 @@ The results achieved by those methods are presented in the table~\ref{staticfeat
     \begin{tabular}{|c|c|c|c|c|}
     \hline
     ~                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    feature set 1                     & 87.072\% & 87,943\% & 69.987\% & ~           \\ \hline
-    feature set 2                     & 87.072\% & 87,943\% & 69.987\% & ~          \\ \hline
-    feature set 3                     & 87.072\% & 87,943\% & 69.987\% & ~           \\ \hline
-    feature set 4                     & 80.976\% & ~  & 68.438\% & 68.630\%          \\ \hline
-    feature set 5                     & 84.623\% & ~  & 77.101\% & 77.518\%          \\ \hline
-    feature set 6                     & 92.762\% & 93,096\% & 80.543\% & 81.235\%           \\ \hline
+    feature set 1                     & 87.072\% & 87.943\% & 69.987\% & 68.422\%   \\ \hline
+    feature set 2                     & 87.072\% & 87.943\% & 69.987\% & 68.422\%          \\ \hline
+    feature set 3                     & 87.072\% & 87.943\% & 69.987\% & 68.422\%           \\ \hline
+    feature set 4                     & 81.150\% & 80.998\% & 68.438\% & 68.630\%          \\ \hline
+    feature set 5                     & 86.544\% & 85.075\% & 77.101\% & 77.518\%          \\ \hline
+    feature set 6                     & 92.762\% & 93.096\% & 80.543\% & 81.235\%           \\ \hline
     \end{tabular}
 \end{table}
 
-After approach allowed to achieve XXX\% of recognition rate and could be unsatisfying from the perspective of the purpose of the application. 
-Analysis of the finger numbering revealed that the fingers are numbered accordingly to the position in Z axis of the tip of the finger.
-This means that when features are approximately on the same position in Z axis, the numbering can change rapidly and proposed features are computed between different fingers.
+For problem of recognition of 5 gestures, 3 first feature sets resulted in over $87$\% recognition rate on testing sets, which was believed to be a good result.
+The same tests for problem of recognition of 10 gestures resulted in lower recognition rates.
+For feature sets 1-3 the recognition rate was below $70$\%, which could be unsatisfying from the perspective of the purpose of the application.
+The low recognition rate was analysed and revealed that the fingers are numbered accordingly to the position in Z axis of the tip of the finger.
+This means that when fingers' tips are approximately on the same position in Z axis, the numbering can change rapidly and proposed features are compared between different fingers.
 To achieve features that would be invariant to the numbering of the fingers, the feature set was slightly modified.
 Instead of containing the absolute angles and distances between consecutive fingers, it was proposed to contain the five greatest values of angles and five greatest values of distances between all combinations of finger pairings.
 The same sorting approach was used for the angles and distances between fingers and hand's palm.
 The feature sets 1, 2, 3 with sorting scheme were respectively called feature sets 4, 5, 6.
 Again, the same dataset with 5 and 10 gestures was used to evaluate those methods. 
 The results are yet again presented in table~\ref{staticfeat}.
-This approach was tested on the same training set and allowed to increase the recognition rate to the XXX\%.
+This approach was tested on the same training set and allowed to increase the recognition rate.
+The best results in both tasks were achieved in case of feature sets 6.
+The simple alleviation of finger numbering problem allowed to top the previous results with recognition rates $93.096\%$ for 5 gesture problem and $81.235\%$ for 10 gesture problem in case of feature set 6. 
 
 \begin{table}[htp!]
 \begin{center}
@@ -192,21 +196,32 @@ This approach was tested on the same training set and allowed to increase the re
     \end{center}
 \end{table}
 
-While using more data, it is worth noticing the growth of training time. 
-In case of $5000$ training samples the typical training process took approximately 12 hours on standard desktop PC. 
+While using more data and longer feature sets usually allows to achieve better results, it is worth to notice the growth of training time of classification technique. 
+In case of $5000$ training samples the typical training process of radial SVM took approximately 12 hours on standard desktop PC. 
 This computing time can be unacceptable by the users of the library, so the test with another SVM library libLinear~\cite{libLinear} was performed. 
 The libLinear's implementation of SVM utilizes the linear kernels, which are useful for large data training sets with multiple number of features. 
-This library reduced the training time to about 5 seconds, but the best obtained recognition rate was smaller in case of libLinear library when compared to the libSVM.
-For the 5 gesture case, the libLinear achieved 88.138\% on testing set while using feature set 6 compared to the XXX\% achieved by libSVM in the same condition.
-Similarly, in 10 gesture case, libLinear achieved 64.830\% compared to XXX\% by LibSVM.
+This library reduced the training time to about 5 seconds.
+Again, the same tests as for the libSVM were performed to compare both approaches.
 All achieved results are presented in tab.~\ref{staticfeatlin}.
+For the 5 gesture case, the libLinear achieved 88.138\% on testing set while using feature set 6 compared to the 93.096\% achieved by libSVM in the same condition.
+In this case, the libLinear might be good choice as the recognition rate different is about 5\%.
+For 10 gesture case, libLinear achieved 64.830\% compared to 81.235\% by LibSVM, which is a significantly lower.
+It's up to user to decide, which library to use, but in most recognition taks applications the library can be learnt offline and only used online.
+That is why, the SVM with RBF kernels is a recommended choice in gesture recognition task.
+
 From the results obtained by the libSVM and libLinear on different feature sets, the feature set 6 was chosen as the one yielding the best results and used in further analysis.
 
-Another factor, that might have an influence on the results is the preprocessing part. 
-The preprocessing operates in the window of hands poses, which size can be modified. 
-For these reason, the experiments with no preprocessing and preprocessing with width size equal to 5, 10, 15 were performed and the influence on the recognition rate was examined.
-The results are presented in tab.~\ref{staticpre}.
 
+Another factor, that might have an influence on the results is the preprocessing part, which should allow to partially remove noise from the data and thus increase the recognition rate. 
+The preprocessing operates in the window of hands poses recorded over time, which size can be modified. 
+The typical library usage allowed to gather data with $60Hz$, while it is assumed that the recognition can be performed with lower framerate. The difference can be efficiently used by defining the appropriate preprocessing window.
+For these reason, the experiments with no preprocessing and preprocessing with width size equal to 5, 10, 15, 20, 30 were performed and the influence on the recognition rate was examined.
+The results are presented in tab.~\ref{staticpre}.
+The achieved results confirm the need and importance of proper data preparation in task of data classification.
+For gesture recognition task containing 5 gesture poses, preprocessing allowed to increase the recognition rate from 93.096\% to over 99\% for window sizes equal or wider than 15. 
+In task of correctly detecting 10 gestures, the preprocessing allowed to increase recognition rate from 81.235\% to over 84\% for windows sizes equal or wider than 10.
+From those results, the preprocessing width of 10 was chosen as the one allowing to significantly improve recognition rate in almost any possible application of the library.
+The preprocessing of width 10 was used for further experiments.
 
 \begin{table}[htp!]
 \begin{center}
@@ -215,23 +230,23 @@ The results are presented in tab.~\ref{staticpre}.
     \begin{tabular}{|c|c|c|c|c|}
     \hline
     preprocessing                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    off                     & 92.762\% & 93,096\%  & 80.543\% & x\% \\ \hline
-    width = 2               & 95.641\% & 96,527\%  & 82.331\% & x\% \\ \hline
-    width = 5               & 95.861\% & 96,650\%  & 82.745\% & x\% \\ \hline
-    width = 10              & 98.796\% & 98,965\%  & 83.224\% & x\% \\ \hline
-    width = 15              & 98.981\% & 99,150\%  & 83.662\% & x\% \\ \hline
-    width = 20              & 99.104\% & 99,242\%  & 83.865\% & x\% \\ \hline
-    width = 30              & 99.232\% & 99,385\%  & x\% & x\% \\ \hline
+    off                     & 92.762\% & 93,096\%  & 80.543\% & 81.235\% \\ \hline
+    width = 2               & 95.641\% & 96,527\%  & 82.736\% & 83.172\% \\ \hline
+    width = 5               & 95.861\% & 96,650\%  & 83.078\% & 83.565\% \\ \hline
+    width = 10              & 98.796\% & 98,965\%  & 83.602\% & 84.071\% \\ \hline
+    width = 15              & 98.981\% & 99,150\%  & 84.112\% & 84.494\% \\ \hline
+    width = 20              & 99.104\% & 99,242\%  & 84.329\% & 84.834\% \\ \hline
+    width = 30              & 99.232\% & 99,385\%  & 84.848\% & 85.320\% \\ \hline
     \end{tabular}
     \end{center}
 \end{table}
 
-All of already presented experiments, treated the problem of recognition as the problem invariant in time.
+All of already presented experiments, treated the classification results of consecutive hand poses as time-independent and not correlated with each other.
 In real applications, it can safely assumed that the consecutively detected hands are similar to each other and probably define the same gesture.
 The remaining question to be answered was the impact of combining the consecutive recognition results for the total recognition percentage.
 Firstly, it is important to use not only the class labels for tested dataset, but the whole information provided by SVM containing the measure of classification rate to all possible classes.
-We can somehow combine measures for each class in a window of set width.
-Then the estimated class is the class of maximal measure.
+This data can be combined to measure the membership rate for each class in a window of set width.
+Then the predicted class is the class with maximal measure.
 Formally, when there is a need to classify between $k$ classes, the result for $i$-th data in dataset can be represented as:
 \begin {equation}
 l(i) = [l_{i1}, l_{i2}, ..., l_{ik}]
@@ -241,54 +256,66 @@ Then combining in a window of width $w$ can be written as:
 \begin{equation}
 r(i,w) = \sum_{j=i-w}^{i}{ l(j) }
 \end{equation}
-where the sum of vectors $l$ can be defined differently.
+where the sum of vectors $l$ can be defined freely.
 The recognized label is the number of the vector component with the highest value:
 \begin{equation}
 \mathrm{label} = \argmax_{k}{\{r(i,w)_k\}}
 \end{equation}
 
-The first approach to defining the sum operator is simple adding the elements of vectors $l$.
-The second approach is to multiple the corresponding elements of vectors $l$. 
-The third approach utilizes the idea of summing corresponding elements of vectors $l$ with weights.
+
+\begin{figure}[htb]
+\centering
+
+\centerline{%
+ \includegraphics[width=0.5\textwidth]{figures/Mul5.png}
+ \includegraphics[width=0.5\textwidth]{figures/Mul10.png}
+ }%
+ \caption{Evaluation of different operators for result combining in case of different window sizes}
+ \label{staticoper}
+\end{figure}
+
+ 
+
+The first approach to defining the sum operator is the operator of simple adding the elements of vectors $l$.
+The second proposition is to multiple the corresponding elements of vectors $l$. 
+The third approach utilizes the idea of calculating the median elements of vectors $l$.
+The three approaches were compared for feature set 6, with preprocessing width equal to 10 for 5 and 10 gestures already used in previous experiments.
+Simultaneously, the test were performed for different widths of window and are presented at fig.~\ref{staticoper}.
+For almost all possible widths, the summation operator demonstrated the best recognition rate.
+For 5 static gesture, the summation with width equal to 10 allowed to achieve the recognition rate over $99.5$\% gaining over $0.5\%$ when compared to solution without postprocessing.
+Interestingly, windows wider than 12 resulted in lower recognition rate than the best achieved with window size equal to 10.
+For 10 static gesture recognition problem, using window of size equal to 50 allowed to increase the recognition rate by over $5\%$ to the value over $89$\%.
+In this case, wider window resulted in better results. 
+Similarly to the preprocessing window size, also in postprocessing too wide window will result in delayed recognition rate of shown gesture.
+Also, too wide window may result in worse results.
+Therefore, the postprocessing window size of 10-15 is recommended, but it also depends on the application of the library.
+
+With simple summation window, the currently achieved result and the results from the past are equally affecting the recognition result. 
+Especially for wider windows, it can be assumed that the current measurement is more important than the measurement from the distant past.
+That is why, the idea of weighted sum was introduced.
 The weight distribution should have the highest weight for the current measurement and smaller values for results that were achieved earlier in time.
-For this task, the half of the Gaussian distribution of weights can be used with maximal peak reached for the currently achieved result.
-For Gaussian, the mean was assumed to be equal to $1$.
-The achieved results are presented in tab.~\ref{staticcom}.
 
-\begin{table}[htp!]
-\begin{center}
-	\label{staticcom}
-	\caption{The recognition rate achieved while using the time-window, preprocessing = 10 and featureset 6}
-    \begin{tabular}{|c|c|c|}
-    \hline
-   ~ &  5 gestures, test set &  10 gestures, test set \\ \hline
-    no window & &  98,965\% & x\%  \\ \hline
-    sum of elements  & &  \\ 
-    window width = $2$ & x\% & x\%  \\ \hline
-    sum of elements & & \\ 
-    window width = $5$  & x\% & x\%   \\ \hline
-    sum of elements & & \\ 
-    window width = $10$  & x\% & x\%   \\ \hline
-    product of elements & &\\ 
-    window width = $2$ & x\% & x\% \\ \hline
-    product of elements & & \\ 
-    window width = $5$ & x\% & x\% \\ \hline
-    product of elements & & \\ 
-    window width = $10$ & x\% & x\% \\ \hline
-    weighted sum for gauss & & \\ 
-    $\sigma = 1$ & x\% & x\% \\ \hline
-    weighted sum for gauss & & \\ 
-    $\sigma = 2$ & x\% & x\% \\ \hline
-    weighted sum for gauss & &\\ 
-    $\sigma = 5$ & x\% & x\% \\ \hline
-    weighted sum for gauss & &\\ 
-    $\sigma = 10$ & x\% & x\% \\ \hline
-    \end{tabular}
-    \end{center}
-\end{table}
+\begin{figure}[htb]
+\centering
 
-From the presented results, the weighted sum provides the greatest gain when it comes to the recognition rate. 
-It is important to notice that, while wider window can generate more stable results, the process of recognition of new gesture is slower and therefore, the chosen value is dependent of the library application.
-For gesture recognition task with the framerate of $15$Hz, the $\sigma$ value of $5$ is recommended as a good choice.
+\centerline{%
+ \includegraphics[width=0.5\textwidth]{figures/gaussSum5.png}
+ \includegraphics[width=0.5\textwidth]{figures/gaussSum10.png}
+ }%
+ \caption{Evaluation of weights for postprocessing distributed accordingly to normal distribution}
+ \label{staticgauss}
+\end{figure}
+
+For this task, the half of the Gaussian distribution of weights can be used with maximal peak reached for the currently achieved result with weights slowly decreasing for measurements further away in time.
+For Gaussian, the mean was assumed to be equal to $0$.
+The standard deviation $\sigma$ was the parameter, which different values were tested.
+The results were also performed for problems of recognition of 5 and 10 gestures.
+The achieved results are presented in fig.~\ref{staticgauss}.
+For 5 gestures, too small $\sigma$ prevented the increase of recognition rate due to the wider window size as the weights were equal to $0$. 
+For greater sigmas, the achieved recognition rate is similar.
+For this problem, the $\sigma$ equal to $10$ resulted in best recognition rate while the window was getting wider.
+For problem of 10 static gesture recognition problem, greater sigma values achieved results comparable with the the results achieved with weights equal to 1.
+As the usage of different weights also comes with greater computing cost and still did not result in better results, this part of processing can omitted without effecting the recognition.
 
 
+From the presented results, the simple summation with uniform weights provides the greatest gain when it comes to the recognition rate and is the method recommended by the authors. 
