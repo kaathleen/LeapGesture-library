@@ -11,11 +11,13 @@
 #include <iostream>
 
 #include "Model/GestureFrame.h"
+
 #include "StorageDriver/BinaryFileStorageDriver.h"
 
 #include <Leap.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <string>
+#include <vector>
 
 #endif /* INCLUDES_H_ */

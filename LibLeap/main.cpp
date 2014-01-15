@@ -2,6 +2,9 @@
 #include "RecognizedGesture.h"
 #include "LeapListener.h"
 #include "FileListener.h"
+
+#include "RecognitionModule/FingerDiff.h"
+
 #include "includes.h"
 
 using namespace std;
@@ -21,6 +24,26 @@ class MyGestures : public RecognizedGestureListener {
 
 
 int main(int argc, char **argv) {
+	///
+	vector<GestureFrame> gesFrame1;
+	vector<GestureFrame> gesFrame2;
+
+	GestureStorageDriver *gsd = new BinaryFileStorageDriver();
+	cout<<"Stan odczytu gesFrame1: "<<gsd->loadAllGestureFrames("r1.lmr", gesFrame1)<<endl;
+	cout<<"Stan odczytu gesFrame2: "<<gsd->loadAllGestureFrames("r2.lmr", gesFrame2)<<endl;
+
+	FingerDiff fingerDiff;
+	std::vector<ClassDataset> classDatasets;
+	classDatasets.push_back(ClassDataset("klasa1", gesFrame1));
+	classDatasets.push_back(ClassDataset("klasa2", gesFrame2));
+
+	cout<<"gesFrame1: "<<gesFrame1.size()<<endl;
+	cout<<"gesFrame2: "<<gesFrame2.size()<<endl;
+
+	fingerDiff.train(classDatasets, "/home/kuba", "lolek", true);
+
+	delete gsd;
+	///
 
 	MyGestures *gst = new MyGestures();
 
