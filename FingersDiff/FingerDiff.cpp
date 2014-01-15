@@ -5,8 +5,6 @@
 
 #include "Preprocessing/LMpre.h"
 
-#include "SVMclassificator.h"
-
 #include "Model/GestureFinger.h"
 #include "Model/GestureFrame.h"
 #include "Model/GestureHand.h"
@@ -16,6 +14,13 @@
 #include "StorageDriver/GestureStorageDriver.h"
 
 #include "PathUtil.h"
+
+#include <vector>
+#include <cmath>
+#include <stdio.h>
+#include <string.h>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -255,7 +260,7 @@ void createFeaturesDataSets(const int& NUMBER_OF_CLASSES, char** argv,
 		}
 		std::vector<GestureFrame> gestureFrameVector;
 		gestureStorageDriver->loadAllGestureFrames(argv[i + 1], gestureFrameVector);
-		std::vector < GestureFrame > preGestureFrameVector = preprocessGestureFrames(gestureFrameVector);
+		std::vector < GestureFrame > preGestureFrameVector = gestureFrameVector;// preprocessGestureFrames(gestureFrameVector);
 		//gestureStorageDriver->openConnection(argv[i + 1], false);
 		//cout << "Open connection for "<<argv[i + 1]<< endl;
 		//GestureFrame currGestureFrame;
@@ -301,85 +306,6 @@ int main(int argc, char **argv) {
 	// Create features data sets
 	createFeaturesDataSets(NUMBER_OF_FILES, argv,
 			featuresInSamplesInClasses, classNames);
-
-	return 0;
-
-	cout << "Preprocessing" << endl;
-	/*int window_size = 5;
-	 for (int i=0;i<NUMBER_OF_CLASSES;i++)
-	 {
-	 for (int j=0;j<setSize[j];j+=window_size)
-	 {
-	 for (int k=0;k<window_size;k++)
-	 {
-	 feature[i][j+k];
-	 }
-
-	 }
-	 cout << setSize[i] << endl;
-	 }
-
-	 feature[0].erase( feature[0].begin());
-	 */
-
-	// Number of class
-	const int NUMBER_OF_CLASS = featuresInSamplesInClasses.size();
-
-	cout << "Learning" << endl;
-	for (int i = 0; i < NUMBER_OF_CLASS; i++) {
-		cout << featuresInSamplesInClasses[i].size() << endl;
-	}
-
-	// Separation of data into learning and testing sets
-	int trainSetSize = 0;
-	int testSetSize = 0;
-
-	vector<int> trainLabel, testLabel;
-	vector<vector<double> > trainFeatures, testFeatures;
-	for (int i = 0; i < NUMBER_OF_CLASS; i++) {
-		int class_train_size = (featuresInSamplesInClasses[i].size() * TRAIN_TEST_PERCENT) / 100;
-		int class_test_size = featuresInSamplesInClasses[i].size() - class_train_size;
-		trainSetSize += class_train_size;
-		testSetSize += class_test_size;
-
-		for (int j = 0; j < class_train_size; j++) {
-			trainLabel.push_back(i + 1);
-			trainFeatures.push_back(featuresInSamplesInClasses[i][j]);
-		}
-		for (int j = class_train_size; j < featuresInSamplesInClasses[i].size(); j++) {
-			testLabel.push_back(i + 1);
-			testFeatures.push_back(featuresInSamplesInClasses[i][j]);
-		}
-	}
-
-	cout << "Train: " << trainLabel.size() << " " << trainFeatures[0].size()
-			<< endl;
-
-	cout << "Prepared test set" << endl;
-	// Creating an object responsible for learning
-	SVMclassificator SVM;
-
-	// Learning the classifier
-	SVM.train(trainFeatures, trainLabel, NUMBER_OF_CLASS);
-
-	cout << "Model learned" << endl;
-	// Predicting the labels on the other TRAIN_TEST_PERCENT
-	vector<int> pred = SVM.classify(testFeatures);
-
-	// Counting the number of correctly recognized labels
-	int count = 0;
-	for (int i = 0; i < testSetSize; i++) {
-		if (pred[i] == testLabel[i]) {
-			count++;
-		}
-	}
-
-	// Printing results
-	cout << endl << "-------- Result --------" << endl;
-	cout << "Recognition rate [%] : " << (count * 1.0 / testSetSize * 100.0)
-			<< "%" << endl;
-	cout << "Correctly recognized [number] : " << count << endl;
-	cout << "Total size of test set [number] : " << testSetSize << endl;
 
 	return 0;
 }

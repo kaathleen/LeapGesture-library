@@ -126,6 +126,15 @@ void do_cross_validation()
 	double total_error = 0;
 	double sumv = 0, sumy = 0, sumvv = 0, sumyy = 0, sumvy = 0;
 	double *target = Malloc(double,prob.l);
+	
+	int classesCorrect[100];
+	int classesAll[100];
+	for (i=0; i<100; i++)
+	{
+		classesCorrect[i] = 0;
+		classesAll[i] = 0;
+	}
+	int maxClass = 0;
 
 	svm_cross_validation(&prob,&param,nr_fold,target);
 	if(param.svm_type == EPSILON_SVR ||
@@ -151,9 +160,24 @@ void do_cross_validation()
 	else
 	{
 		for(i=0;i<prob.l;i++)
+		{
+			if (maxClass<target[i])
+				maxClass = target[i];
+				
+			classesAll[((int)target[i])]++;
 			if(target[i] == prob.y[i])
+			{
+				classesCorrect[((int)target[i])] ++;
 				++total_correct;
+			}
+		}
 		printf("Cross Validation Accuracy = %g%%\n",100.0*total_correct/prob.l);
+		
+		printf("Accuracy for classes:\t");
+		for (i=1; i<=maxClass; i++)
+		{
+			printf("%d: %g%%;\t", i, 100.0*classesCorrect[i]/classesAll[i]);
+		}
 	}
 	free(target);
 }

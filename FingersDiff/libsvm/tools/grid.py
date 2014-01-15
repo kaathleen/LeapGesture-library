@@ -290,9 +290,15 @@ class LocalWorker(Worker):
 	def run_one(self,c,g):
 		cmdline = self.get_cmd(c,g)
 		result = Popen(cmdline,shell=True,stdout=PIPE,stderr=PIPE,stdin=PIPE).stdout
+		returnValue = 0
+		printed = 0
 		for line in result.readlines():
+			if printed == 1:
+				print(line.strip())
 			if str(line).find('Cross') != -1:
-				return float(line.split()[-1][0:-1])
+				returnValue = float(line.split()[-1][0:-1])
+				printed = 1
+		return returnValue
 
 class SSHWorker(Worker):
 	def __init__(self,name,job_queue,result_queue,host,options):
