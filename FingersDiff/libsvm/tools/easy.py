@@ -37,6 +37,7 @@ file_name = os.path.split(train_pathname)[1]
 scaled_file = file_name + ".scale"
 model_file = file_name + ".model"
 range_file = file_name + ".range"
+classprobs_file = file_name + ".classprobs"
 
 if len(sys.argv) > 2:
 	test_pathname = sys.argv[2]
@@ -53,11 +54,24 @@ cmd = '{0} -svmtrain "{1}" -gnuplot "{2}" "{3}"'.format(grid_py, svmtrain_exe, g
 print('Cross validation...')
 f = Popen(cmd, shell = True, stdout = PIPE).stdout
 
-line = ''
-while True:
-	last_line = line
-	line = f.readline()
-	if not line: break
+classProbFile = open(classprobs_file, "w")
+try:
+	line = ''
+	line1 = ''
+	line2 = ''
+	line3 = ''
+	while True:
+		last_line = line
+		line1 = line2
+		line2 = line3
+		line3 = line
+		line = f.readline()
+		if not line: break
+	classProbFile.write(line1.strip()+"\n")
+	classProbFile.write(line2.strip()+"\n")
+	classProbFile.write(line3.strip()+"\n")
+finally:
+	classProbFile.close()
 c,g,rate = map(float,last_line.split())
 
 print('Best c={0}, g={1} CV rate={2}'.format(c,g,rate))
