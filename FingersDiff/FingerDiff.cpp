@@ -238,7 +238,7 @@ std::vector<GestureFrame> preprocessGestureFrames(vector<GestureFrame>& gestureF
 void createFeaturesDataSets(const int& NUMBER_OF_CLASSES, char** argv,
 		vector<vector<vector<double> > > &featuresInSamplesInClasses,
 		vector<string> &classNames) {
-	cout << "createFeaturesDataSets - entry" << endl;
+	std::cout << "createFeaturesDataSets - entry" << std::endl;
 
 	GestureStorageDriver* gestureStorageDriver = new BinaryFileStorageDriver();
 	ofstream svm_gesture;
