@@ -2414,6 +2414,18 @@ map
 ../matrix.h
 ../dlib-18.5/dlib/../dlib/svm/../matrix.h
 
+/home/smi/Desktop/InzInformatyka/DynamicGestures/KFoldCrossValidation.h
+vector
+-
+stdlib.h
+-
+time.h
+-
+iostream
+-
+stdexcept
+-
+
 /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/../Model/GestureFinger.h
 ../Model/Vertex.h
 /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/../Model/../Model/Vertex.h
@@ -2519,6 +2531,8 @@ string.h
 -
 vector
 -
+KFoldCrossValidation.h
+/home/smi/Desktop/InzInformatyka/DynamicGestures/KFoldCrossValidation.h
 dlib/clustering.h
 -
 dlib/rand.h

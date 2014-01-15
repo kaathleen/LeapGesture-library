@@ -270,6 +270,7 @@ CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o
  ../dlib-18.5/dlib/../dlib/svm/sparse_kernel.h
  ../dlib-18.5/dlib/../dlib/svm/sparse_kernel_abstract.h
  ../dlib-18.5/dlib/../dlib/svm/sparse_vector.h
+ /home/smi/Desktop/InzInformatyka/DynamicGestures/KFoldCrossValidation.h
  /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/../Model/GestureFinger.h
  /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/../Model/GestureHand.h
  /home/smi/Desktop/InzInformatyka/DynamicGestures/Model/../Model/Vertex.h

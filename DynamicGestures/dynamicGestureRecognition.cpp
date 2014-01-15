@@ -90,7 +90,8 @@ void kmeans(std::vector<std::vector<double> > data, int classCounter = 13,
 }
 
 // Should return a list of centroids (1 per class)
-void kmeansSimple(std::vector< std::vector<double> > data, int classCounter = 13) {
+void kmeansSimple(std::vector<std::vector<double> > *data, int argc,
+		vector< vector<double> > &centroids, int classCounter = 13) {
 
 	typedef dlib::matrix<double> sample_type;
 
@@ -98,24 +99,61 @@ void kmeansSimple(std::vector< std::vector<double> > data, int classCounter = 13
 	std::vector<sample_type> initial_centers;
 
 	// Copying to compatible type
-	for (int i = 0; i < data.size(); i++) {
-		sample_type m;
-		m.set_size(data[i].size(),1);
+	for (int k=0;k<argc-1;k++)
+	{
+		for (int i = 0; i < data[k].size(); i++) {
+			sample_type m;
+			m.set_size(data[k][i].size(),1);
 
-		for (int j = 0; j < data[i].size(); j++) {
-			m(j) = data[i][j];
+			for (int j = 0; j < data[k][i].size(); j++) {
+				m(j) = data[k][i][j];
+			}
+			samples.push_back(m);
 		}
-		samples.push_back(m);
 	}
 
 	typedef dlib::radial_basis_kernel<sample_type> kernel_type;
 	pick_initial_centers(classCounter, initial_centers, samples, kernel_type(0.1));
 	dlib::find_clusters_using_kmeans(samples, initial_centers);
 
+	ofstream kmeanscentroids;
+	kmeanscentroids.open("centroids.dat");
 	for (int i = 0; i < initial_centers.size(); i++) {
-		cout << "Centroid " << i<<" :: " <<trans(initial_centers[i]) << "--------" << endl;
+		kmeanscentroids << i <<" " << trans(initial_centers[i]);
+		centroids.push_back(vector< double >(initial_centers[i].size()));
+		for (int j = 0; j< initial_centers[i].size(); j++)
+		{
+			cout<<initial_centers[i].size()<<endl;
+			cout<<initial_centers[i](j)<<endl;
+			centroids[i][j] = initial_centers[i](j);
+		}
+
 	}
+	kmeanscentroids.close();
 }
+
+void readCentroidsFromFile( vector< vector<double> > &centroids )
+{
+	ifstream kmeanscentroids;
+	kmeanscentroids.open("centroids.dat");
+	string line;
+	double val;
+	while(!kmeanscentroids.eof()) {
+		kmeanscentroids>>val;
+		if ( val != 0 )
+		{
+			vector<double> row;
+			for (int i=0;i<19;i++)
+			{
+				kmeanscentroids>>val;
+				row.push_back(val);
+			}
+			centroids.push_back(row);
+		}
+	}
+	kmeanscentroids.close();
+}
+
 
 // Maybe define it differently ?
 double similarity(std::vector<double> a, std::vector<double> b)
@@ -187,7 +225,6 @@ int getIndexOfClassName(vector<string> &classNames, string name)
 	return -1;
 }
 
-
 void addAttribute(float attributeValue, int& attributeCounter,
 		vector<double> &attributes) {
 	attributes.push_back(attributeValue);
@@ -233,7 +270,6 @@ void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 		}
 	}
 }
-
 
 void anglesFingersPalmAttribute(GestureHand* tempHand, int& fingerCount,
 		int& attributeCounter, vector<double>& result) {
@@ -331,7 +367,6 @@ vector<double> computeFeatureSet(GestureFrame *gestureFrame) {
 	return result;
 }
 
-
 void columnScaling(vector< vector<double > >& data ) {
 
 	int trainSetSize = data.size();
@@ -362,102 +397,162 @@ void columnScaling(vector< vector<double > >& data ) {
 	}
 }
 
-int main(int argc, char **argv) {
-
+void readingInputData(int argc, vector<GestureFrame> *frames, char** argv) {
 	GestureStorageDriver* gestureStorageDriver = new BinaryFileStorageDriver();
-
-	// Reading data in
-	vector<GestureFrame> frames;
-	for (int i=1;i<argc;i++)
-	{
+	for (int i = 1; i < argc; i++) {
 		string fileName = getFileNameFromPath(argv[i]);
-
 		gestureStorageDriver->openConnection(argv[i], false);
 		cout << "Open connection for " << argv[i] << endl;
 		GestureFrame currGestureFrame;
-
 		while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
-			frames.push_back(currGestureFrame);
+			frames[i - 1].push_back(currGestureFrame);
 			currGestureFrame.clear();
 		}
 		gestureStorageDriver->closeConnection();
 		cout << "Close connection" << endl;
 	}
 	delete gestureStorageDriver;
+}
 
-	// Preprocessing
-	LMpre::LMpre pre(frames, 10);
-	frames = pre.process();
-
-	// Saving all possible gestures as feature sets
-	vector< vector<double> > dataset;
-	for (int i = 0; i < frames.size(); i++) {
-		vector<double> row;
-		row = computeFeatureSet(&frames[i]);
-		dataset.push_back(row);
-
-
-	}
-
-
-	// Data normalizaion in columns
-	columnScaling(dataset);
-
-
-	// Saving for tool
-	ofstream zapis("out.csv");
-	for (int i = 0; i < dataset.size(); i++) {
-		if (i == 0) {
-			for (int j = 0; j < dataset[i].size(); j++) {
-				zapis << '"' << j << '"' << ';';
-			}
-			zapis << endl;
+void dataPreparation(int argc, vector<GestureFrame> *frames,
+		const int preprocessingWidth,
+		vector<vector<double> > *dataset) {
+	for (int i = 0; i < argc - 1; i++) {
+		LMpre::LMpre pre(frames[i], preprocessingWidth);
+		frames[i] = pre.process();
+		for (int j = 0; j < frames[i].size(); j++) {
+			vector<double> row;
+			row = computeFeatureSet(&frames[i][j]);
+			dataset[i].push_back(row);
 		}
-
-		zapis << '"' << i << '"' << ";";
-		for (int j = 0; j < dataset[i].size(); j++) {
-			zapis << dataset[i][j] << ";";
-		}
-		zapis << endl;
+		// Data normalizaion in columns
+		columnScaling(dataset[i]);
 	}
-	zapis.close();
+}
 
-	// dataset contains all positions remember as featureSet
-	cout<<"Size of dataset: " << dataset[0].size() << " x " << dataset.size()<<endl;
+//void saveToEstimateNumbeOfClasses(vector<vector<double> > *dataset, int argc) {
+//	// Saving for tool
+//	ofstream zapis("out.csv");
+//	for (int i = 0; i < argc -1 ; i++) {
+//		if (i == 0) {
+//			for (int j = 0; j < dataset[i].size(); j++) {
+//				zapis << '"' << j << '"' << ';';
+//			}
+//			zapis << endl;
+//		}
+//		zapis << '"' << i << '"' << ";";
+//		for (int j = 0; j < dataset[i].size(); j++) {
+//			zapis << dataset[i][j] << ";";
+//		}
+//		zapis << endl;
+//	}
+//	zapis.close();
+//
+//	std::fstream datasetFile;
+//	datasetFile.open("DATASET_FILE", std::fstream::out | std::fstream::trunc);
+//	for (int i = 0; i < argc -1; i++) {
+//		int lastElement = dataset[i].size() - 1;
+//		for (int j = 0; j < lastElement; j++) {
+//			datasetFile << dataset[i][j] << " ";
+//		}
+//
+//		datasetFile << dataset[i][lastElement] << "\n";
+//	}
+//	datasetFile.close();
+//}
 
-	/*
-	// save dataset for counting number of clusters
-	std::fstream datasetFile;
-	datasetFile.open("DATASET_FILE", std::fstream::out | std::fstream::trunc);
-	for (int i=0; i<dataset.size(); i++)
-	{
-		int lastElement = dataset[i].size()-1;
-		for (int j=0; j<lastElement; j++)
-		{
-			datasetFile<<dataset[i][j]<<" ";
-		}
+int main(int argc, char **argv) {
+	// Parameters to play with
+	const int preprocessingWidth = 10;
+	const int crossValK = 5;
+	const int K = 10; // number of states in one gesture
+	const int M = 8; // number of possible observations
+	const int classNumber = 8;
+	const int readCentroids = 1; // 0 - calculate using k-means, 1 - read them from file
+	const double learningRate = 0.2; // How much do we incorporate new training data into trained model
+	const int iteration_number = 100; // How many learning iterations
 
-		datasetFile<<dataset[i][lastElement]<<"\n";
-	}
-	datasetFile.close();
-	//
+	// Reading data in
+	vector<GestureFrame> frames[40];
+	readingInputData(argc, frames, argv);
 
-	cout<<endl<<"!!!!!!! KMEANS !!!!!!" << endl;
+
+	// Preprocessing &&
+	// Saving all possible gestures as feature sets &&
+	// Scaling
+	vector<vector<double> > dataset[argc-1];
+	dataPreparation(argc, frames, preprocessingWidth, dataset);
+
+
+	// Saving for tool to estimate number of classes
+	//saveToEstimateNumbeOfClasses(dataset, argc);
+
+	vector< vector<double> > centroids;
+	if ( readCentroids )
+		readCentroidsFromFile(centroids);
+	else
+		kmeansSimple(dataset, argc, centroids, classNumber);
+
+	//cout<<endl<<"!!!!!!! KMEANS !!!!!!" << endl;
 	//kmeans(dataset, 11);
-	cout<<endl<<"!!!!!!! KMEANS SIMPLER !!!!!!" << endl;
-	kmeansSimple(dataset, 11);
-	cout<<endl<<"!!!!!!! CHINESE WHISPERS !!!!!!" << endl;
-	//chinese_whispers(dataset);
-	cout<<endl<<"!!!!!!! NEWMAN CLUSTERING !!!!!!" << endl;
+	//cout<<endl<<"!!!!!!! CHINESE WHISPERS !!!!!!" << endl;
+	///chinese_whispers(dataset);
+	//cout<<endl<<"!!!!!!! NEWMAN CLUSTERING !!!!!!" << endl;
 	//newman_cluster(dataset);
 
 
-	return 0;*/
+
+	// Seperating into train/test dataset
+	std::vector<sequence> trainDataset;
+	std::vector<sequence> testDataset;
+
+	// Finding the longest sequence of observations
+	int n = 0;
+	for (int p=0;p<argc-1;p++)
+	{
+		n = max(n, (int)dataset[p].size());
+	}
+
+	// Determine the observation values for all sequences
+	for (int p=0;p<argc-1;p++)
+	{
+		vector<unsigned int> observationLabels(n, 0.0);
+		for (int j=0; j <  n;j++)
+		{
+			// Fill the rest with the last label
+			if ( j >= dataset[p].size() )
+			{
+				observationLabels[j] = observationLabels[dataset[p].size() - 1];
+			}
+			else
+			{
+				// Calculate the errors to the centroids
+				double best_error = 0.0;
+				int best_index = -2;
+				for (int i = 0; i < centroids.size(); i++) {
+					double error = 0.0;
+					for (int k = 0; k < centroids[i].size(); k++) {
+						error += (dataset[p][j][k] - centroids[i][k])
+								* (dataset[p][j][k] - centroids[i][k]);
+					}
+					if (best_error > error || best_index < 0) {
+						best_error = error;
+						best_index = i;
+					}
+				}
+				observationLabels[j] = (best_index);
+			}
+		}
+		// First 10 used for training
+		if ( p < 10)
+			trainDataset.push_back(observationLabels);
+		else
+			testDataset.push_back(observationLabels);
+	}
 
 
-	int K = 2; // number of states in one gesture
-	int M = 2; // number of possible observations
-	int n = 12; // length of observed sequence
+
+
 
 	boost::shared_ptr<HMMVector<double> > pi_ptr(new HMMVector<double>(K));
 	boost::shared_ptr<HMMMatrix<double> > T_ptr(new HMMMatrix<double>(K, K));
@@ -469,61 +564,44 @@ int main(int argc, char **argv) {
 
 	HMMVector<double> &pi = *pi_ptr;
 	// initial probabilities
-	pi(0) = 0.5;
-	pi(1) = 0.5;
+	pi(0) = 1;
+	for (int i=1;i<K;i++)
+		pi(i) = 0;
 
+	// Initial structure of sequential states
+	// 0.5 to connection to itself and the next one
 	HMMMatrix<double> &T = *T_ptr;
-	// transitions from state 0
-	T(0, 0) = 0.5;
-	T(0, 1) = 0.5;
-	// transitions from state 1
-	T(1, 0) = 0.5;
-	T(1, 1) = 0.5;
+	for (int i = 0; i < K; i++) {
+		for (int j = 0; j < K; j++) {
+			if (j == i || (i+1)%K == j)
+			{
+				T(i, j) = 0.5;
+			}
+			else
+				T(i,j) = 0.0;
+		}
+	}
+	T(K-1,K-1) = 1.0;
+	T(K-1,0) = 0.0;
 
+	// Initial random emission matrix
 	HMMMatrix<double> &E = *E_ptr;
-	// emissions from state 0
-	E(0, 0) = 0.3;
-	E(1, 0) = 0.7;
-	// emissions from state 1
-	E(0, 1) = 0.7;
-	E(1, 1) = 0.3;
+	for (int i = 0; i < M; i++) {
+		double x = 0.0;
+		for (int j = 0; j < K; j++) {
+			E(i, j) = rand();
+			x += E(i,j);
+		}
+		for (int j = 0; j < K; j++) {
+			E(i, j) /= x;
+		}
+	}
 
 	HMMVector<double> &pi2 = *pi2_ptr;
 	HMMMatrix<double> &T2 = *T2_ptr;
 	HMMMatrix<double> &E2 = *E2_ptr;
 
-	//std::cout << "obs : [0, 1, 0, 1]" << std::endl;
-	std::vector<sequence> testDataset;
-
-	srand(time(0));
-	for (int k = 0; k < 10; k++) {
-
-		sequence obs(n);
-		obs[0] = 0;
-		obs[1] = 1;
-		obs[2] = 0;
-		obs[3] = 1;
-		obs[4] = 0;
-		obs[5] = 1;
-		obs[6] = 0;
-		obs[7] = 1;
-		obs[8] = 0;
-		obs[9] = 1;
-		obs[10] = 0;
-		obs[11] = 1;
-
-		// Random noise
-		// Changing some value -> right now turned off
-		if (rand() % 10 > 10) {
-			obs[round(rand() % 12)] = 1 - obs[round(rand() % 12)];
-		}
-
-		std::cout << "obs length: " << obs.size() << std::endl;
-		testDataset.push_back(obs);
-	}
-
-	const int crossValK = 5;
-	KFoldCrossValidation<sequence> kFoldCV(testDataset, crossValK);
+	KFoldCrossValidation<sequence> kFoldCV(trainDataset, crossValK);
 
 	sequence hiddenseq(n);
 	HMM<double> *hmm;
@@ -535,9 +613,8 @@ int main(int argc, char **argv) {
 
 	hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
 
-	int iteration_number = 10;
+
 	double total_best = 0.0;
-	double learn_test_percent = 0.5;
 	for (int i = 0; i < iteration_number; i++)
 	{
 		for (int foldNumber=0; foldNumber<kFoldCV.getK(); foldNumber++)
@@ -546,40 +623,83 @@ int main(int argc, char **argv) {
 			{
 				sequence elValue = kFoldCV.getLearningSetElement(elIndex, foldNumber);
 
+				/*cout<<"OBS : ";
+				for (int i=0;i<elValue.size();i++) {
+					cout<<elValue[i]<<" ";
+				}
+				cout<<endl;*/
+
 				double loglik = hmm->viterbi(elValue, hiddenseq);
 				std::cout << "-- log likelihood of hiddenseq: " << loglik
 						<< "\tLikelihood : " << exp(loglik) << std::endl;
+				/*cout << "STATES : ";
+				for (int i = 0; i < hiddenseq.size(); i++) {
+					cout << hiddenseq[i] << " ";
+				}
+				std::cout<<endl;*/
+
 				//std::cout << "Running forward" << std::endl;
 
 				hmm->forward(elValue, scales, F);
 
 				//std::cout << "Running likelihood" << std::endl;
-				loglik = hmm->likelihood(scales);
+				//loglik = hmm->likelihood(scales);
 
 				//std::cout << "Running backward" << std::endl;
 				hmm->backward(elValue, scales, B);
 
 				//std::cout << "Running posterior decoding" << std::endl;
-				hmm->posterior_decoding(elValue, F, B, scales, pd);
+				//hmm->posterior_decoding(elValue, F, B, scales, pd);
 
 				//std::cout << "Running Baum-Welch" << std::endl;
 				hmm->baum_welch(elValue, F, B, scales, *pi2_ptr, *T2_ptr,
 						*E2_ptr);
 
-				delete hmm;
-				for (int j = 0; j < K; j++) {
-					pi(j) = pi2(j);
+				/*for (int j = 0; j < K; j++) {
 
 					for (int k = 0; k < M; k++) {
-						E(k, j) = E2(k, j);
+						std::cout << E2(j, k) << " ";
+					}
+					std::cout << std::endl;
+				}
+
+				for (int j = 0; j < K; j++) {
+
+					for (int k = 0; k < K; k++) {
+						std::cout << T2(j, k) << " ";
+					}
+					std::cout << std::endl;
+
+				}*/
+
+
+				// Update from learning
+				for (int j = 0; j < K; j++) {
+
+					double sum = 0.0;
+					for (int k = 0; k < M; k++) {
+						E(k, j) = (1.0 - learningRate) * E(k, j) + learningRate * E2(k, j);
+						sum += E(k, j);
+					}
+					for (int k = 0; k < M; k++) {
+						E(k, j) /= sum;
+					}
+
+					sum = 0.0;
+					for (int k = 0; k < K; k++) {
+						T(j, k) = (1.0 - learningRate) * T(j, k) + learningRate * T2(j, k);
+						sum += T(j, k);
 					}
 					for (int k = 0; k < K; k++) {
-						T(k, j) = T2(k, j);
+						T(j, k) /= sum;
 					}
+
 				}
+				delete hmm;
 				hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
 			}
 
+			// Checking stop condition
 			double total_rec = 0;
 			for (int elIndex = 0; elIndex<kFoldCV.getTestingSetSize(foldNumber); elIndex++) {
 				sequence elValue = kFoldCV.getTestingSetElement(elIndex, foldNumber);
@@ -598,15 +718,42 @@ int main(int argc, char **argv) {
 	std::cout << " ------ " << std::endl;
 	std::cout << " Proposed model ! " << std::endl;
 	std::cout << " -> Initial probabilites " << std::endl;
-	std::cout << (pi)(0) << " " << (pi)(1) << std::endl;
+	for (int j=0;j<K;j++)
+		std::cout << (pi)(j) << " ";
+	std::cout << std::endl;
 
 	std::cout << " -> Transition matrix " << std::endl;
-	std::cout << (T)(0, 0) << " " << (T)(0, 1) << std::endl;
-	std::cout << (T)(1, 0) << " " << (T)(1, 1) << std::endl;
+	for (int j = 0; j < K; j++) {
+
+		for (int k = 0; k < K; k++) {
+			std::cout << T(j, k) << " ";
+		}
+		std::cout << std::endl;
+
+	}
 
 	std::cout << " -> Emission matrix " << std::endl;
-	std::cout << (E)(0, 0) << " " << (E)(0, 1) << std::endl;
-	std::cout << (E)(1, 0) << " " << (E)(1, 1) << std::endl;
 
+	for (int j = 0; j < K; j++) {
+
+		for (int k = 0; k < M; k++) {
+			std::cout << E(j, k) << " ";
+		}
+		std::cout << std::endl;
+
+	}
+
+	cout <<endl<< "Training dataset:" << endl;
+	for (int i = 0; i < trainDataset.size(); i++) {
+		double loglik = hmm->viterbi(trainDataset[i], hiddenseq);
+		std::cout << "-- log likelihood of hiddenseq: " << loglik
+				<< "\tLikelihood : " << exp(loglik) << std::endl;
+	}
+	cout <<endl << "Test dataset:" << endl;
+	for (int i = 0; i < testDataset.size(); i++) {
+		double loglik = hmm->viterbi(testDataset[i], hiddenseq);
+		std::cout << "-- log likelihood of hiddenseq: " << loglik
+				<< "\tLikelihood : " << exp(loglik) << std::endl;
+	}
 
 }
