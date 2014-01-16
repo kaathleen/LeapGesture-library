@@ -4,6 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
+  "/home/smi/Desktop/InzInformatyka/DynamicGestures/HMM/HMMClass.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o"
   "/home/smi/Desktop/InzInformatyka/DynamicGestures/Model/GestureFinger.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/Model/GestureFinger.cpp.o"
   "/home/smi/Desktop/InzInformatyka/DynamicGestures/Model/GestureFrame.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o"
   "/home/smi/Desktop/InzInformatyka/DynamicGestures/Model/GestureHand.cpp" "/home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles/dyn.dir/Model/GestureHand.cpp.o"

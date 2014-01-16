@@ -190,9 +190,32 @@ CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o.provides: CMakeFi
 
 CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o.provides.build: CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o
 
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o: CMakeFiles/dyn.dir/flags.make
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o: ../HMM/HMMClass.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_7)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/HMM/HMMClass.cpp
+
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dyn.dir/HMM/HMMClass.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/smi/Desktop/InzInformatyka/DynamicGestures/HMM/HMMClass.cpp > CMakeFiles/dyn.dir/HMM/HMMClass.cpp.i
+
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dyn.dir/HMM/HMMClass.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/smi/Desktop/InzInformatyka/DynamicGestures/HMM/HMMClass.cpp -o CMakeFiles/dyn.dir/HMM/HMMClass.cpp.s
+
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.requires:
+.PHONY : CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.requires
+
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.provides: CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.requires
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.provides.build
+.PHONY : CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.provides
+
+CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.provides.build: CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o
+
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: CMakeFiles/dyn.dir/flags.make
 CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o: ../dynamicGestureRecognition.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/smi/Desktop/InzInformatyka/DynamicGestures/build/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o -c /home/smi/Desktop/InzInformatyka/DynamicGestures/dynamicGestureRecognition.cpp
 
@@ -221,6 +244,7 @@ dyn_OBJECTS = \
 "CMakeFiles/dyn.dir/Model/GestureHand.cpp.o" \
 "CMakeFiles/dyn.dir/Model/Vertex.cpp.o" \
 "CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o" \
+"CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o" \
 "CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o"
 
 # External object files for target dyn
@@ -232,6 +256,7 @@ dyn: CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o
 dyn: CMakeFiles/dyn.dir/Model/GestureHand.cpp.o
 dyn: CMakeFiles/dyn.dir/Model/Vertex.cpp.o
 dyn: CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o
+dyn: CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o
 dyn: CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o
 dyn: CMakeFiles/dyn.dir/build.make
 dyn: dlib_build/libdlib.a
@@ -259,6 +284,7 @@ CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/Model/GestureFrame.cpp.o.require
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/Model/GestureHand.cpp.o.requires
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/Model/Vertex.cpp.o.requires
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o.requires
+CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o.requires
 CMakeFiles/dyn.dir/requires: CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o.requires
 .PHONY : CMakeFiles/dyn.dir/requires
 

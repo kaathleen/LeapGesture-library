@@ -127,6 +127,30 @@ dlib/fast:
 	$(MAKE) -f dlib_build/CMakeFiles/dlib.dir/build.make dlib_build/CMakeFiles/dlib.dir/build
 .PHONY : dlib/fast
 
+HMM/HMMClass.o: HMM/HMMClass.cpp.o
+.PHONY : HMM/HMMClass.o
+
+# target to build an object file
+HMM/HMMClass.cpp.o:
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o
+.PHONY : HMM/HMMClass.cpp.o
+
+HMM/HMMClass.i: HMM/HMMClass.cpp.i
+.PHONY : HMM/HMMClass.i
+
+# target to preprocess a source file
+HMM/HMMClass.cpp.i:
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/HMM/HMMClass.cpp.i
+.PHONY : HMM/HMMClass.cpp.i
+
+HMM/HMMClass.s: HMM/HMMClass.cpp.s
+.PHONY : HMM/HMMClass.s
+
+# target to generate assembly for a file
+HMM/HMMClass.cpp.s:
+	$(MAKE) -f CMakeFiles/dyn.dir/build.make CMakeFiles/dyn.dir/HMM/HMMClass.cpp.s
+.PHONY : HMM/HMMClass.cpp.s
+
 Model/GestureFinger.o: Model/GestureFinger.cpp.o
 .PHONY : Model/GestureFinger.o
 
@@ -305,6 +329,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... dlib"
+	@echo "... HMM/HMMClass.o"
+	@echo "... HMM/HMMClass.i"
+	@echo "... HMM/HMMClass.s"
 	@echo "... Model/GestureFinger.o"
 	@echo "... Model/GestureFinger.i"
 	@echo "... Model/GestureFinger.s"
