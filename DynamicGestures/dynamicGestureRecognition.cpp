@@ -556,20 +556,25 @@ int main(int argc, char **argv) {
 	cout<<"HMM start"<<endl;
 
 	// HMM
-	HMMClass hmmGesture(K, n, M);
-	hmmGesture.train(trainDataset,crossValK, iteration_number, learningRate);
+	HMMClass *hmmGesture = new HMMClass(K, n, M);
+	hmmGesture->train(trainDataset,crossValK, iteration_number, learningRate);
+
+	//HMMClass *hmmGesture = new HMMClass("hmmFirstModel.model");
 
 	cout <<endl<< "Training dataset:" << endl;
 	for (int i = 0; i < trainDataset.size(); i++) {
-		double loglik = hmmGesture.predict(trainDataset[i]);
+		double loglik = hmmGesture->predict(trainDataset[i]);
 		std::cout << "-- log likelihood of hiddenseq: " << loglik
 				<< "\tLikelihood : " << exp(loglik) << std::endl;
 	}
 	cout <<endl << "Test dataset:" << endl;
 	for (int i = 0; i < testDataset.size(); i++) {
-		double loglik = hmmGesture.predict(testDataset[i]);
+		double loglik = hmmGesture->predict(testDataset[i]);
 		std::cout << "-- log likelihood of hiddenseq: " << loglik
 				<< "\tLikelihood : " << exp(loglik) << std::endl;
 	}
 
+	hmmGesture->show();
+	hmmGesture->saveModel("hmmFirstModel.model");
+	delete hmmGesture;
 }

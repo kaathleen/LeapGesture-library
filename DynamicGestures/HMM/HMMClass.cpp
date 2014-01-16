@@ -47,31 +47,71 @@ HMMClass::HMMClass(int _K, int _N, int _M){
 	hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
 }
 
-void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
-		int iterationNumber, double learningRate) {
-	cout<<"!"<<endl;
-	boost::shared_ptr<HMMVector<double> > pi2_ptr(new HMMVector<double>(K));
-	boost::shared_ptr<HMMMatrix<double> > T2_ptr(new HMMMatrix<double>(K, K));
-	boost::shared_ptr<HMMMatrix<double> > E2_ptr(new HMMMatrix<double>(M, K));
 
-	HMMVector<double> &pi2 = *pi2_ptr;
-	HMMMatrix<double> &T2 = *T2_ptr;
-	HMMMatrix<double> &E2 = *E2_ptr;
+HMMClass::HMMClass(string path){
+	ifstream instream;
+	instream.open(path.c_str());
 
-	cout<<"!!"<<endl;
+	// Read sizes
+	instream >> K >> N >> M;
+
+	pi_ptr = boost::shared_ptr< HMMVector<double> >(new HMMVector<double>(K));
+	T_ptr = boost::shared_ptr< HMMMatrix<double> >(new HMMMatrix<double>(K, K));
+	E_ptr = boost::shared_ptr< HMMMatrix<double> >(new HMMMatrix<double>(M, K));
+
 	HMMVector<double> &pi = *pi_ptr;
 	HMMMatrix<double> &T = *T_ptr;
 	HMMMatrix<double> &E = *E_ptr;
 
-	cout<<"!!!"<<endl;
+
+	// Initial probabilities
+	for (int i = 0; i < K; i++)
+		instream >> pi(i);
+
+	// Transition matrix
+	for (int i = 0; i < K; i++) {
+		for (int j = 0; j < K; j++) {
+			instream >> T(i,j);
+		}
+	}
+
+	// Emission matrix
+	for (int i = 0; i < M; i++) {
+		for (int j = 0; j < K; j++) {
+			instream >> E(i,j);
+		}
+	}
+
+	hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
+}
+
+void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
+		int iterationNumber, double learningRate) {
+
+	// Additional model to store results of learning
+	boost::shared_ptr<HMMVector<double> > pi2_ptr(new HMMVector<double>(K));
+	boost::shared_ptr<HMMMatrix<double> > T2_ptr(new HMMMatrix<double>(K, K));
+	boost::shared_ptr<HMMMatrix<double> > E2_ptr(new HMMMatrix<double>(M, K));
+
+
+	// Sometimes it's easier to use variables
+	HMMMatrix<double> &T2 = *T2_ptr;
+	HMMMatrix<double> &E2 = *E2_ptr;
+	HMMMatrix<double> &T = *T_ptr;
+	HMMMatrix<double> &E = *E_ptr;
+
+	// Additional matrices to store partial results for learning
 	HMMMatrix<double> F(N, K);
 	HMMVector<double> scales(N);
 	HMMMatrix<double> B(N, K);
+
+	// Hidden sequence of states
 	sequence hiddenseq(N);
 
 	KFoldCrossValidation<sequence> kFoldCV(trainDataset, crossValK);
 	double total_best = 0.0;
-	cout<<"!!!!"<<endl;
+
+	// Learning process
 	for (int i = 0; i < iterationNumber; i++) {
 		for (int foldNumber = 0; foldNumber < kFoldCV.getK(); foldNumber++) {
 			for (int elIndex = 0;
@@ -95,19 +135,9 @@ void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
 //				 }
 //				 std::cout<<endl;
 
-				//std::cout << "Running forward" << std::endl;
+
 				hmm->forward(elValue, scales, F);
-
-				//std::cout << "Running likelihood" << std::endl;
-				//loglik = hmm->likelihood(scales);
-
-				//std::cout << "Running backward" << std::endl;
 				hmm->backward(elValue, scales, B);
-
-				//std::cout << "Running posterior decoding" << std::endl;
-				//hmm->posterior_decoding(elValue, F, B, scales, pd);
-
-				//std::cout << "Running Baum-Welch" << std::endl;
 				hmm->baum_welch(elValue, F, B, scales, *pi2_ptr, *T2_ptr,
 						*E2_ptr);
 
@@ -152,8 +182,8 @@ void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
 					}
 
 				}
-				delete hmm;
-				hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
+				//delete hmm;
+				//hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
 			}
 
 			// Checking stop condition
@@ -188,8 +218,7 @@ void HMMClass::show()
 	HMMMatrix<double> &T = *T_ptr;
 	HMMMatrix<double> &E = *E_ptr;
 
-	std::cout << " ------ " << std::endl;
-	std::cout << " Proposed model ! " << std::endl;
+	std::cout << " Stored model ! " << std::endl;
 	std::cout << " -> Initial probabilites " << std::endl;
 	for (int j = 0; j < K; j++)
 		std::cout << (pi)(j) << " ";
@@ -199,20 +228,54 @@ void HMMClass::show()
 	for (int j = 0; j < K; j++) {
 
 		for (int k = 0; k < K; k++) {
-			std::cout << T(j, k) << " ";
+			printf("%.2f ", T(j, k));
+		}
+		std::cout << std::endl;
+	}
+
+	std::cout << " -> Emission matrix " << std::endl;
+	for (int j = 0; j < K; j++) {
+
+		for (int k = 0; k < M; k++) {
+			printf("%.2f ", E(j, k));
+
 		}
 		std::cout << std::endl;
 
 	}
+}
 
-	std::cout << " -> Emission matrix " << std::endl;
+
+void HMMClass::saveModel(string path)
+{
+	HMMVector<double> &pi = *pi_ptr;
+	HMMMatrix<double> &T = *T_ptr;
+	HMMMatrix<double> &E = *E_ptr;
+
+	ofstream out;
+	out.open(path.c_str());
+
+	out<< K <<" " << N <<" " << M <<endl;
+
+	for (int j = 0; j < K; j++)
+		out << (pi)(j) << " ";
+	out << std::endl;
+
+	for (int j = 0; j < K; j++) {
+
+		for (int k = 0; k < K; k++) {
+			out<< T(j, k) << " ";
+		}
+		out << std::endl;
+	}
 
 	for (int j = 0; j < K; j++) {
 
 		for (int k = 0; k < M; k++) {
-			std::cout << E(j, k) << " ";
-		}
-		std::cout << std::endl;
+			out << E(j, k) << " ";
 
+		}
+		out << std::endl;
 	}
+	out.close();
 }
