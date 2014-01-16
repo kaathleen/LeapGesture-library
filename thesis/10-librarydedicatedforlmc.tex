@@ -1,0 +1,43 @@
+\chapter{LMGesture library dedicated for Leap Motion controller}
+
+\section{Architecture}
+
+\section{Processes}
+
+\subsection{The learning process}
+The learning process is a process, which shows how user can teach LMGesture library a new gesture. First  gestures must be recorded gestures in .lmr format. To obtain recordings in this format user may use Gesture Recorder -  a module included in the library, which records data from Leap Mption Controller and saves it as .lmr file. When all desired gestures are prepared, the user starts the process of learning by {\color{red}[tutaj dodać informacje jak uruchomić ten prces - prawdopodobnie jakas komenda + jakies parametry typu -d uczenie gestów dynamicznych, -s uczenie gestów statycznych + pliki .lmr jako argumenty]}. 
+The first step in the learning process, which is performed by the system is the preprocessing of data. Training data should be deprived of noise or should not have lost fingers for several frames. According to user-specified parameters, the system will learn the gesture as a static or dynamic gesture. Appropriate way of learning corresponds to the appropriate gesture.
+For the learning static gesture system uses a support vector machine (SVM), and for dynamic gestures uses hidden Markov model (HMM). {\color{red}[dopisać o zapisywaniu roznych danych do pliku - tyou przy svm zapisywane sa parametry, itd]}
+
+\subsection{The recognition process}
+The recognition process is a process in which the system attempts to match gesture given by a user, to the set of gestures obtained by the learning process. {\color{red}[Opis procesu recognition process, przedstawienie scenariusza uzycia w stosunku do architektury]}
+
+Handling any of the three above modules is implemented as an Observer pattern. The usage of any parameter by the user results in adding the appropriate listener. During gesture recognition process user can use from 1 to 3 listeners. Each listener is on a separate thread and has different methods.
+
+Methods for a static gesture observer:
+\begin {itemize}
+\item onStart - signals the start of the gesture,
+\item onFrame - returns a list of recognized gestures with matching probabilities,
+\item onGesture - signals the end of the gesture and returns a list of recognized gestures with matching probabilities.
+\end {itemize}
+
+Methods for a dynamic gesture observer:
+\begin {itemize}
+\item onStart, onFrame - have the same purposes as in the case of static observer,
+\item onGesture - signals the end of the gesture and returns a list of recognized gestures with matching probabilities and parameter values.
+\end {itemize}
+
+Methods for a finger differentiation observer:
+\begin {itemize}
+\item onFrame - returns a list of matched classes with probabilities,
+\item onChange - signals a change of fingers arrangement.
+\end {itemize}
+
+As in the learning process for recognizing static gestures system uses SVM and for dynamic gestures - HMM. For finger differentation system uses support vector machine. However, there are other classes than those used for static gestures recogniton. {\color{red}[more info]}
+
+\section{Gesture recorder and visualizer}
+Recorder and vizualizer module is an additional part of library that allows users for easy management of  gestures recordings. The recorder allows to collect data from Leap Motion Controller, convert it into data representations described in {\color{red}[which chapter]} and write it to the .lmr file, which supported by the LMGesture library. Visualizer enables users to see the recorded gestures stored in lmr format. 
+
+\section{Used libraries}
+
+\section{Samples of code using the library dedicated to Leap Motion Controller}

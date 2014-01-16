@@ -1,0 +1,45 @@
+
+\chapter{Introduction}
+
+\section{Scope of work}
+
+The objective scope of this paper includes:
+\begin{itemize}
+\item designing library architecture, 
+\item selection and implementation of algorithms for gesture recognition,
+\item implementation (or learning) of gestures built-in library,
+\item implementation examples of the library, 
+\item tests using Leap Motion Controller.
+\end{itemize}
+Following thesis concerns machine learning. In this paper were used two algorithms from this field of science: support vector machine and hidden Markov model. SVM is included in the group of supervised learning, where algorithm knows set of input data and responses to the data, and tries to create a predictor model that generates reasonable predictions for the response to new data. HMM is an example of unsupervised learning, where algorithms are trying to find hidden structure using unlabeled data. 
+
+Subjective scope of this work is to examine Leap Motion Controller in gesture recognition. This device is an innovative approach to the computer usage. The scope of this work is to examine this controller and create an interface between it and the user.
+
+Time range of the thesis is October 2013 -- January 2014.
+
+
+\section{Motivation}
+
+Nowadays computer usage is not a natural human behavior. To rotate the object in the virtual world user need to click the mouse and move it in 2D plane. Man rotating objects in the real world has to catch it and turn using hands. To make the usage of computer more intuitive and natural the best solution would be to transfer gestures performed on a daily basis into the virtual world. The latest technological solutions allow to control computer using gestures.
+Hands are a fundamental tools of every human being. With them people perform hundreds of operations every day. Without this basic manipulator people are not able to cope with the simplest activities. Hands give a large scope of activities and gestures. They are even used for non-verbal communication. Using this tool man at a low cost can do and achieve almost everything.
+Currently there are several devices that support gesture recognition. An example of such a controller is Kinect, but it is not highly accurate. It is suitable for applications that use the whole body of the user, but for the recognition of hand gestures may be no useful. Leap Motion Controller is a small device that can be placed in front of the computer. Its operating range is between user and PC, and its accuracy is very high. It is an ideal device for recognizing hand gestures through which people have the opportunity for more natural user interface of the computer.
+
+\section{Objectives}
+
+The main purpose of this paper is creation of library, which recognizes hand gestures using Leap Motion controller.
+Additionally,below bulleted objectives will also be realized:
+\begin{itemize}
+\item comparison and evaluation of existing methods in the context of hand gesture recognition,
+\item creating a module to manage gestures,
+\item creating an initial database of gestures to the library,
+\item performing hand gesture recognition quality tests,
+\item presentation of example of library usage.
+\end{itemize}
+
+\section{Thesis organization}
+The structure of the paper is as follows. Chapter 5 presents an overview of the literature on gesture recognition. In this part there are descriptions of gestures classification and known methods of gesture recognition. Chapter 6 is a presentation of Leap Motion Controller. Chapter 7 is devoted to gestures recognizing in the context of Leap Motion Controller. There are descriptions of gestures classification, data representation and additional processing steps for hand gestures recognition using the Leap Motion device. Chapter 8 contains proposed methods, evaluation methodology and experiments for static gesture recognition. Chapter 9 presents a similar description for dynamic gesture recognition. In chapter 10 has been described created library - its architecture, processes, additional modules, used libraries for its implementation and an example of its usage. Chapter 11 provides conclusions of the paper.
+
+{\color{red} Michał Nowicki - svm do statycznych, hmm do dynamicznych
+Olgierd Pilarczyk - projektowanie architektury, impementacja preprocessingu
+Jakub Wąsikowski - visualizer, recorder, rozróżnianie palców, wyznacznie liczby klastrów, klasyfikacja gestów
+Katarzyna Zjawin - visualizer, recorder, rozróżnianie palców, klasyfikacja gestów}

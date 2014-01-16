@@ -1,0 +1,23 @@
+\chapter{Gesture recognition for Leap Motion}
+
+\section{Classification of gestures}
+
+\section{Gesture data representation}
+
+\section{Additional processing steps}
+Fingers differentiation is used for the correct interpretation of the data from the Leap Motion controller. This method provides additional data needed for static and dynamic gestures recognition. Differentiation of fingers is also needed in determining the values of parameterized. This module returns information, which particular fingers has been detected. The differentiation process is independent from the position, rotation, arrangement and size of hand and from the size of the fingers.  This module is based on SVM classifier. 32 classes have been designate, which reflect all the possible permutations of hand arrangements.
+Data obtained from Leap Motion Controller used in fingers differentiation is the same as the information used for gesture recognition. The first thing that must be done is the preprocessing of data in order to delete unnecessary information, such as noise. It is also worth mentioning that sometimes Leap Motion Controller losts data about fingers for a few frames. Implemented data preprocessing also solves this problem and it is important that preprocessing has been executed before the fingers differentiation process.
+As mentioned previously, it is important that the fingers differentiation process is independent from things like position of hand or size of finger. 6 features were selected, which are independent from those parameters: 
+
+\begin{itemize}
+\item finger count, 
+\item distance between two nearest base points of a finger, 
+\item ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points, 
+\item ratio of the finger thickness to the maximal finger thickness, 
+\item angles between two nearest fingers, 
+\item angles between finger and first finger relative to palm position. 
+\end{itemize}
+
+Not all of these features has to be used to differentiate fingers.
+The fingers differentiation module returns list of classes with probabilities of matching processed gesture to each class. 
+Several tests were performed using different combinations of features, using two sets of recordings of all 32 permutations, using all classes or 15 selected classes with most frequently used gestures. {\color{red}[opisac wyniki po przeprowadzeniu testow z preprocessingiem]}

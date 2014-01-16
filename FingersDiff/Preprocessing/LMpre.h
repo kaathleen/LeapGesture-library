@@ -12,13 +12,13 @@
 #include <vector>
 #include <set>
 
-#include "Model/GestureFinger.h"
-#include "Model/GestureFrame.h"
-#include "Model/GestureHand.h"
-#include "Model/Vertex.h"
+#include "../Model/GestureFinger.h"
+#include "../Model/GestureFrame.h"
+#include "../Model/GestureHand.h"
+#include "../Model/Vertex.h"
 
-#include "StorageDriver/BinaryFileStorageDriver.h"
-#include "StorageDriver/GestureStorageDriver.h"
+#include "../StorageDriver/BinaryFileStorageDriver.h"
+#include "../StorageDriver/GestureStorageDriver.h"
 
 
 namespace LMpre {
