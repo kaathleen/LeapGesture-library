@@ -127,8 +127,8 @@ void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
 //				 cout<<endl;
 
 				double loglik = hmm->viterbi(elValue, hiddenseq);
-				std::cout << "-- log likelihood of hiddenseq: " << loglik
-						<< "\tLikelihood : " << exp(loglik) << std::endl;
+			//	std::cout << "-- log likelihood of hiddenseq: " << loglik
+			//			<< "\tLikelihood : " << exp(loglik) << std::endl;
 //				cout << "STATES : ";
 //				 for (int i = 0; i < hiddenseq.size(); i++) {
 //				 cout << hiddenseq[i] << " ";
