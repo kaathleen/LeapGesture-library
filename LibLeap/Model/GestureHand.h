@@ -25,35 +25,35 @@ public:
 		this->id = id;
 	}
     	
-    	Vertex getPalmPosition() const
-    	{
-    		return this->palmPosition;
-    	}
-    	
-    	void setPalmPosition(Vertex palmPosition)
-    	{
-    		this->palmPosition = palmPosition;
-    	}
-    	
-    	Vertex getStabilizedPalmPosition() const
-    	{
-    		return this->stabilizedPalmPosition;
-    	}
-    	
-    	void setStabilizedPalmPosition(Vertex stabilizedPalmPosition)
-    	{
-    		this->stabilizedPalmPosition = stabilizedPalmPosition;
-    	}
-    	
-    	Vertex getPalmNormal() const
-    	{
-    		return this->palmNormal;
-    	}
-    	
-    	void setPalmNormal(Vertex palmNormal)
-    	{
-    		this->palmNormal = palmNormal;
-    	}
+	Vertex getPalmPosition() const
+	{
+		return this->palmPosition;
+	}
+
+	void setPalmPosition(Vertex palmPosition)
+	{
+		this->palmPosition = palmPosition;
+	}
+
+	Vertex getStabilizedPalmPosition() const
+	{
+		return this->stabilizedPalmPosition;
+	}
+
+	void setStabilizedPalmPosition(Vertex stabilizedPalmPosition)
+	{
+		this->stabilizedPalmPosition = stabilizedPalmPosition;
+	}
+
+	Vertex getPalmNormal() const
+	{
+		return this->palmNormal;
+	}
+
+	void setPalmNormal(Vertex palmNormal)
+	{
+		this->palmNormal = palmNormal;
+	}
     	
 	Vertex getDirection() const
 	{
@@ -92,7 +92,7 @@ public:
 	bool operator< (const GestureHand &other) const
 	{
 		return this->orderValue < other.orderValue;
-    	}
+	}
 	
 	void clear();
 

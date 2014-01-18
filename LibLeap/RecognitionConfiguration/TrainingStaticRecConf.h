@@ -1,0 +1,19 @@
+#include <string>
+
+#include "../Types/StaticRecFeatureVersion.h"
+
+#ifndef TRAININGSTATICRECCONF_H_
+#define TRAININGSTATICRECCONF_H_
+
+class TrainingStaticRecConf {
+public:
+	std::string configurationPath;
+	std::string configurationName;
+	bool saveDatasetFile;
+	StaticRecFeatureVersion featureSetVersion;
+	int kCrossValParam;
+
+	TrainingStaticRecConf();
+};
+
+#endif /* TRAININGSTATICRECCONF_H_ */

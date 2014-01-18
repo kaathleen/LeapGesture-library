@@ -10,66 +10,100 @@
 using namespace std;
 using namespace Leap;
 
-class MyGestures : public RecognizedGestureListener {
+class MyGestures: public RecognizedGestureListener {
 
 	void onStaticRecognized() {
 		cout << "Recognized static gesture!" << endl;
 	}
 
 	void onDynamicRecognized() {
-			cout << "Recognized dynamic gesture!" << endl;
+		cout << "Recognized dynamic gesture!" << endl;
 	}
 
 };
 
-
 int main(int argc, char **argv) {
-	///
+	///////////////////////////////////////////
+	/*FingerDiff fingerDiff;
+
+	LogUtil::setQuietMode(false);
+
 	vector<GestureFrame> gesFrame1;
 	vector<GestureFrame> gesFrame2;
 
 	GestureStorageDriver *gsd = new BinaryFileStorageDriver();
-	cout<<"Stan odczytu gesFrame1: "<<gsd->loadAllGestureFrames("r1.lmr", gesFrame1)<<endl;
-	cout<<"Stan odczytu gesFrame2: "<<gsd->loadAllGestureFrames("r2.lmr", gesFrame2)<<endl;
 
-	FingerDiff fingerDiff;
-	std::vector<ClassDataset> classDatasets;
-	classDatasets.push_back(ClassDataset("klasa1", gesFrame1));
-	classDatasets.push_back(ClassDataset("klasa2", gesFrame2));
+	//training
+	cout << "Stan odczytu gesFrame1: "
+			<< gsd->loadAllGestureFrames("r1.lmr", gesFrame1) << endl;
+	cout << "Stan odczytu gesFrame2: "
+			<< gsd->loadAllGestureFrames("r2.lmr", gesFrame2) << endl;
 
-	cout<<"gesFrame1: "<<gesFrame1.size()<<endl;
-	cout<<"gesFrame2: "<<gesFrame2.size()<<endl;
+	std::vector<TrainingClassDataset> classDatasets;
+	classDatasets.push_back(TrainingClassDataset("klasa1", gesFrame1));
+	classDatasets.push_back(TrainingClassDataset("klasa2", gesFrame2));
 
-	fingerDiff.train(classDatasets, "/home/kuba", "lolek", true);
+	cout << "gesFrame1: " << gesFrame1.size() << endl;
+	cout << "gesFrame2: " << gesFrame2.size() << endl;
 
-	delete gsd;
-	///
+	TrainingResult* trainResult = fingerDiff.train(classDatasets, "/home/kuba",
+			"lolek", true);
+
+	cout << "Train result: " << trainResult->trainRate << endl;
+	for (unsigned int i = 0; i < trainResult->trainClassResults.size(); i++) {
+		cout << "Train result for \""
+				<< trainResult->trainClassResults[i].className << "\" class: "
+				<< trainResult->trainClassResults[i].classTrainRate << endl;
+	}
+
+	//testing
+	vector<GestureFrame> frames;
+	cout << "Stan odczytu testFrames: "
+			<< gsd->loadAllGestureFrames("tests.lmr", frames) << endl;
+	for (unsigned int i=0; i<frames.size(); i++) {
+		TestingFrame testingFrame(frames[i]);
+		TestingResult *testingResult = fingerDiff.classify(testingFrame, "/home/kuba", "lolek", 0.5);
+
+		cout<<"Is recognized: "<<testingResult->recognized<<endl;
+		if (testingResult->recognized)
+			cout<<"Test result: "<<testingResult->className<<", timestamp: "<<testingResult->frameTimestamp<<endl;
+		for (unsigned int j=0; j<testingResult->classificationClassResults.size(); j++) {
+			cout << "Test result for \""
+					<< testingResult->classificationClassResults[j].className << "\" class: "
+					<< testingResult->classificationClassResults[j].classTrainRate << endl;
+		}
+	}
+
+	//
+
+	delete gsd;*/
+
+	cout << "koniec testu";
+	///////////////////////////////////////////
 
 	MyGestures *gst = new MyGestures();
 
-
 	/*
 	 *
-	// odczyt z Leap Motion
+	 // odczyt z Leap Motion
 	 *
 	 */
 
 	/*
-	LeapProcess *process = new LeapProcess(gst, true, true);
+	 LeapProcess *process = new LeapProcess(gst, true, true);
 
-	LeapListener listener;
-	listener.attachToProcess(process);
-	Controller c(listener);
+	 LeapListener listener;
+	 listener.attachToProcess(process);
+	 Controller c(listener);
 
-	process->start();
-	cin.get();
-	c.removeListener(listener);
-	*/
-
+	 process->start();
+	 cin.get();
+	 c.removeListener(listener);
+	 */
 
 	/*
 	 *
-	// oczyt z pliku
+	 // oczyt z pliku
 	 *
 	 */
 
@@ -79,13 +113,13 @@ int main(int argc, char **argv) {
 
 	process->start();
 
-	string filePath = "/home/oli/workspace/projekt-inzynierski/GesturesVisualizer/Builds/Linux/build/dlon.lmr";
+	string filePath =
+			"/home/oli/workspace/projekt-inzynierski/GesturesVisualizer/Builds/Linux/build/dlon.lmr";
 	fListener.readFile(filePath);
 
 	cin.get();
 
 	///////////////////////////// END
-
 
 	return 0;
 
