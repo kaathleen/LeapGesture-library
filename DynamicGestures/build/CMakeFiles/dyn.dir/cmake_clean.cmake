@@ -5,6 +5,7 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/dyn.dir/Model/GestureHand.cpp.o"
   "CMakeFiles/dyn.dir/Model/Vertex.cpp.o"
   "CMakeFiles/dyn.dir/StorageDriver/BinaryFileStorageDriver.cpp.o"
+  "CMakeFiles/dyn.dir/HMM/HMMClass.cpp.o"
   "CMakeFiles/dyn.dir/dynamicGestureRecognition.cpp.o"
   "dyn.pdb"
   "dyn"

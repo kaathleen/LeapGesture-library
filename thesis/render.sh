@@ -5,7 +5,7 @@
 # latexmk -pvc -pdf thesis-master-english.tex
 #
 
-for type in bachelor-english bachelor-polski master-english master-polski-nicer master-polski; do
+for type in bachelor-english; do
         pdflatex thesis-$type.tex
         bibtex   thesis-$type
         pdflatex thesis-$type.tex

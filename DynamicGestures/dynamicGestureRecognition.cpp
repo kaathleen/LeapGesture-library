@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <vector>
+#include <stdlib.h>
 
 #include "KFoldCrossValidation.h"
 
@@ -23,6 +24,8 @@
 #include "PathUtil.h"
 
 #include "preprocess/LMpre.h"
+
+#include "HMM/HMMClass.h"
 
 using namespace hmmlib;
 using namespace std;
@@ -90,7 +93,8 @@ void kmeans(std::vector<std::vector<double> > data, int classCounter = 13,
 }
 
 // Should return a list of centroids (1 per class)
-void kmeansSimple(std::vector< std::vector<double> > data, int classCounter = 13) {
+void kmeansSimple(std::vector<std::vector<double> > *data, int count,
+		vector< vector<double> > &centroids, int classCounter = 13) {
 
 	typedef dlib::matrix<double> sample_type;
 
@@ -98,24 +102,61 @@ void kmeansSimple(std::vector< std::vector<double> > data, int classCounter = 13
 	std::vector<sample_type> initial_centers;
 
 	// Copying to compatible type
-	for (int i = 0; i < data.size(); i++) {
-		sample_type m;
-		m.set_size(data[i].size(),1);
+	for (int k=0;k<count;k++)
+	{
+		for (int i = 0; i < data[k].size(); i++) {
+			sample_type m;
+			m.set_size(data[k][i].size(),1);
 
-		for (int j = 0; j < data[i].size(); j++) {
-			m(j) = data[i][j];
+			for (int j = 0; j < data[k][i].size(); j++) {
+				m(j) = data[k][i][j];
+			}
+			samples.push_back(m);
 		}
-		samples.push_back(m);
 	}
 
 	typedef dlib::radial_basis_kernel<sample_type> kernel_type;
 	pick_initial_centers(classCounter, initial_centers, samples, kernel_type(0.1));
 	dlib::find_clusters_using_kmeans(samples, initial_centers);
 
+	ofstream kmeanscentroids;
+	kmeanscentroids.open("centroids.dat");
 	for (int i = 0; i < initial_centers.size(); i++) {
-		cout << "Centroid " << i<<" :: " <<trans(initial_centers[i]) << "--------" << endl;
+		kmeanscentroids << i <<" " << trans(initial_centers[i]);
+		centroids.push_back(vector< double >(initial_centers[i].size()));
+		for (int j = 0; j< initial_centers[i].size(); j++)
+		{
+		//	cout<<initial_centers[i].size()<<endl;
+		//	cout<<initial_centers[i](j)<<endl;
+			centroids[i][j] = initial_centers[i](j);
+		}
+
 	}
+	kmeanscentroids.close();
 }
+
+void readCentroidsFromFile( vector< vector<double> > &centroids )
+{
+	ifstream kmeanscentroids;
+	kmeanscentroids.open("centroids.dat");
+	string line;
+	double val;
+	while(!kmeanscentroids.eof()) {
+		kmeanscentroids>>val;
+		if ( val != 0 )
+		{
+			vector<double> row;
+			for (int i=0;i<19;i++)
+			{
+				kmeanscentroids>>val;
+				row.push_back(val);
+			}
+			centroids.push_back(row);
+		}
+	}
+	kmeanscentroids.close();
+}
+
 
 // Maybe define it differently ?
 double similarity(std::vector<double> a, std::vector<double> b)
@@ -187,7 +228,6 @@ int getIndexOfClassName(vector<string> &classNames, string name)
 	return -1;
 }
 
-
 void addAttribute(float attributeValue, int& attributeCounter,
 		vector<double> &attributes) {
 	attributes.push_back(attributeValue);
@@ -234,7 +274,6 @@ void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 	}
 }
 
-
 void anglesFingersPalmAttribute(GestureHand* tempHand, int& fingerCount,
 		int& attributeCounter, vector<double>& result) {
 
@@ -271,7 +310,7 @@ void distancesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 	if (tempHand != NULL && fingerCount > 1) {
 
 
-		vector<float> distances(6, 0.0);
+		vector<float> distances(4, 0.0);
 
 		// For all combinations of finger configurations
 		for (int i = 0; i < fingerCount; i++) {
@@ -287,25 +326,38 @@ void distancesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 
 		sort(distances.begin(), distances.end(), std::greater<float>());
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 4; i++) {
 			addAttribute(distances[i], attributeCounter, result);
 		}
 	}
 	// There are no fingers in the captured data
 	else
 	{
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 4; i++) {
 			addAttribute(0.0, attributeCounter, result);
 		}
 	}
 }
 
+
+void handMovementAttribute(GestureHand* tempHand, GestureHand* tempHand2,
+		int& attributeCounter, vector<double>& result) {
+
+	Vertex palmPos = tempHand->getPalmPosition();
+	Vertex palmPos2 = tempHand2->getPalmPosition();
+
+	addAttribute(palmPos2.getX() - palmPos.getX(), attributeCounter, result);
+	addAttribute(palmPos2.getY() - palmPos.getY(), attributeCounter, result);
+	addAttribute(palmPos2.getZ() - palmPos.getZ(), attributeCounter, result);
+}
+
 // Computes the feature set
-vector<double> computeFeatureSet(GestureFrame *gestureFrame) {
+vector<double> computeFeatureSet(GestureFrame *gestureFrame, GestureFrame *gestureFrame2) {
 	vector<double> result;
 
 	// Get the numbe of fingers
 	GestureHand *tempHand = gestureFrame->getHand(0);
+	GestureHand *tempHand2 = gestureFrame2->getHand(0);
 	int fingerCount =
 			(tempHand != NULL) ?
 					min(tempHand->getFingerCount(), MAX_FINGER_COUNT) : 0;
@@ -314,23 +366,33 @@ vector<double> computeFeatureSet(GestureFrame *gestureFrame) {
 	// Adding the finger count to the feature set
 	fingerCountAttribute(fingerCount, attributeCounter, result);
 
+	int fingerCount2 =
+				(tempHand != NULL) ?
+						min(tempHand2->getFingerCount(), MAX_FINGER_COUNT) : 0;
+
+	// Adding the finger count to the feature set
+	fingerCountAttribute(fingerCount2, attributeCounter, result);
+
 	// Adding 3 angles to the palm normal
-	anglesFingersPalmAttribute(tempHand, fingerCount, attributeCounter,
-				result);
+	//anglesFingersPalmAttribute(tempHand, fingerCount, attributeCounter,
+	//			result);
 
 	// Adding the 6 highest angles to the feature set
-	anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
-			result);
+	//anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
+	//		result);
 
 	// Adding the 6 greatest distances to the feature set
-	distancesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
-			result);
+	//distancesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
+	//		result);
+	distancesBetweenFingersAttribute(tempHand2, fingerCount2, attributeCounter,
+				result);
 
 
+	// Hand movement
+	handMovementAttribute(tempHand, tempHand2, attributeCounter, result);
 
 	return result;
 }
-
 
 void columnScaling(vector< vector<double > >& data ) {
 
@@ -362,251 +424,286 @@ void columnScaling(vector< vector<double > >& data ) {
 	}
 }
 
-int main(int argc, char **argv) {
-
+void readingInputData(string fileName, vector<GestureFrame> &frames) {
 	GestureStorageDriver* gestureStorageDriver = new BinaryFileStorageDriver();
 
-	// Reading data in
-	vector<GestureFrame> frames;
-	for (int i=1;i<argc;i++)
-	{
-		string fileName = getFileNameFromPath(argv[i]);
+	gestureStorageDriver->openConnection(fileName, false);
 
-		gestureStorageDriver->openConnection(argv[i], false);
-		cout << "Open connection for " << argv[i] << endl;
-		GestureFrame currGestureFrame;
-
-		while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
-			frames.push_back(currGestureFrame);
-			currGestureFrame.clear();
-		}
-		gestureStorageDriver->closeConnection();
-		cout << "Close connection" << endl;
+	GestureFrame currGestureFrame;
+	while (gestureStorageDriver->loadGestureFrame(currGestureFrame)) {
+		frames.push_back(currGestureFrame);
+		currGestureFrame.clear();
 	}
+	gestureStorageDriver->closeConnection();
 	delete gestureStorageDriver;
+}
 
-	// Preprocessing
-	LMpre::LMpre pre(frames, 10);
-	frames = pre.process();
+void dataPreparation(int count, vector<GestureFrame> *frames,
+		const int preprocessingWidth,
+		vector<vector<double> > *dataset) {
+	for (int i = 0; i < count; i++) {
 
-	// Saving all possible gestures as feature sets
-	vector< vector<double> > dataset;
-	for (int i = 0; i < frames.size(); i++) {
-		vector<double> row;
-		row = computeFeatureSet(&frames[i]);
-		dataset.push_back(row);
+		LMpre::LMpre pre(frames[i], preprocessingWidth);
+		frames[i] = pre.process();
+		for (int j = 0; j < frames[i].size(); j++) {
+			vector<double> row;
+			int k = (j + 10) < frames[i].size() ? (j+10) : (frames[i].size()-1);
 
-
-	}
-
-
-	// Data normalizaion in columns
-	columnScaling(dataset);
-
-
-	// Saving for tool
-	ofstream zapis("out.csv");
-	for (int i = 0; i < dataset.size(); i++) {
-		if (i == 0) {
-			for (int j = 0; j < dataset[i].size(); j++) {
-				zapis << '"' << j << '"' << ';';
-			}
-			zapis << endl;
+			row = computeFeatureSet(&frames[i][j], &frames[i][k]);
+			dataset[i].push_back(row);
 		}
-
-		zapis << '"' << i << '"' << ";";
-		for (int j = 0; j < dataset[i].size(); j++) {
-			zapis << dataset[i][j] << ";";
-		}
-		zapis << endl;
+		// Data normalizaion in columns
+		columnScaling(dataset[i]);
 	}
-	zapis.close();
+}
 
-	// dataset contains all positions remember as featureSet
-	cout<<"Size of dataset: " << dataset[0].size() << " x " << dataset.size()<<endl;
+//void saveToEstimateNumbeOfClasses(vector<vector<double> > *dataset, int argc) {
+//	// Saving for tool
+//	ofstream zapis("out.csv");
+//	for (int i = 0; i < argc -1 ; i++) {
+//		if (i == 0) {
+//			for (int j = 0; j < dataset[i].size(); j++) {
+//				zapis << '"' << j << '"' << ';';
+//			}
+//			zapis << endl;
+//		}
+//		zapis << '"' << i << '"' << ";";
+//		for (int j = 0; j < dataset[i].size(); j++) {
+//			zapis << dataset[i][j] << ";";
+//		}
+//		zapis << endl;
+//	}
+//	zapis.close();
+//
+//	std::fstream datasetFile;
+//	datasetFile.open("DATASET_FILE", std::fstream::out | std::fstream::trunc);
+//	for (int i = 0; i < argc -1; i++) {
+//		int lastElement = dataset[i].size() - 1;
+//		for (int j = 0; j < lastElement; j++) {
+//			datasetFile << dataset[i][j] << " ";
+//		}
+//
+//		datasetFile << dataset[i][lastElement] << "\n";
+//	}
+//	datasetFile.close();
+//}
 
-	/*
-	// save dataset for counting number of clusters
-	std::fstream datasetFile;
-	datasetFile.open("DATASET_FILE", std::fstream::out | std::fstream::trunc);
-	for (int i=0; i<dataset.size(); i++)
+void readConfig(int &preprocessingWidth, int &crossValK, int &K, int &M,
+		int &classNumber, int &readCentroids, double &learningRate,
+		int &iteration_number, int &datasetSize)
+{
+	ifstream in;
+	in.open("config.cfg");
+
+	string tmp;
+	string val;
+
+	getline(in, tmp);
+	getline(in, val);
+	preprocessingWidth = atoi(val.c_str());
+
+	getline(in, tmp);
+	getline(in, val);
+	crossValK = atoi(val.c_str());
+
+	getline(in, tmp);
+	getline(in, val);
+	K = atoi(val.c_str());
+
+	getline(in, tmp);
+	getline(in, val);
+	classNumber = atoi(val.c_str());
+	M = classNumber;
+
+	getline(in, tmp);
+	getline(in, val);
+	readCentroids = atoi(val.c_str());
+
+	getline(in, tmp);
+	getline(in, val);
+	learningRate = atof(val.c_str());
+
+	getline(in, tmp);
+	getline(in, val);
+	iteration_number = atoi(val.c_str());
+
+	getline(in, tmp);
+	getline(in, val);
+	datasetSize = atoi(val.c_str());
+
+	in.close();
+}
+
+int main(int argc, char **argv) {
+	// Parameters to play with
+	int preprocessingWidth = 10;
+	int crossValK = 5;
+	int K = 10; // number of states in one gesture
+	int M = 15;
+	int classNumber = 15; // number of possible observations
+	int readCentroids = 1; // 0 - calculate using k-means, 1 - read them from file
+	double learningRate = 0.2; // How much do we incorporate new training data into trained model
+	int iteration_number = 100; // How many learning iterations
+	int datasetSize = 180;
+
+	// Read parameters
+	readConfig(preprocessingWidth, crossValK, K, M, classNumber, readCentroids,
+			learningRate, iteration_number, datasetSize);
+
+	// Reading data in
+	vector<GestureFrame> frames[180];
+	vector<int> label;
+
+	for (int k=0;k<6;k++)
 	{
-		int lastElement = dataset[i].size()-1;
-		for (int j=0; j<lastElement; j++)
+		string base = "dataset/";
+		if ( k == 0)
+			base = base + "123/";
+		else if (k == 1)
+			base = base + "drzwi/";
+		else if (k == 2)
+			base = base + "kolko/";
+		else if (k == 3)
+			base = base + "nozyce/";
+		else if (k == 4)
+			base = base + "pistolet/";
+		else
+			base = base + "przenoszenie/";
+		for (int j=1;j<31;j++)
 		{
-			datasetFile<<dataset[i][j]<<" ";
+			string name = base;
+			stringstream ss2;
+			ss2 << j;
+			name = name + ss2.str() + ".lmr";
+			readingInputData(name, frames[k*30 + j-1 ]);
+			label.push_back(k);
 		}
-
-		datasetFile<<dataset[i][lastElement]<<"\n";
 	}
-	datasetFile.close();
-	//
+	cout<<"Ended loading data" <<endl;
 
-	cout<<endl<<"!!!!!!! KMEANS !!!!!!" << endl;
+	// Preprocessing &&
+	// Saving all possible gestures as feature sets &&
+	// Scaling
+	vector<vector<double> > dataset[datasetSize];
+	dataPreparation(datasetSize, frames, preprocessingWidth, dataset);
+
+	// Saving for tool to estimate number of classes
+	//saveToEstimateNumbeOfClasses(dataset, argc);
+
+	cout << " k-means " << endl;
+	vector< vector<double> > centroids;
+	if ( readCentroids )
+		readCentroidsFromFile(centroids);
+	else
+		kmeansSimple(dataset, datasetSize, centroids, classNumber);
+
+	//cout<<endl<<"!!!!!!! KMEANS !!!!!!" << endl;
 	//kmeans(dataset, 11);
-	cout<<endl<<"!!!!!!! KMEANS SIMPLER !!!!!!" << endl;
-	kmeansSimple(dataset, 11);
-	cout<<endl<<"!!!!!!! CHINESE WHISPERS !!!!!!" << endl;
-	//chinese_whispers(dataset);
-	cout<<endl<<"!!!!!!! NEWMAN CLUSTERING !!!!!!" << endl;
+	//cout<<endl<<"!!!!!!! CHINESE WHISPERS !!!!!!" << endl;
+	///chinese_whispers(dataset);
+	//cout<<endl<<"!!!!!!! NEWMAN CLUSTERING !!!!!!" << endl;
 	//newman_cluster(dataset);
 
-
-	return 0;*/
-
-
-	int K = 2; // number of states in one gesture
-	int M = 2; // number of possible observations
-	int n = 12; // length of observed sequence
-
-	boost::shared_ptr<HMMVector<double> > pi_ptr(new HMMVector<double>(K));
-	boost::shared_ptr<HMMMatrix<double> > T_ptr(new HMMMatrix<double>(K, K));
-	boost::shared_ptr<HMMMatrix<double> > E_ptr(new HMMMatrix<double>(M, K));
-
-	boost::shared_ptr<HMMVector<double> > pi2_ptr(new HMMVector<double>(K));
-	boost::shared_ptr<HMMMatrix<double> > T2_ptr(new HMMMatrix<double>(K, K));
-	boost::shared_ptr<HMMMatrix<double> > E2_ptr(new HMMMatrix<double>(M, K));
-
-	HMMVector<double> &pi = *pi_ptr;
-	// initial probabilities
-	pi(0) = 0.5;
-	pi(1) = 0.5;
-
-	HMMMatrix<double> &T = *T_ptr;
-	// transitions from state 0
-	T(0, 0) = 0.5;
-	T(0, 1) = 0.5;
-	// transitions from state 1
-	T(1, 0) = 0.5;
-	T(1, 1) = 0.5;
-
-	HMMMatrix<double> &E = *E_ptr;
-	// emissions from state 0
-	E(0, 0) = 0.3;
-	E(1, 0) = 0.7;
-	// emissions from state 1
-	E(0, 1) = 0.7;
-	E(1, 1) = 0.3;
-
-	HMMVector<double> &pi2 = *pi2_ptr;
-	HMMMatrix<double> &T2 = *T2_ptr;
-	HMMMatrix<double> &E2 = *E2_ptr;
-
-	//std::cout << "obs : [0, 1, 0, 1]" << std::endl;
+	// Seperating into train/test dataset
+	std::vector<sequence> trainDataset[6];
 	std::vector<sequence> testDataset;
 
-	srand(time(0));
-	for (int k = 0; k < 10; k++) {
-
-		sequence obs(n);
-		obs[0] = 0;
-		obs[1] = 1;
-		obs[2] = 0;
-		obs[3] = 1;
-		obs[4] = 0;
-		obs[5] = 1;
-		obs[6] = 0;
-		obs[7] = 1;
-		obs[8] = 0;
-		obs[9] = 1;
-		obs[10] = 0;
-		obs[11] = 1;
-
-		// Random noise
-		// Changing some value -> right now turned off
-		if (rand() % 10 > 10) {
-			obs[round(rand() % 12)] = 1 - obs[round(rand() % 12)];
-		}
-
-		std::cout << "obs length: " << obs.size() << std::endl;
-		testDataset.push_back(obs);
+	// Finding the longest sequence of observations
+	int n = 0;
+	for (int p=0;p<datasetSize;p++)
+	{
+		n = max(n, (int)dataset[p].size());
 	}
 
-	const int crossValK = 5;
-	KFoldCrossValidation<sequence> kFoldCV(testDataset, crossValK);
-
-	sequence hiddenseq(n);
-	HMM<double> *hmm;
-
-	HMMMatrix<double> F(n, K);
-	HMMVector<double> scales(n);
-	HMMMatrix<double> B(n, K);
-	HMMMatrix<double> pd(n, K);
-
-	hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
-
-	int iteration_number = 10;
-	double total_best = 0.0;
-	double learn_test_percent = 0.5;
-	for (int i = 0; i < iteration_number; i++)
+	cout <<"Seperating data"<<endl;
+	// Determine the observation values for all sequences
+	for (int p=0;p<datasetSize;p++)
 	{
-		for (int foldNumber=0; foldNumber<kFoldCV.getK(); foldNumber++)
+		vector<unsigned int> observationLabels(n, 0.0);
+		for (int j=0; j <  n;j++)
 		{
-			for (int elIndex = 0; elIndex<kFoldCV.getLearningSetSize(foldNumber); elIndex++)
+			// Fill the rest with the last label
+			if ( j >= dataset[p].size() )
 			{
-				sequence elValue = kFoldCV.getLearningSetElement(elIndex, foldNumber);
-
-				double loglik = hmm->viterbi(elValue, hiddenseq);
-				std::cout << "-- log likelihood of hiddenseq: " << loglik
-						<< "\tLikelihood : " << exp(loglik) << std::endl;
-				//std::cout << "Running forward" << std::endl;
-
-				hmm->forward(elValue, scales, F);
-
-				//std::cout << "Running likelihood" << std::endl;
-				loglik = hmm->likelihood(scales);
-
-				//std::cout << "Running backward" << std::endl;
-				hmm->backward(elValue, scales, B);
-
-				//std::cout << "Running posterior decoding" << std::endl;
-				hmm->posterior_decoding(elValue, F, B, scales, pd);
-
-				//std::cout << "Running Baum-Welch" << std::endl;
-				hmm->baum_welch(elValue, F, B, scales, *pi2_ptr, *T2_ptr,
-						*E2_ptr);
-
-				delete hmm;
-				for (int j = 0; j < K; j++) {
-					pi(j) = pi2(j);
-
-					for (int k = 0; k < M; k++) {
-						E(k, j) = E2(k, j);
+				observationLabels[j] = observationLabels[dataset[p].size() - 1];
+			}
+			else
+			{
+				// Calculate the errors to the centroids
+				double best_error = 0.0;
+				int best_index = -2;
+				for (int i = 0; i < centroids.size(); i++) {
+					double error = 0.0;
+					for (int k = 0; k < centroids[i].size(); k++) {
+						error += (dataset[p][j][k] - centroids[i][k])
+								* (dataset[p][j][k] - centroids[i][k]);
 					}
-					for (int k = 0; k < K; k++) {
-						T(k, j) = T2(k, j);
+					if (best_error > error || best_index < 0) {
+						best_error = error;
+						best_index = i;
 					}
 				}
-				hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
+				observationLabels[j] = (best_index);
 			}
-
-			double total_rec = 0;
-			for (int elIndex = 0; elIndex<kFoldCV.getTestingSetSize(foldNumber); elIndex++) {
-				sequence elValue = kFoldCV.getTestingSetElement(elIndex, foldNumber);
-
-				double loglik = hmm->viterbi(elValue, hiddenseq);
-				total_rec += exp(loglik);
-			}
-
-			if (total_rec <= total_best)
-				break;
-
-			total_best = total_rec;
 		}
+		// First 20 used for training
+		if ( p % 30 < 20)
+			trainDataset[p/30].push_back(observationLabels);
+
+		testDataset.push_back(observationLabels);
 	}
 
-	std::cout << " ------ " << std::endl;
-	std::cout << " Proposed model ! " << std::endl;
-	std::cout << " -> Initial probabilites " << std::endl;
-	std::cout << (pi)(0) << " " << (pi)(1) << std::endl;
 
-	std::cout << " -> Transition matrix " << std::endl;
-	std::cout << (T)(0, 0) << " " << (T)(0, 1) << std::endl;
-	std::cout << (T)(1, 0) << " " << (T)(1, 1) << std::endl;
+	cout<<"HMM start"<<endl;
 
-	std::cout << " -> Emission matrix " << std::endl;
-	std::cout << (E)(0, 0) << " " << (E)(0, 1) << std::endl;
-	std::cout << (E)(1, 0) << " " << (E)(1, 1) << std::endl;
+	// HMM
+	HMMClass *hmmGesture[6];
+	for (int i=0;i<6;i++)
+	{
+		cout<<"Learning model i = " << i << " on " <<trainDataset[i].size()<< " samples" <<endl;
+		hmmGesture[i] = new HMMClass(K, n, M);
+		hmmGesture[i]->train(trainDataset[i],crossValK, iteration_number, learningRate);
+		cout<<"Model learnt" << endl;
+	}
+
+	//HMMClass *hmmGesture = new HMMClass("hmmFirstModel.model");
+
+	vector<int> predictedLabels;
+	for (int i=0;i<datasetSize;i++)
+	{
+		double error;
+		int index = -1;
+		for (int j=0;j<6;j++)
+		{
+			double loglik = hmmGesture[j]->predict(testDataset[i]);
+			if ( index == -1 || loglik > error)
+			{
+				error = loglik;
+				index = j;
+			}
+		}
+		predictedLabels.push_back(index);
+	}
+
+	cout<<"Counting percentage ..."<<endl;
+	int counter = 0;
+	for (int i=0; i< datasetSize;i++)
+		if ( predictedLabels[i] == label[i])
+			counter++;
+
+	cout<<"Total recognition rate : " << counter * 100.0 / datasetSize << endl;
+
+	//hmmGesture->show();
 
 
+
+	for (int j=0;j<6;j++)
+	{
+		string name = "hmmModel_";
+		stringstream ss2;
+		ss2 << (j+1);
+		name = name + ss2.str() + ".model";
+		hmmGesture[j]->saveModel(name);
+		delete hmmGesture[j];
+	}
 }

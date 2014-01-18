@@ -11,5 +11,5 @@ find_package(Boost 1.52.0)
 
 include(dlib-18.5/dlib/cmake)
 include_directories(${Boost_INCLUDE_DIRS} HMMlib-1.0.2)
-add_executable(dyn preprocess/LMpre.cpp Model/GestureFinger.cpp Model/GestureFrame.cpp Model/GestureHand.cpp Model/Vertex.cpp StorageDriver/BinaryFileStorageDriver.cpp dynamicGestureRecognition.cpp)
+add_executable(dyn preprocess/LMpre.cpp Model/GestureFinger.cpp Model/GestureFrame.cpp Model/GestureHand.cpp Model/Vertex.cpp StorageDriver/BinaryFileStorageDriver.cpp HMM/HMMClass.cpp dynamicGestureRecognition.cpp)
 target_link_libraries(dyn ${Boost_LIBRARIES} dlib)
