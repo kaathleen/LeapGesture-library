@@ -2,48 +2,53 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 #include "../Types/ConfExt.h"
 #include "../Util/PathUtil.h"
 #include "../Util/FileWriterUtil.h"
-#include "../Model/RecognitionModule/ClassDataset.h"
-#include "../Model/RecognitionModule/TrainClassResult.h"
+#include "../Util/LogUtil.h"
+
+#include "AbstractSvmModule.h"
 #include "SVMclassificator.h"
+
+#include "../Model/RecognitionModule/TrainingClassDataset.h"
+#include "../Model/RecognitionModule/TrainingResult.h"
+
+#include "../Model/RecognitionModule/TestingFrame.h"
+#include "../Model/RecognitionModule/TestingResult.h"
+
+#include "../RecognitionConfiguration/TestingFingerDiffConf.h"
+#include "../RecognitionConfiguration/TrainingFingerDiffConf.h"
 
 #ifndef FINGERDIFF_H_
 #define FINGERDIFF_H_
 
-class FingerDiff {
+class FingerDiff : AbstractSvmModule {
 
 public:
 	FingerDiff();
-	TrainResult train(ClassDatasets &classDatasets, std::string configurationPath, std::string configurationName, bool saveDatasetFile = false);
+	~FingerDiff();
+	TrainingResult* train(TrainingClassDatasetList &classDatasetList, TrainingFingerDiffConf configuration);
+	TestingResult* classify(TestingFrame &testingFrame, TestingFingerDiffConf configuration);
 
 private:
-	const static int MAX_FINGER_COUNT;
+	LogUtil* logger;
 
-	std::string configurationPath;
-	std::string configurationName;
-	bool saveDatasetFile;
+	void createTrainingFeaturesDataSet(TrainingClassDatasetList& classDatasets,
+			std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels, bool saveDatasetFile);
+	void createTestingFeaturesDataSet(TestingFrame &testingFrame, std::vector<double>& testDataset);
 
-	std::vector<std::string> genericClassNames;
-
-	void createGenericClassNames(std::vector<ClassDataset>& classDatasets);
-	void saveGenericClassNames();
-	void createFeaturesDataSet(std::vector<ClassDataset>& classDatasets,
-			std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels);
-	std::vector<double> createFeatures(GestureFrame *gestureFrame, FileWriterUtil& datasetFile);
+	std::vector<double> addFeatures(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
 
 	// features
-	void fingerCountAttribute(int& fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile);
-	void nearestFingersDistancesAttribute(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile);
-	void nearestFingersDistancesRatiosAttribute(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile);
-	void fingerThicknessRatiosAttribute(int& fingerCount, GestureHand* tempHand, int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile);
-	void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile);
-	void anglesBetweenFingersRelativeToPalmPosAttribute(GestureHand* tempHand, int fingerCount, int attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile);
-
-	// feature utils
-	void addAttribute(float attributeValue, int& attributeCounter, std::vector<double> &attributes, FileWriterUtil& datasetFile);
+	void fingerCountAttribute(int& fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
+	void nearestFingersDistancesAttribute(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
+	void nearestFingersDistancesRatiosAttribute(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
+	void fingerThicknessRatiosAttribute(int& fingerCount, GestureHand* tempHand, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
+	void anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
+	void anglesBetweenFingersRelativeToPalmPosAttribute(GestureHand* tempHand, int fingerCount, int attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
 };
 
 #endif /* FINGERDIFF_H_ */

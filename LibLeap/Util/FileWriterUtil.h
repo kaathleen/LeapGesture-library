@@ -24,7 +24,9 @@ private:
 template<class T>
 FileWriterUtil & FileWriterUtil::operator<<(const T val)
 {
-	file<<val;
+	if (file.is_open() && quietMode == false) {
+		file<<val;
+	}
 	return *this;
 }
 

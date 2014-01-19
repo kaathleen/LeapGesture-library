@@ -1,112 +1,120 @@
 #include "FingerDiff.h"
 
-const int FingerDiff::MAX_FINGER_COUNT = 5;
-
-FingerDiff::FingerDiff()
-{
+FingerDiff::FingerDiff() {
+	logger = new LogUtil("Finger differentiation");
 }
 
-TrainResult FingerDiff::train(ClassDatasets& classDatasets, std::string configurationPath, std::string configurationName, bool saveDatasetFile)
-{
-	this->configurationPath = configurationPath;
-	this->configurationName = configurationName;
-	this->saveDatasetFile = saveDatasetFile;
+FingerDiff::~FingerDiff() {
+	delete logger;
+}
 
-	createGenericClassNames(classDatasets);
+TrainingResult* FingerDiff::train(TrainingClassDatasetList& classDatasetList,
+		TrainingFingerDiffConf configuration) {
+	logger->debug("train entry");
+
+	this->confPath = configuration.configurationPath;
+	this->confName = configuration.configurationName;
+
+	createGenericClassNames(classDatasetList);
 	saveGenericClassNames();
 
 	std::vector<std::vector<double> > trainDataset; //features in samples
 	std::vector<int> trainLabels;
-	createFeaturesDataSet(classDatasets, trainDataset, trainLabels);
+	createTrainingFeaturesDataSet(classDatasetList, trainDataset, trainLabels,
+			configuration.saveDatasetFile);
 
-	//SVMclassificator svm;
-	//svm.train(trainDataset, trainLabels, genericClassNames.size(), configurationPath, configurationName);
+	SVMclassificator svm;
+	TrainingResult *trainResult = svm.train(trainDataset, trainLabels,
+			genericClassNames.size(), confPath, confName,
+			configuration.saveDatasetFile, configuration.kCrossValParam);
 
-	TrainResult trainResult;
+	for (unsigned int i = 0; i < trainResult->trainClassResults.size(); i++) {
+		trainResult->trainClassResults[i].className = genericClassNames[i];
+	}
+
+	logger->debug("train exit");
 	return trainResult;
 }
 
-void FingerDiff::createGenericClassNames(std::vector<ClassDataset>& classDatasets)
-{
-	for (uint i=0; i<classDatasets.size(); i++)
-	{
-		std::string className = classDatasets[i].className;
-		bool isNewClass = true;
-		uint j;
-		for (j=0; j<genericClassNames.size(); j++)
-		{
-			if (genericClassNames[j] == className)
-			{
-				isNewClass = false;
-				break;
-			}
-		}
+TestingResult* FingerDiff::classify(TestingFrame &testingFrame, TestingFingerDiffConf configuration) {
+	logger->debug("classify entry");
 
-		if (isNewClass)
-		{
-			genericClassNames.push_back(className);
-			classDatasets[i].genericClassName = genericClassNames.size()-1;
-		}
-		else
-		{
-			classDatasets[i].genericClassName = j;
+	this->confPath = configuration.configurationPath;
+	this->confName = configuration.configurationName;
+	std::string genericClassFilePath = PathUtil::combinePathFileNameAndExt(
+			confPath, confName, ConfExt::CLASS_MAP_EXT);
+	loadGenericClassNames(genericClassFilePath);
+
+	std::vector<double> testDataset; //features in samples
+	createTestingFeaturesDataSet(testingFrame, testDataset);
+
+	SVMclassificator svm;
+	TestingResult *testResult = svm.classify(testDataset,
+			genericClassNames.size(), confPath, confName,
+			configuration.classificationThresholdRate);
+
+	if (testResult->recognized) {
+		testResult->className = genericClassNames[testResult->genericClassName];
+		testResult->frameTimestamp = testingFrame.frame.getTimestamp();
+		for (unsigned int i = 0;
+				i < testResult->classificationClassResults.size(); i++) {
+			int genericClassIndex =
+					testResult->classificationClassResults[i].genericClassName;
+			testResult->classificationClassResults[i].className =
+					genericClassNames[genericClassIndex];
 		}
 	}
+
+	logger->debug("classify exit");
+	return testResult;
 }
 
-void FingerDiff::saveGenericClassNames()
-{
-	std::string genericClassFilePath = PathUtil::combinePathFileNameAndExt(configurationPath, configurationName, ConfExt::CLASS_MAP_EXT);
-	FileWriterUtil genericClassFile(genericClassFilePath);
-	genericClassFile.open();
-	for (int i=0; i<genericClassNames.size(); i++)
-	{
-		genericClassFile<<genericClassNames[i]<<"\n";
-	}
-	genericClassFile.close();
-}
-
-void FingerDiff::createFeaturesDataSet(std::vector<ClassDataset>& classDatasets,
-		std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels) {
-	std::string datasetFilePath = PathUtil::combinePathFileNameAndExt(configurationPath, configurationName, ConfExt::DAT_EXT);
+void FingerDiff::createTrainingFeaturesDataSet(
+		TrainingClassDatasetList& classDatasetList,
+		std::vector<std::vector<double> >& trainDataset,
+		std::vector<int>& trainLabels, bool saveDatasetFile) {
+	std::string datasetFilePath = PathUtil::combinePathFileNameAndExt(
+			confPath, confName, ConfExt::DAT_EXT);
 	FileWriterUtil datasetFile(datasetFilePath, !saveDatasetFile);
 	datasetFile.open();
 
-	for (uint i = 0; i < classDatasets.size(); i++)
-	{
-		for(uint j=0; j<classDatasets[i].dataset.size(); j++)
-		{
+	for (unsigned int i = 0; i < classDatasetList.size(); i++) {
+		for (unsigned int j = 0; j < classDatasetList[i].dataset.size(); j++) {
 			// Defining the set of features
 			std::vector<double> row;
 			// sequence number of class
-			datasetFile<<classDatasets[i].genericClassName<<" ";
-			row = createFeatures(&(classDatasets[i].dataset[j]), datasetFile);
-			datasetFile<<"\n";
+			datasetFile << classDatasetList[i].genericClassName << " ";
+			row = createFeatureSet(&(classDatasetList[i].dataset[j]),
+					&datasetFile);
+			datasetFile << "\n";
 
 			trainDataset.push_back(row);
-			trainLabels.push_back(classDatasets[i].genericClassName);
+			trainLabels.push_back(classDatasetList[i].genericClassName);
 		}
 	}
 
 	datasetFile.close();
 }
 
-std::vector<double> FingerDiff::createFeatures(GestureFrame *gestureFrame, FileWriterUtil& datasetFile) {
-	std::vector<double> result;
-	GestureHand *tempHand = gestureFrame->getHand(0);
-	int fingerCount = (tempHand != NULL) ? std::min(tempHand->getFingerCount(), MAX_FINGER_COUNT) : 0;
-	int attributeCounter = 1;
+void FingerDiff::createTestingFeaturesDataSet(TestingFrame &testingFrame,
+		std::vector<double>& testDataset) {
+	// sequence number of class
+	testDataset = createFeatureSet(&(testingFrame.frame));
+}
 
+std::vector<double> FingerDiff::addFeatures(GestureHand* tempHand,
+		int fingerCount, int& attributeCounter, std::vector<double>& result,
+		FileWriterUtil* datasetFile) {
 	//fingerCount
 	fingerCountAttribute(fingerCount, attributeCounter, result, datasetFile);
 
 	//distance between two nearest base points of a finger
 	/*nearestFingersDistancesAttribute(tempHand, fingerCount, attributeCounter,
-			result, svmGesture);*/
+	 result, svmGesture);*/
 
 	//ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
-	nearestFingersDistancesRatiosAttribute(tempHand, fingerCount, attributeCounter,
-			result, datasetFile);
+	nearestFingersDistancesRatiosAttribute(tempHand, fingerCount,
+			attributeCounter, result, datasetFile);
 
 	//ratio of the finger thickness to the maximal finger thickness
 	fingerThicknessRatiosAttribute(fingerCount, tempHand, attributeCounter,
@@ -124,12 +132,13 @@ std::vector<double> FingerDiff::createFeatures(GestureFrame *gestureFrame, FileW
 }
 
 void FingerDiff::fingerCountAttribute(int& fingerCount, int& attributeCounter,
-		std::vector<double>& result, FileWriterUtil& datasetFile) {
+		std::vector<double>& result, FileWriterUtil* datasetFile) {
 	addAttribute(fingerCount, attributeCounter, result, datasetFile);
 }
 
-void FingerDiff::nearestFingersDistancesAttribute(GestureHand* tempHand, int fingerCount,
-		int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile) {
+void FingerDiff::nearestFingersDistancesAttribute(GestureHand* tempHand,
+		int fingerCount, int& attributeCounter, std::vector<double>& result,
+		FileWriterUtil* datasetFile) {
 	//distance between two nearest base points of a finger
 	if (tempHand != NULL && fingerCount > 1) {
 		Vertex firstBaseFingerPosition =
@@ -142,19 +151,22 @@ void FingerDiff::nearestFingersDistancesAttribute(GestureHand* tempHand, int fin
 					- tempFinger->getDirection().getNormalized()
 							* tempFinger->getLength();
 			float distance =
-					abs((firstBaseFingerPosition - baseFingerPosition).getMagnitude());
+					abs(
+							(firstBaseFingerPosition - baseFingerPosition).getMagnitude());
 			addAttribute(distance, attributeCounter, result, datasetFile);
 			firstBaseFingerPosition = baseFingerPosition;
 		}
 	}
 	fingerCount = (fingerCount == 0) ? 1 : fingerCount;
-	for (int i = 0; i < (MAX_FINGER_COUNT - fingerCount); i++) {
+	for (int i = 0; i < (AbstractSvmModule::MAX_FINGER_COUNT - fingerCount);
+			i++) {
 		addAttribute(0, attributeCounter, result, datasetFile);
 	}
 }
 
-void FingerDiff::nearestFingersDistancesRatiosAttribute(GestureHand* tempHand, int fingerCount,
-		int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile) {
+void FingerDiff::nearestFingersDistancesRatiosAttribute(GestureHand* tempHand,
+		int fingerCount, int& attributeCounter, std::vector<double>& result,
+		FileWriterUtil* datasetFile) {
 	//distance between two nearest base points of a finger
 	if (tempHand != NULL && fingerCount > 1) {
 		float minimalDistance = 0;
@@ -169,16 +181,17 @@ void FingerDiff::nearestFingersDistancesRatiosAttribute(GestureHand* tempHand, i
 					- tempFinger->getDirection().getNormalized()
 							* tempFinger->getLength();
 			float distance =
-					abs((firstBaseFingerPosition - baseFingerPosition).getMagnitude());
-			if ((minimalDistance == 0 || distance < minimalDistance) && distance > 0)
-			{
+					abs(
+							(firstBaseFingerPosition - baseFingerPosition).getMagnitude());
+			if ((minimalDistance == 0 || distance < minimalDistance)
+					&& distance > 0) {
 				minimalDistance = distance;
 			}
 
 			distances.push_back(distance);
 			firstBaseFingerPosition = baseFingerPosition;
 		}
-		for (uint i = 0; i < distances.size(); i++) {
+		for (unsigned int i = 0; i < distances.size(); i++) {
 			float distanceRatio = 0;
 			if (minimalDistance > 0)
 				distanceRatio = distances[i] / minimalDistance;
@@ -187,13 +200,15 @@ void FingerDiff::nearestFingersDistancesRatiosAttribute(GestureHand* tempHand, i
 		}
 	}
 	fingerCount = (fingerCount == 0) ? 1 : fingerCount;
-	for (int i = 0; i < (MAX_FINGER_COUNT - fingerCount); i++) {
+	for (int i = 0; i < (AbstractSvmModule::MAX_FINGER_COUNT - fingerCount);
+			i++) {
 		addAttribute(0, attributeCounter, result, datasetFile);
 	}
 }
 
-void FingerDiff::fingerThicknessRatiosAttribute(int& fingerCount, GestureHand* tempHand,
-		int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile) {
+void FingerDiff::fingerThicknessRatiosAttribute(int& fingerCount,
+		GestureHand* tempHand, int& attributeCounter,
+		std::vector<double>& result, FileWriterUtil* datasetFile) {
 	//ratio of the finger thickness to the maximal finger thickness
 	float fingersThickness[fingerCount];
 	float maxFingerThickness = 0;
@@ -210,13 +225,15 @@ void FingerDiff::fingerThicknessRatiosAttribute(int& fingerCount, GestureHand* t
 		addAttribute(fingerThicknessRatio, attributeCounter, result,
 				datasetFile);
 	}
-	for (int i = 0; i < (MAX_FINGER_COUNT - fingerCount); i++) {
+	for (int i = 0; i < (AbstractSvmModule::MAX_FINGER_COUNT - fingerCount);
+			i++) {
 		addAttribute(0, attributeCounter, result, datasetFile);
 	}
 }
 
-void FingerDiff::anglesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
-		int& attributeCounter, std::vector<double>& result, FileWriterUtil& datasetFile) {
+void FingerDiff::anglesBetweenFingersAttribute(GestureHand* tempHand,
+		int& fingerCount, int& attributeCounter, std::vector<double>& result,
+		FileWriterUtil* datasetFile) {
 	// angles between fingers
 	if (tempHand != NULL && fingerCount > 1) {
 		Vertex leftFingerDirection = tempHand->getFinger(0)->getDirection();
@@ -236,14 +253,15 @@ void FingerDiff::anglesBetweenFingersAttribute(GestureHand* tempHand, int& finge
 		}
 	}
 	fingerCount = (fingerCount == 0) ? 1 : fingerCount;
-	for (int i = 0; i < (MAX_FINGER_COUNT - fingerCount); i++) {
+	for (int i = 0; i < (AbstractSvmModule::MAX_FINGER_COUNT - fingerCount);
+			i++) {
 		addAttribute(0, attributeCounter, result, datasetFile);
 	}
 }
 
-void FingerDiff::anglesBetweenFingersRelativeToPalmPosAttribute(GestureHand* tempHand,
-		int fingerCount, int attributeCounter, std::vector<double>& result,
-		FileWriterUtil& datasetFile) {
+void FingerDiff::anglesBetweenFingersRelativeToPalmPosAttribute(
+		GestureHand* tempHand, int fingerCount, int attributeCounter,
+		std::vector<double>& result, FileWriterUtil* datasetFile) {
 	// angles between finger and first finger relative to palmPosition
 	if (tempHand != NULL && fingerCount > 1) {
 		Vertex leftBaseFingerPalmPosition =
@@ -268,14 +286,8 @@ void FingerDiff::anglesBetweenFingersRelativeToPalmPosAttribute(GestureHand* tem
 		}
 	}
 	fingerCount = (fingerCount == 0) ? 1 : fingerCount;
-	for (int i = 0; i < (MAX_FINGER_COUNT - fingerCount); i++) {
+	for (int i = 0; i < (AbstractSvmModule::MAX_FINGER_COUNT - fingerCount);
+			i++) {
 		addAttribute(0, attributeCounter, result, datasetFile);
 	}
-}
-
-void FingerDiff::addAttribute(float attributeValue, int& attributeCounter,
-		std::vector<double> &attributes, FileWriterUtil& datasetFile) {
-	attributes.push_back(attributeValue);
-	datasetFile<<attributeCounter<<":"<<attributeValue<<" ";
-	attributeCounter++;
 }
