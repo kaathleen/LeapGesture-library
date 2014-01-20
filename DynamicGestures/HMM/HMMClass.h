@@ -40,6 +40,9 @@ public:
 	// Model from file
 	HMMClass(string path);
 
+	// Clear memory
+	~HMMClass();
+
 	// Log probability of sequence
 	double predict(sequence test);
 

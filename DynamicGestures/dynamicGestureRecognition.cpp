@@ -339,6 +339,34 @@ void distancesBetweenFingersAttribute(GestureHand* tempHand, int& fingerCount,
 	}
 }
 
+void distancesBetweenFingersPalmAttribute(GestureHand* tempHand, int& fingerCount,
+		int& attributeCounter, vector<double>& result) {
+
+	// If Hand exists and we have fingers
+	if (tempHand != NULL && fingerCount > 1) {
+
+		vector<float> distances(4, 0.0);
+
+		// For all combinations of finger configurations
+		for (int i = 0; i < fingerCount; i++) {
+			Vertex fingerDirection = tempHand->getFinger(i)->getStabilizedTipPosition();
+			Vertex palmPosition = tempHand->getPalmPosition();
+			distances.push_back((fingerDirection - palmPosition).getMagnitude());
+		}
+
+		sort(distances.begin(), distances.end(), std::greater<float>());
+
+		for (int i = 0; i < 4; i++) {
+			addAttribute(distances[i], attributeCounter, result);
+		}
+	}
+	// There are no fingers in the captured data
+	else {
+		for (int i = 0; i < 4; i++) {
+			addAttribute(0.0, attributeCounter, result);
+		}
+	}
+}
 
 void handMovementAttribute(GestureHand* tempHand, GestureHand* tempHand2,
 		int& attributeCounter, vector<double>& result) {
@@ -454,19 +482,24 @@ vector<double> computeFeatureSet(GestureFrame *gestureFrame, GestureFrame *gestu
 	// Adding the finger count to the feature set
 	fingerCountAttribute(fingerCount2, attributeCounter, result);
 
+
 	// Adding 4 angles to the palm normal
-	//anglesFingersPalmAttribute(tempHand, fingerCount, attributeCounter,
-	//			result);
+	distancesBetweenFingersPalmAttribute(tempHand2, fingerCount2, attributeCounter,
+			result);
+
+	// Adding 4 angles to the palm normal
+	anglesFingersPalmAttribute(tempHand2, fingerCount2, attributeCounter,
+			result);
 
 	// Adding the 4 highest angles to the feature set
-	anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
+	anglesBetweenFingersAttribute(tempHand2, fingerCount2, attributeCounter,
 			result);
 
 	// Adding the 4 greatest distances to the feature set
-	distancesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
-			result);
 	distancesBetweenFingersAttribute(tempHand2, fingerCount2, attributeCounter,
-				result);
+			result);
+	//distancesBetweenFingersAttribute(tempHand, fingerCount2, attributeCounter,
+	//			result);
 
 
 	// Hand movement
@@ -536,7 +569,7 @@ void dataPreparation(int count, vector<GestureFrame> *frames,
 		//cout<<i<<" "<< frames[i].size() << " " 	;
 		for (int j = 0; j < frames[i].size(); j++) {
 			vector<double> row;
-			int k = (j + 10) < frames[i].size() ? (j+10) : (frames[i].size()-1);
+			int k = (j - 10) >= 0 ? (j-10) : 0;
 
 			//cout<<"("<<i<<", "<<j<<")"<<endl;
 			row = computeFeatureSet(&frames[i][j], &frames[i][k]);

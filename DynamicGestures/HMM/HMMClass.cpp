@@ -85,6 +85,13 @@ HMMClass::HMMClass(string path){
 	hmm = new HMM<double>(pi_ptr, T_ptr, E_ptr);
 }
 
+HMMClass::~HMMClass()
+{
+	pi_ptr.reset();
+	T_ptr.reset();
+	E_ptr.reset();
+}
+
 void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
 		int iterationNumber, double learningRate) {
 
@@ -204,7 +211,12 @@ void HMMClass::train(std::vector<sequence> trainDataset, int crossValK,
 			total_best = total_rec;
 		}
 	}
+	pi2_ptr.reset();
+	T2_ptr.reset();
+	E2_ptr.reset();
 }
+
+
 
 double HMMClass::predict(sequence test)
 {

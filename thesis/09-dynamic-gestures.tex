@@ -171,7 +171,23 @@ In training part, those features are extracted from all recorded positions for a
 Then one of the unsupervised clustering algorithms is used to find the classes of observations.
 Knowledge of the classes is used to represent each dynamic gesture as a series of one-dimensional observations.
 After that for each dynamic gesture, the corresponding HMM is learned by running the Baum-Welch algorithm on the sequence of observations.
-To complete, the training process, the HMMs are combined into one HMM.
+The Baum-Welch algorithm finds the matrices that maximizes the likelihood for one sequence of observations, therefore the problem of training on multiple training data was encountered.
+Following by the idea presented in \cite{hmmtutorial}, each matrix trained by one training example is incorporated into trained matrix by using simple addition with learning rate $\mu$.
+Denoting the transition matrix by $T$ and learnt transition matrix $T_{new}$, it can be written:
+\begin{equation}\label{eq:dynT}
+T = (1-\mu) \times T + \mu \times T_{new}
+\end{equation}
+The same idea applies also to the emission matrix, denoted by $E$ and learnt emission matrix $E_{new}$:
+\begin{equation}\label{eq:dynE}
+E = (1-\mu) \times E + \mu \times E_{new}
+\end{equation}
+The problem with the matrices by computing equations\ref{eq:dynT, eq:dynE} is the fact, that they do not fulfill the probability constrains.
+Therefore, each row of new matrices is normalized to $1.0$.
+When dealing with multiple training examples, the solution may be overfitted to the training samples.
+To deal with this problem, the K-fold cross validation was utilized in a similar approach as in the static gestures.
+To complete the training process, each of the HMMs is put into one recognition structure. 
+During the recognition part, observed sequence is treated as input to the Viterbi algorithm performed on each of the HMMs and the output is analysed.
+The HMM with the highest likelihood is chosen, and the observed sequence is labelled with the label of this HMM.
 
 In the online working, the raw data from leap motion is preprocessed, then each frame is labelled accordingly to the classes learnt by the unsupervised clustering algorithm.
 The next step include providing the set of observations to HMM and running the Viterbi algorithm.
@@ -181,25 +197,28 @@ If the likelihood is above preset threshold, the gesture is assumed to be correc
 
 \section{Evaluation methodology}
 
-To evaluate the quality of recognition achieved by proposed processing pipeline, 8 dynamic gesture were chosen for which the data was recorded.
+To evaluate the quality of recognition achieved by proposed processing pipeline, 6 dynamic gesture were chosen for which the data was recorded.
 For each of those gestures, we recorded 120 samples (30 samples per each author).
 The recorded data were in different positions, with different speed to measure the wanted invariance.
 The chosen dynamic gestures are:
 \begin{enumerate}
-\item ``number 8'' -- it's a number 8 made by one finger in the air,
-\item ``letter Z'' -- it's a letter Z made by one finger in the air,
-\item open hand with 5 fingers going down in the direction of the sensor,
-\item ``clearing'' -- open hand moving left and right and simulating the movement of clearing the screen,
-\item circle made by one finger in the air
-\item ``letter A'' -- a letter A made by one finger in the air,
+\item ``123'' -- it's a gesture when performing counting to 3 using hands,
+\item ``door'' -- it's a gesture performed while trying to grasp a handle of door and then open the door,
+\item ``circle'' -- making a circle in the air with the forefinger,
+\item ``scissors'' -- simulating the cutting with the scissors made by a forefinger and a middlefinger,
 \item ``gun'' -- only the thumb and the index finger are not in the fist. The hand moves up simulating the movement during the firing from the gun.
-\item ``swipe from right'' -- moving the hand from right to left, used e.g. in smartphones to move something out of the current view.
+\item ``moving the object'' -- performing the task of grasping an invisible object, moving it and letting it go in different place.
 \end{enumerate}
 
-To test the proposed approach, similarly to the static gesture recognition problem, the $120\times8=960$ samples were divided into training and testing group. 
+To test the proposed approach, similarly to the static gesture recognition problem, the $120\times6=720$ samples were divided into training set containing $66,7\%$ of recordings and testing group containing the remaining $240$ recordings. 
 The part of the gestures recorded by Katarzyna were used to find the proper number of clusters than could be used by form the observations for the HMMs. 
 The training set was used to train each HMM separately on the training data of each gesture. 
-To prevent overfitting of the data and achieve the measure when the training process should be stopped, the k-fold cross validation was utilized. 
+To prevent overfitting to the data and achieving the measure when the training process should be stopped, the k-fold cross validation was utilized. 
+Preliminary results revealed that initialization of HMM matrices has an impact on the achieved results.
+Due to no prior knowledge, the random initialization was chosen.
+As this was susceptible to not yield reliable solution, each training process is performed $10$ times and the best model from cross-validation is returned.  
+Each training cycle of all HMMs takes between $1-10$ minutes, with total training part taking around $25-45$ minutes.
+If not stated otherwise, the learning rate $\mu$ was set to $0.1$, k-cross validation was performed for $k=5$ and the number of states in one HMM was set to $10$.
 
 
 \section{Experiments}
@@ -258,13 +277,164 @@ It is expected that either of those numbers is the correct choice when it comes 
 \end{table}
 
 The proposed values of clusters for different methods are presented in the table~\ref{clusterwyn}.
+Due to the inconclusive results, the correct number of classes was determined by performing experiments with different class number parameter.
+The analysis of the correct class number was postponed until the correct feature set is chosen.
+Until stated otherwise, the class number equal to $10$ was chosen.
+
+The next challenge was to find the feature set describing one gesture in time, that would contain the information about the dynamic nature of the gesture to be recognized. 
+The first feature set consisted of features encoding the information about the speed of the hand. For each $i-th$ hand position in recorded sequence, the $(i-10)$-th position was also considered. 
+The feature set consisted of the recorded displacement of hand in $X, Y, Z$ directions.
+The number of fingers in both positions were also added, resulting in feature set containing:
+\begin{itemize}
+\item finger count in $i$-th hand position,
+\item finger count in $i-10$-th hand position,
+\item displacement of hand position in X,
+\item displacement of hand position in Y,
+\item displacement of hand position in Z.
+\end{itemize}
+The presented approach allowed to achieve $64.583\%$ on cross-validation set. 
+Due to the small testing set, the total recognition rate was calculated on training and testing sets.
+This approach resulted in $61.806\%$ on all samples, which is too small to by used in real applications.
+
+The previous approach suffers from the fact, that the encoded speeds are represented in the coordinate system of the Leap Motion.
+Executing the gesture with different angle to the Leap Motion's coordinate system makes the recognition tasks harder and sometimes results in mislabelling.
+Therefore, the feature set was supposed to encode the information with respect to the local coordinate system of hand. 
+In new approach, the magnitude of the displacement is calculated. 
+It is independent of the chosen orientation of the coordinate system.
+To represent the direction of movement, the normalized displacement vector is computed as a vector connecting the center of $i-10$-th hand position with $i$-th hand position.
+Then, the dot product between normalized displacement vector and palm normal in $i-10$ position is calculated.
+As this not encode the whole information, the dot product between the normalized displacement vector and the plan direction is also computed.
+The resulting feature is contains also $5$ elements:
+\begin{itemize}
+\item finger count in $i$-th hand position,
+\item finger count in $i-10$-th hand position,
+\item magnitude of the hand's displacement,
+\item dot product of the normalized displacement vector and the palm's normal in $i-10$-th position,
+\item dot product of the normalized displacement vector and the palm's direction in $i-10$-th position.
+\end{itemize}
+This approach allowed to improve the recognition rate in cross-validation () and on the whole set (), although was still not satisfying from the practical point of view.
+
+The simple observation on the feature set and recorded gestures reveals that sometimes only the fingers are changing positions, while position of hand is steady.
+The previous approaches, did not encode this information in feature vectors, which made the those changes invisible to the further processing pipeline.
+Therefore, the new feature vector contained also the information about the displacement of each corresponding finger.
+In order to keep the feature size small, it was decided to only incorporate the magnitude of those displacements. 
+Due to the nature of Leap Motion's erratic numbering of fingers, those magnitudes were also sorted.
+The total of 4 top values were added to feature vector resulting in:
+\begin{itemize}
+\item finger count in $i$-th hand position,
+\item finger count in $i-10$-th hand position,
+\item magnitude of the hand's displacement,
+\item dot product of the normalized displacement vector and the palm's normal in $i-10$-th position,
+\item dot product of the normalized displacement vector and the palm's direction in $i-10$-th position,
+\item $4$ greatest magnitudes of finger displacements.
+\end{itemize}
+The results were not satisfying as were even worse than the ones achieved for the feature set 2 -- $66.111\%$ compared to the previously received $67.500\%$. 
+The further inspection revealed that, while adding displacement of fingers helps in most situations, it can also pose a great risk.
+In case of different order of finger numbering, the resulting displacement may be calculated between different fingers, thus resulting in big artificial displacement of fingers.
+Therefore, the idea of using displacement of fingers was abandoned.
+ 
+Looking at the recorded gestures, it seemed that speed information is not sufficient to correctly detect the sequences of gestures combining in one dynamic gesture.
+The new feature set, contained also the information about the static hand positions allowing to distinguish dynamic gestures that are comprised of sequential static gestures.
+The new feature set contained the already proposed speed part with additional static encoding that was successfully used in static gesture recognition:
+\begin{itemize}
+\item finger count in $i$-th hand position,
+\item finger count in $i-10$-th hand position,
+\item magnitude of the hand's displacement,
+\item dot product of the normalized displacement vector and the palm's normal in $i-10$-th position,
+\item dot product of the normalized displacement vector and the palm's direction in $i-10$-th position,
+\item $4$ greatest euclidean distances between all combination of finger's tips in $i$-th position,
+\item $4$ greatest absolute angles between all combination of finger's vectors in $i$-th position,
+\item $4$ greatest euclidean distances between finger's tips and palm's position in $i$-th position,
+\item $4$ greatest absolute angles between finger's vectors and palm's normal in $i$-th position.
+\end{itemize}
+
+The experiments showed that the proposed approach is not as successful as it was believed.
+It was believed that the sophisticated static part of feature set is dominating dynamic part of feature set, which prevents the method from achieving better results.
+Therefore, the $5$-th proposed feature set consist of static part represented by the $4$ greatest euclidean distances between all combination of finger's tips in $i$-th position and $4$ greatest absolute angles between all combination of finger's vectors in $i$-th position.
+Similarly, feature sets $6$, $7$, $8$ were also the propositions containing the reduced static parts, but did not improve significantly over already received results. 
+The all results are presented in tab.~\ref{tab:dyn1}. 
+
+\begin{table}[htp!]
+	\label{tab:dyn1}
+	\caption{Results obtained by the HMM approach using different feature sets, 10 classes}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
+    feature set 1                     & 64.583\% & 61.806\%   \\ \hline
+    feature set 2                     & 69.583\% & 67.500\%   \\ \hline
+    feature set 3                     & 68.542\% & 66.111\%   \\ \hline
+    feature set 4, full info          & 77.917\% & 76.111\%   \\ \hline
+    feature set 5                     & 66.667\% & 63.889\%   \\ \hline
+    feature set 6, only dist          & 72.912\% & 70.417\%   \\ \hline
+    feature set 7, only angles        & 71.875\% & 69.167\%   \\ \hline
+    feature set 8, dist fing, ang finpalm        & 78.125\% & 77.222\%   \\ \hline
+    \end{tabular}
+\end{table}
+  
+The best results were obtained for feature set $8$, but the results obtained by the full static representation (feature set 4) are not significantly worse.
+For further assessment, the feature set 4 was chosen as the one that describes each gesture with more information and therefore is believed to work better for gestures that were not included in proposed experiments.
+The mentioned feature set will be used in further evaluation.
+
+
+The next experiments were performed to test what is the best number of observation classes for k-means algorithm. 
+The tests were conducted using feature set $4$ and learning rate $\mu=0.05$.
+
+\begin{table}[htp!]
+	\label{tab:dyn1}
+	\caption{Results obtained by the HMM approach using feature set 4 and different class clusters}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
+	k = 4                  	  & 77.292\% & 74.722\%   \\ \hline
+    k = 5               	  & 79.583\% & 77.639\%   \\ \hline
+    k = 6                     & 79.583\% & 77.639\%   \\ \hline
+    k = 8                     & 77.708\% & 75.977\%   \\ \hline
+    k = 10                    & 77.917\% & 76.111\%   \\ \hline
+    k = 12                    & 78.542\% & 77.361\%   \\ \hline
+    \end{tabular}
+\end{table}
+The best obtained results are for the $k=5$ and $k=6$ allowing to increase the recognition rate from cross-validation to $79.583\%$, which allowed to achieve recognition rate equal to $77.639\%$ on the whole dataset. 
 
 
 
-********8
-*********88
-*DYNAMICZNE TESTY
-********88
-********
+The next experiments involved finding the best learning rate. 
+In our application, the stable learning rate was chosen to minimize the number of parameters to tune. 
+The further developments may involve using learning rate that is changing depending on the already received learning rate.
+Using predefined learning rate may be dangerous as small value may mean small convergence, while too big step may result in not converging to the locally best solution. 
+The achieved results are presented in~\ref{tab:dyn2}.
+In proposed application, the learning rate $\mu = 0.05$ allowed to achieve the best results. 
 
+\begin{table}[htp!]
+	\label{tab:dyn2}
+	\caption{Results obtained by the HMM approach using feature set 4, 5 observation classes and different learning rates}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
+	$\mu$ = 0.01                  	  & 77.500\% & 76.944\%   \\ \hline
+    $\mu$ = 0.05                      & 80.417\% & 79.028\%   \\ \hline
+    $\mu$ = 0.1                      & 79.583\% & 77.639\%   \\ \hline
+    $\mu$ = 0.2                      & 69.583\% & 69.7222\%   \\ \hline
+    \end{tabular}
+\end{table}
+
+
+The only parameter not tested in previous experiments is the number of state each HMM is composed of. 
+The previously used value was equal to $10$ states.
+The performed experiments confirmed the choice as smaller number of states ($5$) resulted in lower recognition rate, while greater number of states did not improve the result.
+The drawback of taking HMMs with big state numbers is the learning time. 
+The performed experiments and theoretical computational complexity confirm that the computational complexity grows linear with the chosen number of states, which in practical applications means linear grow of taken processing time.
+
+
+\begin{table}[htp!]
+	\label{tab:dyn3}
+	\caption{Results obtained by the HMM approach using feature set 4, 6 observation classes and different state elements}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
+	K = 5                  	  & 73.958\% & 73.611\%   \\ \hline
+    K = 10                     & 79.583\% & 77.639\%   \\ \hline
+    K = 20                    & 77.500\% & 76.528\%   \\ \hline
+    K = 30                     & 77.917\% & 76.25\%   \\ \hline
+    \end{tabular}
+\end{table}
 
