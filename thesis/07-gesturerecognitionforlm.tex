@@ -2,6 +2,52 @@
 
 \section{Classification of gestures}
 
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=0.8\columnwidth]{figures/gestureClassification.png}
+ \caption[]{Classification of gestures proposed in the thesis}
+ \label{thesisgesturetypes}
+\end{figure}
+
+In section 3.1 have been presented the three main classifications of gestures based on the existing literature. Particularly important for further research and to properly define the problem of gesture recognition may be the last of the presented taxonomies, which defines a wide range of possible gestures occurring in human-computer interaction.
+
+It should be noticed that the previously mentioned classifications are defined strictly due to the characteristics of individual gestures, which can make it difficult to analysis of choosing methods for gesture recognition. Therefore, it was decided to propose a new division that will be based on early taxonomies and in addition will be focused on the gesture recognition methods and will be defined strictly in the context of gesture recognition.
+
+The proposed classification distinguishes basic division of gestures due to conveyed informations:
+\begin{itemize}
+\item action gestures,
+\item parametrized gestures.
+\end{itemize}
+
+The first group (1), represents gestures, which their recognition rely only on detection of gesture occurence. This means that action gestures have assigned some meaning, and the occurrence of this type of gesture implies execution of pre-defined action. It should also be noted that gestures of this type do not convey any additional parameters which define or describe the action. An example of this type can be gesture showing open hand, which could mean stop playing music. Another example might be a moving index finger in circles, which means rotating previously selected object of the specified number of degrees.
+
+Gestures, which may be included to parameterized (2), are recognized on the basis of gesture detection and returning parameters associated with the context of the gesture. In contrast to previous group, parametrized gestures carry additional meaning or parameters needed to perform the gesture. An example of this kind of gestures might be a similar gesture to the previously mentioned instance of action gestures -- making circles through moving finger -- but in this case -- in addition to returning information about recognized gesture -- a value of angle, which should be used to rotate selected object, will also be conveyed.
+
+Then action gestures (1) were divided into static (1.1) and dynamic (1.2). The first one relates to gestures, that are not variable in time, therefore hand posture, its position and rotation are fixed during hand gesture performing. It should also be mentioned that these gestures should be independent of the orientation relative to the environment and the occurrence of this gesture is detected only on the basis of hand posture.
+
+Dynamic action gestures (1.2) refer to group of gestures, which are continuously and non-parametrized variable in time in terms of hand posture, position and rotation in space. This group is further divided into global, local and mixed. Global were detected based on a fixed hand posture and specified movement, which may relate both to changes in position and rotation. In the case of local, hand posture is only variable in time, while the mixed include gestures, for which both the hand posture, as well as the position and rotation vary with time. 
+
+For parameterized gestures (2) distinguished division of parameterized locally (1.1), globally (1.2) and mixed. Parameterized globally include gestures, whose parameters are determined by values of position and rotation or its changes of the hand. For instance, swipe gesture can be considered as globally parametrized gesture, where the parameter is the length of the swipe motion. Recognition of globally parametrized gestures is performed on the basis of unchanging hand posture or specific changes in the shape of the hand posture over time.
+
+Locally parameterized group (1.2) include gestures whose the hand posture or its changes are parameterized, for example a distance between index finger and thumb of one hand may be a parameter for scaling gesture. Gestures of this kind should be independent of the position and rotation in space. Recognition should be based on the hand posture, which can be problematic when it will be time-varying.
+
+Mixed parametrized group (1.3) represents gestures which both
+\begin{itemize}
+\item hand posture or hand posture changes over time,
+\item and hand posture values or changes of position and rotation
+\end{itemize}
+are parametrized. Gestures of this group are recognized based on hand posture.
+Classification presented above relates to the previously described taxonomy proposed by Aigner et al. at follows:
+\begin{itemize}
+\item pointing gestures -- represented by mixed parametrized gestures,
+\item static semaphoric -- represented by static action gestures,
+\item dynamic and stroke semaphoric -- represented by dynamic action gestures,
+\item static iconic -- for demonstrating the shapes of objects represented by static action gestures and for presenting the size of object by locally parametrized gestures,
+\item dynamic iconic -- mainly represented by dynamic action gestures, but can also be globally parameterized gestures for indicating the size of the objects,
+\item pantomimic -- represented mostly by mixed dynamic action gestures, assuming that they are always performed in the same way,
+\item manipulation -- represented by all types of parametrized gestures.
+\end{itemize}
+
 \section{Gesture data representation}
 
 \section{Additional processing steps}
