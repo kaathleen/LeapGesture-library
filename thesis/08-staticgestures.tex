@@ -318,4 +318,93 @@ For problem of 10 static gesture recognition problem, greater sigma values achie
 As the usage of different weights also comes with greater computing cost and still did not result in better results, this part of processing can omitted without effecting the recognition.
 
 
-From the presented results, the simple summation with uniform weights provides the greatest gain when it comes to the recognition rate and is the method recommended by the authors. 
+From the presented results, the simple summation with uniform weights provides the greatest gain when it comes to the recognition rate and is the method recommended by the authors.
+
+
+\section{Finger differentiation} 
+Finger differentiation module is responsible to verify which particular fingers are detected during gesture recognition. The module can be used for additional processing on the user side, for which the information about the visible fingers can often be significant, It can also assist interpretation of data derived from parametrized gestures. The user can also use the module to better fit dataset features to the characteristics of selected gestures.
+\subsection{Methods}
+For this module were used the same classification algorithms (kernel functions) as those who had the best results in static gesture recognition. As in the case of static gesture recognition libSVM library has been used and RBF kernel has been selected.
+\subsection{Evaluation methodology}
+In the assumptions for static gesture recognitions was mentioned that the process must be independent of the position, rotation, sizes of hand and fingers. This presumption applies also to finger differentiation. However, this assumption is still does not contain one element, from which the differentiation process should be independent -- arrangement of hand. Whether forefinger is straight or bent, it is the same class, where only this one finger is taken out.
+
+\subsubsection{Recorded dataset}
+Dataset was collected by two different people. Each of them has recorded 32 classes, which reflect all the possible permutations of hand arrangements. The next step was to select from 32 gestures, those which are most frequently used by people in everyday life. Those 15 selected gestures are natural for human and do not cause a pain. People uses them as specific signes like peace sign. From the dataset were created four data collections used in the experiments:
+\begin{itemize}
+\item 32 gestures recorded by two people,
+\item 15 gestures recorded by two people,
+\item 32 gestures recorded by one person,
+\item 15 gestures recorded by one person.
+\end{itemize}
+
+\subsection{Features}
+As mentioned previously, it is important that the fingers differentiation process is independent of things like position of hand or size of finger. 
+
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=0.75\columnwidth]{figures/fingDiffFeatures.png}
+ \caption{Features used for finger differentiation}
+ \label{fingfifffeatures}
+\end{figure}
+
+6 features were selected, which are independent of those parameters: 
+\begin{enumerate}
+\item finger count, 
+\item distance between two nearest base points of a finger, 
+To appoint a finger base point has to be reversed normalized direction vector multiplied by the length of a finger. Subsequent as the beginning of the vector thus formed is set finger tip position. The end of the vector indicates the finger base point (fig.~\ref{fingfifffeatures}.1). An example of distance between two nearest base points of a finger is showed on fig.~\ref{fingfifffeatures}.2.
+\item ratio of the finger thickness to the maximal finger thickness, 
+Leap Motion controller can return information about the thickness of the fingers (fig.~\ref{fingfifffeatures}.3). There are known relationships between the thicknesses of the fingers, for example that the thumb is the thickest finger. Just like in the previous feature ratio was used in order to become independent of size.
+\item angles between two nearest fingers, 
+In fig.~\ref{fingfifffeatures}.4  this feature has been shown. It is obtained by calculating the angle between the direction vectors of two adjacent fingers.
+\item angles between finger and first finger relative to palm position. 
+To calculate this angle three positions are needed : two finger tip positions and a palm position. The next step is to determine the line segments between palm position and finger tip positions. The searched angle is between two designated segments. This angle is marked in fig.~\ref{fingfifffeatures}.5.
+\end{enumerate}
+
+During testing new feature was created based on the features 2:\newline
+2b. ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
+This feature is very similar to the previous one. The difference is that in this case is used ratio of distance and not the actual values. Thanks to this feature is independent of the size of hand.
+
+\section{Experiments}
+For the tests created several combinations of previously described features:
+\begin{itemize}
+\item 1,2,4
+\item 1,3,5
+\item 1,3,4,5
+\item 1,2,3,4,5
+\end{itemize}
+
+All sets of features has been tested for all four datasets. The percentage results can be seen in table~\ref{findiff}. From the data obtained it can be concluded that the best match is when the all features are used. However, feature 2 is not independent of the size of the hand. Therefore, a new feature has been created using the ratio of two values obtained from the original feature. Then the test was performed for a set of: 1, 2b, 3, 4, 5 for all the dataset. The result for this test is in the last line of the table~\ref{findiff}. Interestingly, despite the fact that the modified feature is independent of the size of hand, attribute 2b had an inferior result than the original feature, which operates on the actual value of the distance apart fingers. 
+
+\begin{table}[htp!]
+\begin{center}
+	\label{findiff}
+	\caption{Results obtained by experimental feature sets for different data collections}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    features & 32 classes, 2 people & 15 classes, 2 people & 32 classes, 1 person  & 15 classes, 1 person  \\ \hline
+    1,2,4		& 75.393\% & 87.288\%  & 78.411\% & 90.608\% \\ \hline
+    1,3,5              	& 76.291\% & 87.504\%  & 79.638\% & 91.548\% \\ \hline
+    1,3,4,5            	& 78.082\% & 87.504\%  & 79.638\% & 91.548\% \\ \hline
+    1,2,3,4,5           & 83.180\% & 90.278\%  & 85.825\% & 93.036\% \\ \hline
+    1,2b,3,4,5          & 76.553\% & 87.619\%  & 79.798\% & 91.629\% \\ \hline
+    \end{tabular}
+    \end{center}
+\end{table}
+
+It is worth to mention that it seemed that feature 4 -- angles between two nearest fingers -- will have a substantial contribution to finger differentiation. However, the results showed that this feature has impact only on the largest amount of data, while in other cases brought nothing.
+
+In the second round of tests was verified how preprocessing will affect the finger differentiation process. For the best set of features from the previous test was performed a new test with preprocessing for all datasets. 
+
+\begin{table}[htp!]
+\begin{center}
+	\label{findiffpre}
+	\caption{The recognition rate achieved with feature set 1,2,3,4,5}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    features & 32 classes, 2 people & 15 classes, 2 people & 32 classes, 1 person  & 15 classes, 1 person  \\ \hline
+    1,2,3,4,5           & \% & \%  & \% & \% \\ \hline
+    \end{tabular}
+    \end{center}
+\end{table}
+
+
