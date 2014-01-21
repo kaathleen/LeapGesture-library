@@ -1,65 +1,65 @@
 
 \chapter{Static gestures recognition}
 
-As was already mentioned, the detected gestures can be divided into two groups: static gestures and dynamic gestures.
-The static gestures can be understood as a chosen position and orientation of the fingers and hand in a single moment, while dynamic gestures are defined as a movement of the hand and fingers in time. 
-The problem of recognition of those gestures is a subject of following chapter. 
+As was already mentioned, the gestures that can be detected can be divided into two main groups: static gestures and dynamic gestures.
+The static gestures can be understood as a chosen position and orientation of fingers and a hand in a single moment, while dynamic gestures are defined as a movement of the hand and fingers in time. 
+The problem of static gesture recognition is a subject of following chapter. 
 Firstly, the proposed approach is presented, followed by the introduction to the evaluation scheme. 
-In last section, the performed experiments are descriebed, which were used to examine the effectiveness of proposed static gesture recognition approach.
+In last section, the performed experiments are described, which were used to examine the effectiveness of proposed approach.
 
 \section{Proposed methods}
 
 The static gesture recognition problem can be stated as a problem invariant to time.
-That means that for each detected hand, the position and orientation can be treated as a new data uncorrelated to previously classified data.
-While this assumption means that one can easily generate multiple samples from the sensors in short time, it also gives an opportunity to look at the static gesture recognition problem as a problem of classification.
+That means that for each detected hand, the position and orientation can be treated as a new data, uncorrelated to previously classified hands.
+With this assumption, one can easily generate multiple samples from the sensors in short time, but it also gives an opportunity to look at the static gesture recognition problem as a problem of classification.
 
-While for most 2D gesture recognition problems simple classification algorithms seems to work well enough, the 3D data is more complication to model by the set of features and finally successfully label.
-While dealing with 3D data, the position and orientation of hand can be easily affected by the height of the hand above the sensor or small change in the orientation of the hand with respect to the sensor's coordinate system. 
-It is intuitively understood, that the system should recognize those gestures as the one as they are similar.
-To meet those requirement, one need to define what is meant by the ``small'' change in orientation resulting in treating the static gestures as the same.
+In literature, most of the approaches uses two-dimensional representation of gestures, which makes recognition problems relatively simple and therefore allow to use simple classification algorithms e.g. k-NNs [Gesture recognition toolbox]. 
+The three-dimensional representation of data is more complicated to model by the set of features and finally successfully label.
+While dealing with 3D data, the position and orientation of hand can be easily affected by the height of the hand above the sensor or a small change in the orientation of the hand with respect to the sensor's coordinate system. 
+All of those distortions should not prevent the system from recognizing those gestures as the one as they are similar.
+To meet those requirement, it is needed to define what is the ``small'' change in orientation resulting in treating the static gestures as the same one.
 
 \begin{figure}[htb]
 \centering
  \includegraphics[width=0.6\columnwidth]{figures/SVM.png}
- \caption[]{SVM is a technique searching for the hyperplane that maximizes the margin between classes\footnotemark}
+ \caption[]{SVM is a classification algorithm looking for the hyperplane that maximizes the margin between classes\footnotemark}
  \label{svmmargin}
 \end{figure}
 
+In application of the library presented in this thesis, it is assumed that the learning process can be done offline, while strict online requirements has to be met in the recognition part. 
 
-
-To meet those requirements, the Support Vector Machines \cite{Cortes:SVM} were used as a classification algorithm.
-The SVMs were chosen as there exist a solid mathematical background supporting the simple idea of maximalizing the margin between classes.
-Moreover, the SVMs were chosen also because of the popularity due to the open-source library libSVM \cite{libSVM}, which contains the multiple platform SVM implementation.
-It is worth noticing that in original work, SVMs were used only to classify between two classes, but the idea was expanded to utilize the one-vs-all scheme allowing to classify multiple class sets.
-The efficiency of SVMs depends on correctly choosing the kernel function used to map the separation problem into higher-dimension with expectation to achieve problem easier to solve.
-The typical kernel functions:
+To meet listed requirements, the Support Vector Machines (SVMs)\cite{Cortes:SVM} were used as a robust classification algorithm.
+The SVMs were chosen as there exist a solid mathematical background supporting the simple idea of maximizing the margin between classes.
+Moreover, the SVMs were chosen due to the popularity in the current research trends and is commonly used technique in biology, robotics or IT for solving data classification problems.
+The another advantage is the existence of the open-source library libSVM \cite{libSVM}, which contains the implementation of the SVM in different programming languages.
+In the original work, SVMs were designed to be only to classify between two classes, but the idea was expanded to utilize the one-vs-all classification allowing to differentiate between multiple classes.
+This might be the drawback, as the for $n$ classes, it is necessary to train $n$ SVMs each to classify one class against all samples from the rest of the classes. 
+The efficiency of SVMs depends on correctly choosing the kernel function used to map the separation problem into higher dimension with expectation to achieve a classification problem that can be separated.
+There exists several kernel functions:
 \begin{itemize}
 \item linear: $K(x_i, x_j) = x_i^Tx_j$.
 \item polynomial: $K(x_i, x_j) = (\gamma x_i^Tx_j + r)^d, \gamma > 0$.
 \item radial basis function (RBF): $K(x_i, x_j) = exp(-\gamma ||x_i - x_j||^2), \gamma > 0$.
 \item sigmoid: $K(x_i, x_j) = tanh(\gamma x_i^Tx_j+r)$.
 \end{itemize}
-where $\gamma$, $r$, and $d$ are kernel parameters. According to the authors of the library, linear kernels should be used for linearly separable problems, while RBF kernel is the most versatile one.
+where $\gamma$, $r$, and $d$ are kernel parameters. 
+According to the authors of the library \cite{libSVM}, linear kernels perform the best, when used for linearly separable problems, while RBF kernels are the most versatile ones and are recommended for most of the applications.
 
 \footnotetext{\url{http://en.wikipedia.org/wiki/File:Svm_max_sep_hyperplane_with_margin.png}}
 
-The problem of classification assumes that each sample consists of set of features, which describe this sample and can be used to distinguish it from the other samples.
-Additionally, each sample has a known or unknown label, which defined the membership of sample to the class. 
-The samples with the known labels can be used to train the classification system to compute the membership to the classes for the samples. 
-The computation is performed on previously mentioned sets of features.
+The problem of classification assumes that each sample consists of set of features, which describe a sample and can be used to distinguish it from the other samples.
+Additionally, each sample has a known or unknown label, which define the membership of the sample to the classification class. 
+The samples with the known labels can be used to train the classification system.
+Trained classification system is used to predict the labels for the provided samples.
 
-In application of gesture recognition the classification be divided into two flows: the training part and the recognition part. 
-In training part, the library will be provided with the samples of static gestures with known correspondences to the static gesture classes. 
+In application of gesture recognition the classification be divided into two flows: the training part (offline) and the recognition part (online). 
+The static gesture processing flow is presented at fig.~\ref{staticsol}.
+In training part, the library will be provided with the recorded samples of static gestures with known correspondences to the static gesture classes. 
 From those samples, the sets of features are computed, which are used to train the classifier.
 The recognition part assumes to have trained classifier. 
-The recognition part is provided with samples static gestures without labels. 
+The recognition part is provided with samples of static gestures without labels. 
 For each sample the sets of features are computed and then given as input to the trained classifier.
-The classifier returns the information of the gesture's class membership (label) of each sample.
-
-In case of library, it is assumed that the learning process can be done offline, while strict online requirements has to be met in recognition part. 
-To meet those requirements the Support Vector Machine is introduced\cite{Cortes:SVM}. 
-The SVM classification is commonly used technique in multiple areas of research as biology, robotics or IT for solving data classification problems.
-Additional advantage of the SVM is possibility to use C++ library libSVM \cite{libSVM}, which provides an easy interface to utilize this classification methods in different problems.
+The classifier provides the information of the predicted gesture's class membership (label) for each input sample.
 
 \begin{figure}[htb]
 \centering
@@ -68,18 +68,14 @@ Additional advantage of the SVM is possibility to use C++ library libSVM \cite{l
  \label{staticsol}
 \end{figure}
 
-
 While presented approach can be treated as state-of-the-art approach it still cannot be used without defining proper feature sets for gesture recognition.
 The naive solution would be to use the raw data from Leap motion sensor as the feature set.
 This solution was tested, but provided poor results as the proposed features were dependent on the position, orientation and scale of hand. 
 Even small movement in any direction meant problems with stable recognition. 
 The theoretical literature suggests to compute a set of features invariant to wanted transformations, which can allow to fully distinguish between different classes.
-Unfortunately, there are not available propositions to feature sets when it comes to the gesture recognition using the data even similar to the data provided by the Leap Motion sensor.
-Seeking right feature is a task undertaken in experimental section~\ref{static:exp}.
-
-To sum up, the static gesture processing flow is presented at fig.~\ref{staticsol}. In training part, the data from Leap Motion is preprocessed, the feature sets are computed and the data is used to train SVM classifier.
-In recognition part, the data is also preprocessed and described by the feature sets, but the knowledge of the label comes from the already trained SVM classifier.
-
+The proposed feature sets are application dependant.
+Together the fact that the gesture recognition using the data similar to the data provided by the Leap Motion sensor has not been yet examined by the researches meant that seeking right feature set is a task of the thesis.
+The task is undertaken in experimental section~\ref{static:exp}.
 
 \section{Evaluation methodology}
 
@@ -88,7 +84,7 @@ To provide user with library working in different conditions, it was assumed tha
 This assumption means that the static gesture rotated by unknown angles, translated in sensor coordinate system and also with different hand sizes should still be recognized as the same gesture.
 Invariance to the rotation, translation and scale poses a great challenge to the recognition, but allows the future users of API to fully utilize the feasibility of the library.
 It is worth mentioning that, it does not reduce the possible applications of the library, as an assignment of static gesture to already defined class allows to find the transformation between the model of the class and observed gesture.
-
+And further, this transformation can be used to examine the parameters of the instance of the model e.g. rotation of the hand.
 
 \subsection{Recorded datasets}
 
@@ -97,7 +93,7 @@ To propose and test the quality of the features twelve static gestures were chos
 \item the peace sign,
 \item a fist,
 \item full hand with space between each finger,
-\item American Sign Language: ``I love you'' sign,
+\item from American Sign Language: ``I love you'' sign,
 \item sign ``gun'' created by putting thumb and forefinger up, while holding the rest fingers in a fist,
 \item all fingers in a fist with exception of thumb, which is up,
 \item the sign X made with the forefingers of both hands,
@@ -112,21 +108,19 @@ To propose and test the quality of the features twelve static gestures were chos
  \caption{Recorded static gestures used for evaulation}
  \label{staticgesturesdata}
 \end{figure}
-
-
 The gestures are also presented at fig.~\ref{staticgesturesdata}.
 
-
-The sample data of each gestures were recorded using the continuous mode of recording, while moving the hands in different directions and changing the orientation of the hands. 
-For each of the proposed gestures, each author recorded approximately 1000 samples.
+The sample data of each gestures were recorded using the continuous mode of recording, while moving the hands in different directions and changing the orientation of the hands.
+The hands were moved and rotated as each repeated static gesture is always a little bit different from the previously recorded samples/ 
+For each of the proposed gestures, each author of this thesis recorded approximately 1000 samples.
 
 Having samples with known labels, the whole dataset was separated into training and testing sets in relation $2:1$. 
-For the training, the k-fold cross-validation (CV) scheme was used, which searches for optimal $C$ and $\gamma$ parameters trying to prevent the algorithm from over-fitting the training data.
-This method is used to find the optimal parameters of the classification system, while estimating the performance on the data not used in the training part. 
-In standard version of the method, the gathered data is divided into two sets: one containing k-1 parts of the data, the other 1 part of the data. 
-The first is used to train the classification system, while the rest of the gathered data is used to estimate the performance. 
-The performance is estimated by calculating the number of cases when the classification system returned a label which matched already known label. 
-The percent of correctly recognized labels to the total size of the testing set is known as recognition rate.
+For the training, the k-fold cross-validation (CV) scheme was used, which searches for optimal $C$ and $\gamma$ parameters of SVM trying to train the classification algorithm while preventing the algorithm from over-fitting the training data.
+This method is used to find the optimal parameters of the classification system, while estimating the performance is done on the data not used in the training part. 
+In standard version of the CV, the gathered data is divided into two sets: one containing $k-1$ parts of the data, the other $1$ part of the data. 
+The first is used to train the classification system, while the rest of the gathered data is used to estimate how well the system is learnt.
+In the next iteration, the CV parts are shuffled by still having the ratio of training and validation sets.
+After the training, the final performance is estimated by calculating the percent of correctly recognized labels to the total size of the testing set known as recognition rate.
 
 
 \section{Experiments}
@@ -139,10 +133,10 @@ Firstly, the experiments to find the proper set of features were conducted. The 
 \item the absolute angles between consecutive fingers.
 \end{itemize} 
 
-While this feature set did not take into account the relative position of fingers to the hand, the second and third feature set were introduced.
+This feature set did not take into account the relative position of fingers to the hand.
 The second feature set is a first feature set extended by the distances between consecutive finger tips and the position of the hand's palm.
 The third feature set contains features from second feature set extended by the five angles between fingers and normal of hand's palm.
-Those, 3 proposed feature sets were firstly tested on all $10$ recorded static gestures.
+Those, 3 proposed feature sets were firstly tested on all $10$ recorded.
 The firstly tested set of all static gestures contained gestures, which were undistinguishable for the Leap Motion, because they did not take into account the way how the Leap Motion works. 
 For gestures like fist or 'X' the recorded data contained almost no information how to classify those gestures.
 That's why the experiments were repeated on the five gestures, which could be easily distinguish using the data provided by Leap Motion. 
@@ -154,30 +148,30 @@ The results achieved by those methods are presented in the table~\ref{staticfeat
 	\caption{Results obtained by experimental feature sets by the libSVM library}
     \begin{tabular}{|c|c|c|c|c|}
     \hline
-    ~                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    feature set 1                     & 87.072\% & 87.943\% & 69.987\% & 68.422\%   \\ \hline
-    feature set 2                     & 87.072\% & 87.943\% & 69.987\% & 68.422\%          \\ \hline
-    feature set 3                     & 87.072\% & 87.943\% & 69.987\% & 68.422\%           \\ \hline
-    feature set 4                     & 81.150\% & 80.998\% & 68.438\% & 68.630\%          \\ \hline
-    feature set 5                     & 86.544\% & 85.075\% & 77.101\% & 77.518\%          \\ \hline
-    feature set 6                     & 92.762\% & 93.096\% & 80.543\% & 81.235\%           \\ \hline
+    ~                                                   & $5$ gestures, CV & $5$ gestures, test set & $10$ gestures, CV  & $10$ gestures, test set \\ \hline
+    feature set $1$                     & $87.072\%$ & $87.943\%$ & $69.987\%$ & $68.422\%$   \\ \hline
+    feature set $2$                     & $87.072\%$ & $87.943\%$ & $69.987\%$ & $68.422\%$          \\ \hline
+    feature set $3$                     & $87.072\%$ & $87.943\%$ & $69.987\%$ & $68.422\%$           \\ \hline
+    feature set $4$                     & $81.150\%$ & $80.998\%$ & $68.438\%$ & $68.630\%$          \\ \hline
+    feature set $5$                     & $86.544\%$ & $85.075\%$ & $77.101\%$ & $77.518\%$          \\ \hline
+    feature set $6$                     & $92.762\%$ & $93.096\%$ & $80.543\%$ & $81.235\%$           \\ \hline
     \end{tabular}
 \end{table}
 
-For problem of recognition of 5 gestures, 3 first feature sets resulted in over $87$\% recognition rate on testing sets, which was believed to be a good result.
-The same tests for problem of recognition of 10 gestures resulted in lower recognition rates.
-For feature sets 1-3 the recognition rate was below $70$\%, which could be unsatisfying from the perspective of the purpose of the application.
+For problem of recognition of $5$gestures, three first feature sets resulted in over $87\%$ recognition rate on testing sets, which was believed to be a good result.
+The same tests for problem of recognition of $10$ gestures resulted in lower recognition rates.
+For feature sets $1-3$ the recognition rate was below $70\%$, which could be unsatisfying from the perspective of the purpose of the application.
 The low recognition rate was analysed and revealed that the fingers are numbered accordingly to the position in Z axis of the tip of the finger.
-This means that when fingers' tips are approximately on the same position in Z axis, the numbering can change rapidly and proposed features are compared between different fingers.
+This means that when finger's tips are approximately on the same position in Z axis, the numbering can change rapidly and proposed features are compared between different fingers.
 To achieve features that would be invariant to the numbering of the fingers, the feature set was slightly modified.
 Instead of containing the absolute angles and distances between consecutive fingers, it was proposed to contain the five greatest values of angles and five greatest values of distances between all combinations of finger pairings.
 The same sorting approach was used for the angles and distances between fingers and hand's palm.
-The feature sets 1, 2, 3 with sorting scheme were respectively called feature sets 4, 5, 6.
-Again, the same dataset with 5 and 10 gestures was used to evaluate those methods. 
+The feature sets $1$, $2$, $3$ with sorting scheme were respectively called feature sets $4$, $5$, $6$.
+Again, the same dataset with $5$ and $10$ gestures was used to evaluate those methods. 
 The results are yet again presented in table~\ref{staticfeat}.
 This approach was tested on the same training set and allowed to increase the recognition rate.
-The best results in both tasks were achieved in case of feature sets 6.
-The simple alleviation of finger numbering problem allowed to top the previous results with recognition rates $93.096\%$ for 5 gesture problem and $81.235\%$ for 10 gesture problem in case of feature set 6. 
+The best results in both tasks were achieved in case of feature sets $6$.
+The simple alleviation of finger numbering problem allowed to top the previous results with recognition rates $93.096\%$ for $5$ gesture problem and $81.235\%$ for $10$ gesture problem. 
 
 \begin{table}[htp!]
 \begin{center}
@@ -185,58 +179,58 @@ The simple alleviation of finger numbering problem allowed to top the previous r
 	\caption{Results obtained by experimental feature sets by the libLinear library}
     \begin{tabular}{|c|c|c|c|c|}
     \hline
-    ~                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    feature set 1                     & 78.282\% & 78.283\%  & 50.596\% & 50.593\% \\ \hline
-    feature set 2                     & 78.282\% & 78.283\%  & 50.596\% & 50.593\% \\ \hline
-    feature set 3                     & 78.282\% & 78.283\%  & 50.596\% & 50.593\% \\ \hline
-    feature set 4                     & 78.205\% & 78.242\%  & 50.658\% & 50.575\% \\ \hline
-    feature set 5                     & 79.527\% & 79.502\%  & 55.284\% & 55.263\% \\ \hline
-    feature set 6                     & 88.0756\% & 88.138\% & 64.747\% & 64.830\% \\ \hline
+    ~                                                   & $5$ gestures, CV & $5$ gestures, test set & $10$ gestures, CV  & $10$ gestures, test set \\ \hline
+    feature set $1$                     & $78.282\%$ & $78.283\%$  & $50.596\%$ & $50.593\%$ \\ \hline
+    feature set $2$                     & $78.282\%$ & $78.283\%$  & $50.596\%$ & $50.593\%$ \\ \hline
+    feature set $3$                     & $78.282\%$ & $78.283\%$  & $50.596\%$ & $50.593\%$ \\ \hline
+    feature set $4$                     & $78.205\%$ & $78.242\%$  & $50.658\%$ & $50.575\%$ \\ \hline
+    feature set $5$                     & $79.527\%$ & $79.502\%$  & $55.284\%$ & $55.263\%$ \\ \hline
+    feature set $6$                     & $88.076\%$ & $88.138\%$  & $64.747\%$ & $64.830\%$ \\ \hline
     \end{tabular}
     \end{center}
 \end{table}
 
 While using more data and longer feature sets usually allows to achieve better results, it is worth to notice the growth of training time of classification technique. 
-In case of $5000$ training samples the typical training process of radial SVM took approximately 12 hours on standard desktop PC. 
-This computing time can be unacceptable by the users of the library, so the test with another SVM library libLinear~\cite{libLinear} was performed. 
-The libLinear's implementation of SVM utilizes the linear kernels, which are useful for large data training sets with multiple number of features. 
-This library reduced the training time to about 5 seconds.
+In case of $5000$ training samples the typical training process of radial SVM took approximately $12$ hours on standard desktop PC. 
+This computing time can be unacceptable by the users of the library and the tests with another SVM library, libLinear~\cite{libLinear} were performed. 
+The libLinear's implementation of SVM utilizes the linear kernels and is dedicated for the large data training sets with multiple number of features. 
+This library reduced the training time to about $5$ seconds.
 Again, the same tests as for the libSVM were performed to compare both approaches.
 All achieved results are presented in tab.~\ref{staticfeatlin}.
-For the 5 gesture case, the libLinear achieved 88.138\% on testing set while using feature set 6 compared to the 93.096\% achieved by libSVM in the same condition.
-In this case, the libLinear might be good choice as the recognition rate different is about 5\%.
-For 10 gesture case, libLinear achieved 64.830\% compared to 81.235\% by LibSVM, which is a significantly lower.
-It's up to user to decide, which library to use, but in most recognition taks applications the library can be learnt offline and only used online.
-That is why, the SVM with RBF kernels is a recommended choice in gesture recognition task.
+For the 5 gesture case, the libLinear achieved $88.138\%$ on testing set while using feature set 6 compared to the $93.096\%$ achieved by libSVM in the same condition.
+In this case, the libLinear might be good choice as the recognition rate is lower by about $5\%$.
+For 10 gesture case, libLinear achieved $64.830\%$ compared to $81.235\%$ by LibSVM, which is a significantly lower recognition rate.
+It's up to user to decide which library to use, but in most recognition applications, the library can be learnt offline and only used online.
+That is why, the authors of the thesis recommend the SVM with RBF kernels for static gesture recognition task.
 
-From the results obtained by the libSVM and libLinear on different feature sets, the feature set 6 was chosen as the one yielding the best results and used in further analysis.
+From the results obtained by the libSVM and libLinear on different feature sets, the feature set $6$ was chosen as the one yielding the best results and used in further analysis.
 
 
-Another factor, that might have an influence on the results is the preprocessing part, which should allow to partially remove noise from the data and thus increase the recognition rate. 
+Another factor, that might have an influence on the results is the preprocessing part, which should allow to partially remove noise from the data and thus increase the recognition rates. 
 The preprocessing operates in the window of hands poses recorded over time, which size can be modified. 
 The typical library usage allowed to gather data with $60Hz$, while it is assumed that the recognition can be performed with lower framerate. The difference can be efficiently used by defining the appropriate preprocessing window.
-For these reason, the experiments with no preprocessing and preprocessing with width size equal to 5, 10, 15, 20, 30 were performed and the influence on the recognition rate was examined.
+For these reason, the experiments with no preprocessing and preprocessing with width size equal to $5$, $10$, $15$, $20$, $30$ were performed and the influence on the recognition rate was examined.
 The results are presented in tab.~\ref{staticpre}.
 The achieved results confirm the need and importance of proper data preparation in task of data classification.
-For gesture recognition task containing 5 gesture poses, preprocessing allowed to increase the recognition rate from 93.096\% to over 99\% for window sizes equal or wider than 15. 
-In task of correctly detecting 10 gestures, the preprocessing allowed to increase recognition rate from 81.235\% to over 84\% for windows sizes equal or wider than 10.
-From those results, the preprocessing width of 10 was chosen as the one allowing to significantly improve recognition rate in almost any possible application of the library.
-The preprocessing of width 10 was used for further experiments.
+For gesture recognition task containing $5$ gesture poses, preprocessing allowed to increase the recognition rate from $93.096\%$ to over $99\%$ for window sizes equal or wider than $15$. 
+In task of correctly detecting 10 gestures, the preprocessing allowed to increase recognition rate from $81.235\%$ to over $84\%$ for windows sizes equal or wider than $10$.
+From those results, the preprocessing width of $10$ was chosen as the one allowing to significantly improve recognition rate in almost any possible application of the library.
+The preprocessing of width $10$ was used for all further experiments if not stated otherwise.
 
 \begin{table}[htp!]
 \begin{center}
 	\label{staticpre}
-	\caption{The recognition rate achieved with feature set 6 and different parameters of preprocessing}
+	\caption{The recognition rate achieved with feature set $6$ and different parameters of preprocessing}
     \begin{tabular}{|c|c|c|c|c|}
     \hline
-    preprocessing                                                   & 5 gestures, CV & 5 gestures, test set & 10 gestures, CV  & 10 gestures, test set \\ \hline
-    off                     & 92.762\% & 93,096\%  & 80.543\% & 81.235\% \\ \hline
-    width = 2               & 95.641\% & 96,527\%  & 82.736\% & 83.172\% \\ \hline
-    width = 5               & 95.861\% & 96,650\%  & 83.078\% & 83.565\% \\ \hline
-    width = 10              & 98.796\% & 98,965\%  & 83.602\% & 84.071\% \\ \hline
-    width = 15              & 98.981\% & 99,150\%  & 84.112\% & 84.494\% \\ \hline
-    width = 20              & 99.104\% & 99,242\%  & 84.329\% & 84.834\% \\ \hline
-    width = 30              & 99.232\% & 99,385\%  & 84.848\% & 85.320\% \\ \hline
+    preprocessing                                                   & $5$ gestures, CV & $5$ gestures, test set & $10$ gestures, CV  & $10$ gestures, test set \\ \hline
+    off                     & $92.762\%$ & $93.096\%$  & $80.543\%$ & $81.235\%$ \\ \hline
+    width = $2$               & $95.641\%$ & $96.527\%$  & $82.736\%$ & $83.172\%$ \\ \hline
+    width = $5$               & $95.861\%$ & $96.650\%$  & $83.078\%$ & $83.565\%$ \\ \hline
+    width = $10$              & $98.796\%$ & $98.965\%$  & $83.602\%$ & $84.071\%$ \\ \hline
+    width = $15$              & $98.981\%$ & $99.150\%$  & $84.112\%$ & $84.494\%$ \\ \hline
+    width = $20$              & $99.104\%$ & $99.242\%$  & $84.329\%$ & $84.834\%$ \\ \hline
+    width = $30$              & $99.232\%$ & $99.385\%$  & $84.848\%$ & $85.320\%$ \\ \hline
     \end{tabular}
     \end{center}
 \end{table}
