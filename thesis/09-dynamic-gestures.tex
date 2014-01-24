@@ -355,18 +355,18 @@ The results obtained by all proposed feature sets are presented in tab.~\ref{tab
 
 \begin{table}[htp!]
 	\label{tab:dyn1}
-	\caption{Results obtained by the HMM approach using different feature sets, 10 classes}
+	\caption{Results obtained by the HMM approach using different feature sets, $10$ classes}
     \begin{tabular}{|c|c|c|}
     \hline
-    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
-    feature set 1                     & 64.583\% & 61.806\%   \\ \hline
-    feature set 2                     & 69.583\% & 67.500\%   \\ \hline
-    feature set 3                     & 68.542\% & 66.111\%   \\ \hline
-    feature set 4,          		  & 77.917\% & 76.111\%   \\ \hline
-    feature set 5                     & 66.667\% & 63.889\%   \\ \hline
-    feature set 6,                    & 72.912\% & 70.417\%   \\ \hline
-    feature set 7,                    & 71.875\% & 69.167\%   \\ \hline
-    feature set 8,                    & 78.125\% & 77.222\%   \\ \hline
+    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+    feature set $1$                     & $64.583\%$ & $61.806\%$   \\ \hline
+    feature set $2$                     & $69.583\%$ & $67.500\%$   \\ \hline
+    feature set $3$                     & $68.542\%$ & $66.111\%$   \\ \hline
+    feature set $4$          		  & $77.917\%$ & $76.111\%$   \\ \hline
+    feature set $5$                     & $66.667\%$ & $63.889\%$   \\ \hline
+    feature set $6$                    & $72.912\%$ & $70.417\%$   \\ \hline
+    feature set $7$                    & $71.875\%$ & $69.167\%$   \\ \hline
+    feature set $8$                    & $78.125\%$ & $77.222\%$   \\ \hline
     \end{tabular}
 \end{table}
   
@@ -378,16 +378,16 @@ The tests were conducted using feature set $4$ and learning rate $\mu=0.05$.
 
 \begin{table}[htp!]
 	\label{tab:dyn1}
-	\caption{Results obtained by the HMM approach using feature set 4 and different class clusters}
+	\caption{Results obtained by the HMM approach using feature set $4$ and different numbers of class clusters}
     \begin{tabular}{|c|c|c|}
     \hline
-    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
-	k = 4                  	  & 77.292\% & 74.722\%   \\ \hline
-    k = 5               	  & 79.583\% & 77.639\%   \\ \hline
-    k = 6                     & 79.583\% & 77.639\%   \\ \hline
-    k = 8                     & 77.708\% & 75.977\%   \\ \hline
-    k = 10                    & 77.917\% & 76.111\%   \\ \hline
-    k = 12                    & 78.542\% & 77.361\%   \\ \hline
+    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+	$k = 4$                  	  & $77.292\%$ & $74.722\%$   \\ \hline
+    $k = 5$               	  & $79.583\%$ & $77.639\%$   \\ \hline
+    $k = 6$                    & $79.583\%$ & $77.639\%$   \\ \hline
+    $k = 8$                     & $77.708\%$ & $75.977\%$   \\ \hline
+    $k = 10$                    & $77.917\%$ & $76.111\%$   \\ \hline
+    $k = 12$                    & $78.542\%$ & $77.361\%$   \\ \hline
     \end{tabular}
 \end{table}
 The best obtained results are for the $k=5$ and $k=6$ allowing to increase of the recognition rate from cross-validation to $79.583\%$ and increase to the $77.639\%$ on the whole dataset. 
@@ -401,20 +401,21 @@ In proposed application, the learning rate $\mu = 0.05$ allowed to achieve the b
 
 \begin{table}[htp!]
 	\label{tab:dyn2}
-	\caption{Results obtained by the HMM approach using feature set 4, 5 observation classes and different learning rates}
+	\caption{Results obtained by the HMM approach using feature set $4$, $5$ observation classes and different learning rates}
     \begin{tabular}{|c|c|c|}
     \hline
-    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
-	$\mu$ = 0.01                  	  & 77.500\% & 76.944\%   \\ \hline
-    $\mu$ = 0.05                      & 80.417\% & 79.028\%   \\ \hline
-    $\mu$ = 0.1                      & 79.583\% & 77.639\%   \\ \hline
-    $\mu$ = 0.2                      & 69.583\% & 69.7222\%   \\ \hline
+    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+	$\mu$ = 0.01                  	  & $77.500\%$ & $76.944\%$   \\ \hline
+    $\mu$ = 0.05                      & $80.417\%$ & $79.028\%$   \\ \hline
+    $\mu$ = 0.1                      & $79.583\%$ & $77.639\%$   \\ \hline
+    $\mu$ = 0.2                      & $69.583\%$ & $69.7222\%$   \\ \hline
     \end{tabular}
 \end{table}
 
 
-The only parameter not tested in previous experiments is the number of state each HMM is composed of. 
+The only parameter not tested in the already described experiments is the number of state each HMM is composed of. 
 The previously used value was equal to $10$ states.
+The results from experiments are presented in tab.~\ref{tab:dyn3}. 
 The performed experiments confirmed the choice as smaller number of states ($5$) resulted in lower recognition rate, while greater number of states did not improve the result.
 The drawback of taking HMMs with big state numbers is the learning time. 
 The performed experiments and theoretical computational complexity confirm that the computational complexity grows linear with the chosen number of states, which in practical applications means linear grow of taken processing time.
@@ -422,14 +423,14 @@ The performed experiments and theoretical computational complexity confirm that 
 
 \begin{table}[htp!]
 	\label{tab:dyn3}
-	\caption{Results obtained by the HMM approach using feature set 4, 6 observation classes and different state elements}
+	\caption{Results obtained by the HMM approach using feature set $4$, $6$ observation classes and different state elements}
     \begin{tabular}{|c|c|c|}
     \hline
-    ~                                 & 5 gestures, CV & 5 gestures, whole dataset  \\ \hline
-	K = 5                  	  & 73.958\% & 73.611\%   \\ \hline
-    K = 10                     & 79.583\% & 77.639\%   \\ \hline
-    K = 20                    & 77.500\% & 76.528\%   \\ \hline
-    K = 30                     & 77.917\% & 76.25\%   \\ \hline
+    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+	$K = 5$                  	  & $73.958\%$ & $73.611\%$   \\ \hline
+    $K = 10$                     & $79.583\%$ & $77.639\%$   \\ \hline
+    $K = 20$                    & $77.500\%$ & $76.528\%$   \\ \hline
+    $K = 30$                     & $77.917\%$ & $76.25\%$   \\ \hline
     \end{tabular}
 \end{table}
 
