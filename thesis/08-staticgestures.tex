@@ -205,6 +205,14 @@ That is why, the authors of the thesis recommend the SVM with RBF kernels for st
 
 From the results obtained by the libSVM and libLinear on different feature sets, the feature set $6$ was chosen as the one yielding the best results and used in further analysis.
 
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=0.8\columnwidth]{figures/staticClassesRecognitionRates.png}
+ \caption{Recognition rates of classes for the feature set $6$}
+ \label{staticClassesRecognitionRates}
+\end{figure}
+
+For the problem of recognition of $10$ gestures were performed an additional experiment on the test set, which presents the recognition rates achieved for each class. As a result, can be checked, for which gesturesselected feature set was the best, and for which was wrong. The fig.~\ref{staticClassesRecognitionRates} shows the results of the experiment in the form of confusion matrix. Gestures of two hands fared the worst. The reason for such low recognition rate errors can be reading error from the device, which performs poorly with overlapping objects. For gesture ``Time'' additional problems which may affect the reading of data, can be hand position perpendicular to the Leap Motion and join the finger tips of one palm to the other. Can be also noticed that the fist is often confused with exposed thumb gesture (no. $6$).
 
 Another factor, that might have an influence on the results is the preprocessing part, which should allow to partially remove noise from the data and thus increase the recognition rates. 
 The preprocessing operates in the window of hands poses recorded over time, which size can be modified. 
