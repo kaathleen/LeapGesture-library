@@ -50,5 +50,42 @@ Classification presented above relates to the previously described taxonomy prop
 
 \section{Gesture data representation}
 
+LeapSDK provides built-in classes representing real--world object seen by the controller. The basic data unit we get from Leap Motion is a Frame. Frame contains objects like Hands and Pointables (Fingers and Tools), described by features directly related real attributes.
+
+Hand is an object representing a regular human hand. It contains Fingers, and is described by three dimensional values, like: position of center of hand, normal vector and direction vector (pointing from the center to the end of fingers). 
+
+Pointables are objects like Fingers or Tools (which are longer and thinner than Fingers). Both are described by the same set of features: position of tip, pointing direction vector, length and width.
+
+\begin{itemize}
+	\item Frame:
+	\begin{itemize}
+		\item Hands (position of center, normal vector, direction vector)
+			\begin{itemize}
+				\item Pointables: (tip position, pointing direction, length, width)
+				\begin{itemize}
+					\item Fingers
+					\item Tools
+				\end{itemize}
+			\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+All positions are expressed in milimeters, relative to position of controller which is always located in the center of the 3D space. Manufacturer claims, that the accuracy of device is about 0.01mm. Experiments shown results better than 0.2mm, using an industrial robot moving an object in controllers' field of view. This is more than enough, as accuracy of positioning human hand is about 0.4mm. \cite{lmAN} 
+
 \section{Additional processing steps}
+
+Stability of images acquired by Leap Motion can vary, which occurs as noise on captured data -- sometimes fingers may flicker, or nonexisting objects appear in view. Those malfunctions happen for a very short period of time, usually less then 5 frames. 
+
+To improve data stability, a simple preprocessing has been created. Its principle is based on median filter -- it uses a window with custom definied size. For a given frame, for every unique finger which have been captured in the the window, algorithm checks if it should be present in current frame, by checking its neighboor frames within defined radius $r$. It counts occurences of a finger ($f_0$) in a neighboorhood and decides:
+
+\begin{itemize}
+\item if $f_0 > r$, a finger should appear in that frame
+\item otherwise, there should not be a finger
+\end{itemize}
+
+If the finger does not exist in current frame and a check indicates it should, its position is calculated using finger positions in two closest frames where that finger appears, using linear interpolation. Otherwise, a finger is simply removed.
+
+Using data preprocessing causes delay in data transmission to processing threads, proportional $r+1$. For example, while capturing with 50 frames per second, with window radius $r=4$, the delay would be:
+
+$$ \frac{r+1}{fps} = \frac{5}{50} = 0.1 second $$
 

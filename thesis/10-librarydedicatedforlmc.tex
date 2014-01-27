@@ -1,6 +1,48 @@
+
 \chapter{LMGesture library dedicated for Leap Motion controller}
 
 \section{Architecture}
+
+One of the main goals of creating a library for gesture recognition using Leap Motion, was simplyfying the task for end-user and creating consistent, easy to use inferface for applications use. A library can be treated like a black box which takes data frames as a input and responds only if a gesture from defined set has been recognized. Code was written using C++. Library is distributed as open source code files.
+
+The library is divided into three main parts:
+\begin{itemize}
+\item process
+\item static gesture processing thread
+\item dynamic gesture processing thread
+\end{itemize}
+
+Process part is a middle layer between user application, Leap Motion and data processing threads. That approach improves clarity of code and makes modification easy.
+
+Workflow:
+\begin{enumerate}
+  \item User creates LeapProcess and LeapListener object.
+  \item User starts processing.
+  \item Library starts threads for static and dynamic processing.
+  \item Leap Motion reads a frame.
+  \item A frame is preprocessed and sent to processing threads.
+  \item If processing finds a gesture, an appropriate user--supplied method is invoked.
+\end{enumerate}
+
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=0.8\columnwidth]{figures/timeline.eps}
+ \caption[]{Sequence diagram of processing}
+ \label{processingtimeline}
+\end{figure}
+
+Elements of library:
+\begin{itemize}
+\item GestureFinger, GestureHand, GestureFrame, Vertex - classes representing respectively: Frame, Hand and Finger, with additional Vertex class, which simpifies operations on 3D points
+\item StorageDriver -- class supporting reading data from .lmr files
+\item FileListener -- listener grabbing input data from file and feeding them to LeapProcess
+\item LeapListener -- listener grabbing data from Leap Motion controller
+\item LeapProcess -- class responsible for creating  (in separate threads)
+\item LibLeap -- main file intented to being included by user to their project
+\item LMpre -- data preprocessing
+\item LMRecorder -- class responsible for translating Leap Motion API data structures to proposed by us
+\item RecognizedGesture -- abstract class, user should override its methods in order to handle actions which will execute after a gesture was successfully recognized
+\end{itemize}
 
 \subsection{Model}
 
@@ -170,6 +212,75 @@ List of Recorder features:
  \label{recorder}
 \end{figure}
 
-\section{Used libraries}
+\section{Used external libraries}
+
+\begin{itemize} 
+\item LeapSDK -- allows to access Leap Motion device and its API
+\item pthread -- library used to create lightweight processes (threads), to allow simulteanous (multithreaded) processing and provide task synchronization
+\item LIBSVM -- ''A Library for Support Vector Machines'', provides SVM classifying abilities
+\item Dlib -- provides linear algebra operations and machine learning ?
+\item HMMlib -- a C++ library for general hidden Markov Models
+\end{itemize}
 
 \section{Samples of code using the library dedicated to Leap Motion Controller}
+
+Here's an example of code required to use gesture recognition features.
+
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=b,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+\begin{lstlisting}
+// specifies method which will be executed after successful recognition
+class MyGestures: public RecognizedGestureListener {
+
+	void onStaticRecognized() {
+		cout << "Recognized static gesture!" << endl;
+	}
+
+	void onDynamicRecognized() {
+		cout << "Recognized dynamic gesture!" << endl;
+	}
+
+};
+
+int main(int argc, char **argv) {
+
+	// create instance of recognized gesture actions
+	MyGestures *gst = new MyGestures();
+
+	// create new data processor
+	LeapProcess *process = new LeapProcess(gst, true, true);
+
+	// create a listener and attach it to a process
+	LeapListener listener;
+	listener.attachToProcess(process);
+	
+	// create a Leap Motion controller object and direct its data output to a listener
+	Controller c(listener);
+
+	// start processing
+	process->start();
+	
+	// as processing works in a separate thread, application can now perform other tasks
+	cin.get();
+	
+	// stop processing
+	c.removeListener(listener);
+
+}
+\end{lstlisting}
