@@ -26,21 +26,15 @@
 #ifndef STATICREC_H_
 #define STATICREC_H_
 
-class StaticRec : AbstractSvmModule{
+class StaticRec : public AbstractSvmModule<TrainingStaticRecConf, TestingStaticRecConf>{
 public:
 	StaticRec();
 	~StaticRec();
-
-	TrainingResult* train(TrainingClassDatasetList &classDatasetList, TrainingStaticRecConf configuration);
-	TestingResult* classify(TestingFrame &testingFrame, TestingStaticRecConf configuration);
 private:
-	LogUtil* logger;
-
 	StaticRecFeatureVersion featureVersion;
 
-	void createTrainingFeaturesDataSet(TrainingClassDatasetList& classDatasets,
-			std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels, bool saveDatasetFile);
-	void createTestingFeaturesDataSet(TestingFrame &testingFrame, std::vector<double>& testDataset);
+	void setTrainingConfiguration(TrainingStaticRecConf configuration);
+	void setTestingConfiguration(TestingStaticRecConf configuration);
 
 	std::vector<double> addFeatures(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
 

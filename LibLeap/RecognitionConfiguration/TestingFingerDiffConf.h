@@ -11,7 +11,7 @@ public:
 	std::string configurationName;
 	double classificationThresholdRate;
 
-	TestingFingerDiffConf();
+	TestingFingerDiffConf(std::string configurationPath = "", std::string configurationName = DEFAULT_CONF_NAME, double classificationThresholdRate = 0.5);
 };
 
 #endif /* TESTINGFINGERDIFFCONF_H_ */

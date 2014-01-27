@@ -2,8 +2,9 @@
 
 const std::string TestingFingerDiffConf::DEFAULT_CONF_NAME = "defaultDataset";
 
-TestingFingerDiffConf::TestingFingerDiffConf() {
-	this->configurationName = DEFAULT_CONF_NAME;
-	this->classificationThresholdRate = 0.5;
+TestingFingerDiffConf::TestingFingerDiffConf(std::string configurationPath, std::string configurationName, double classificationThresholdRate) {
+	this->configurationPath = configurationPath;
+	this->configurationName = configurationName;
+	this->classificationThresholdRate = classificationThresholdRate;
 }
 

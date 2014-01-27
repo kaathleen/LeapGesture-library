@@ -11,6 +11,7 @@
 #include "../Util/LogUtil.h"
 
 #include "SVMclassificator.h"
+#include "AbstractSvmModuleBase.h"
 
 #include "../Model/RecognitionModule/TrainingClassDataset.h"
 #include "../Model/RecognitionModule/TrainingResult.h"
@@ -24,27 +25,70 @@
 #ifndef ABSTRACTSVMMODULE_H_
 #define ABSTRACTSVMMODULE_H_
 
-class AbstractSvmModule {
+template <class TRAIN_C, class TEST_C>
+class AbstractSvmModule : public AbstractSvmModuleBase {
 public:
-	AbstractSvmModule();
-	virtual ~AbstractSvmModule();
+	virtual TrainingResult* train(TrainingClassDatasetList &classDatasetList, TRAIN_C configuration) {
+		logger->debug("train entry");
+
+		setTrainingConfiguration(configuration);
+
+		createGenericClassNames(classDatasetList);
+		saveGenericClassNames();
+
+		std::vector<std::vector<double> > trainDataset; //features in samples
+		std::vector<int> trainLabels;
+		createTrainingFeaturesDataSet(classDatasetList, trainDataset, trainLabels,
+				configuration.saveDatasetFile);
+
+		SVMclassificator svm;
+		TrainingResult *trainResult = svm.train(trainDataset, trainLabels,
+				genericClassNames.size(), confPath, confName,
+				configuration.saveDatasetFile, configuration.kCrossValParam);
+
+		for (unsigned int i = 0; i < trainResult->trainClassResults.size(); i++) {
+			trainResult->trainClassResults[i].className = genericClassNames[i];
+		}
+
+		logger->debug("train exit");
+		return trainResult;
+	}
+
+	virtual TestingResult* classify(TestingFrame &testingFrame, TEST_C configuration) {
+		logger->debug("classify entry");
+
+		setTestingConfiguration(configuration);
+
+		std::string genericClassFilePath = PathUtil::combinePathFileNameAndExt(
+				confPath, confName, ConfExt::CLASS_MAP_EXT);
+		loadGenericClassNames(genericClassFilePath);
+
+		std::vector<double> testDataset; //features in samples
+		createTestingFeaturesDataSet(testingFrame, testDataset);
+
+		SVMclassificator svm;
+		TestingResult *testResult = svm.classify(testDataset,
+				genericClassNames.size(), confPath, confName,
+				configuration.classificationThresholdRate);
+
+		if (testResult->recognized) {
+			testResult->className = genericClassNames[testResult->genericClassName];
+			testResult->frameTimestamp = testingFrame.frame.getTimestamp();
+			for (unsigned int i = 0;
+					i < testResult->classificationClassResults.size(); i++) {
+				int genericClassIndex =
+						testResult->classificationClassResults[i].genericClassName;
+				testResult->classificationClassResults[i].className =
+						genericClassNames[genericClassIndex];
+			}
+		}
+
+		logger->debug("classify exit");
+		return testResult;
+	}
 protected:
-	const static int MAX_FINGER_COUNT;
-
-	std::string confPath;
-	std::string confName;
-
-	std::vector<std::string> genericClassNames;
-
-	virtual void createGenericClassNames(TrainingClassDatasetList& classDatasets);
-	virtual void saveGenericClassNames();
-	virtual void loadGenericClassNames(std::string filePath);
-
-	virtual std::vector<double> createFeatureSet(GestureFrame *gestureFrame, FileWriterUtil* datasetFile = NULL);
-	virtual std::vector<double> addFeatures(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile) = 0;
-
-	// feature util
-	virtual void addAttribute(float attributeValue, int& attributeCounter, std::vector<double> &attributes, FileWriterUtil* datasetFile);
+	virtual void setTrainingConfiguration(TRAIN_C configuration) = 0;
+	virtual void setTestingConfiguration(TEST_C configuration) = 0;
 private:
 };
 

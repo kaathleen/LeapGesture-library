@@ -1,8 +1,12 @@
 #include "TrainingStaticRecConf.h"
 
-TrainingStaticRecConf::TrainingStaticRecConf() {
-	this->saveDatasetFile = false;
-	this->featureSetVersion = VERSION6;
-	this->kCrossValParam = 5;
+TrainingStaticRecConf::TrainingStaticRecConf(std::string configurationPath,
+		std::string configurationName, bool saveDatasetFile,
+		StaticRecFeatureVersion featureSetVersion, int kCrossValParam) {
+	this->configurationPath = configurationPath;
+	this->configurationName = configurationName;
+	this->saveDatasetFile = saveDatasetFile;
+	this->featureSetVersion = featureSetVersion;
+	this->kCrossValParam = kCrossValParam;
 }
 

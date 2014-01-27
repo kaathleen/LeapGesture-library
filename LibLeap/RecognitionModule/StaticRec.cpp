@@ -8,90 +8,16 @@ StaticRec::~StaticRec() {
 	delete logger;
 }
 
-TrainingResult* StaticRec::train(TrainingClassDatasetList& classDatasetList, TrainingStaticRecConf configuration) {
-	logger->debug("train entry");
-
+void StaticRec::setTrainingConfiguration(TrainingStaticRecConf configuration) {
 	this->confPath = configuration.configurationPath;
 	this->confName = configuration.configurationName;
 	this->featureVersion = configuration.featureSetVersion;
-
-	createGenericClassNames(classDatasetList);
-	saveGenericClassNames();
-
-	std::vector<std::vector<double> > trainDataset; //features in samples
-	std::vector<int> trainLabels;
-	createTrainingFeaturesDataSet(classDatasetList, trainDataset, trainLabels, configuration.saveDatasetFile);
-
-	SVMclassificator svm;
-	TrainingResult *trainResult = svm.train(trainDataset, trainLabels,
-				genericClassNames.size(), confPath, confName,
-				configuration.saveDatasetFile, configuration.kCrossValParam);
-
-	for (unsigned int i=0; i<trainResult->trainClassResults.size(); i++) {
-		trainResult->trainClassResults[i].className = genericClassNames[i];
-	}
-
-	logger->debug("train exit");
-	return trainResult;
 }
 
-TestingResult* StaticRec::classify(TestingFrame &testingFrame, TestingStaticRecConf configuration) {
-	logger->debug("classify entry");
-
+void StaticRec::setTestingConfiguration(TestingStaticRecConf configuration) {
 	this->confPath = configuration.configurationPath;;
 	this->confName = configuration.configurationName;
 	this->featureVersion = configuration.featureSetVersion;
-
-	std::string genericClassFilePath = PathUtil::combinePathFileNameAndExt(
-			confPath, confName, ConfExt::CLASS_MAP_EXT);
-	loadGenericClassNames(genericClassFilePath);
-
-	std::vector<double> testDataset; //features in samples
-	createTestingFeaturesDataSet(testingFrame, testDataset);
-
-	SVMclassificator svm;
-	TestingResult *testResult = svm.classify(testDataset, genericClassNames.size(), confPath, confName, configuration.classificationThresholdRate);
-
-	if (testResult->recognized) {
-		testResult->className = genericClassNames[testResult->genericClassName];
-		testResult->frameTimestamp = testingFrame.frame.getTimestamp();
-		for (unsigned int i=0; i<testResult->classificationClassResults.size(); i++) {
-			int genericClassIndex = testResult->classificationClassResults[i].genericClassName;
-			testResult->classificationClassResults[i].className = genericClassNames[genericClassIndex];
-		}
-	}
-
-	logger->debug("classify exit");
-	return testResult;
-}
-
-void StaticRec::createTrainingFeaturesDataSet(TrainingClassDatasetList& classDatasetList,
-		std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels, bool saveDatasetFile) {
-	std::string datasetFilePath = PathUtil::combinePathFileNameAndExt(
-			confPath, confName, ConfExt::DAT_EXT);
-	FileWriterUtil datasetFile(datasetFilePath, !saveDatasetFile);
-	datasetFile.open();
-
-	for (unsigned int i = 0; i < classDatasetList.size(); i++) {
-		for (unsigned int j = 0; j < classDatasetList[i].dataset.size(); j++) {
-			// Defining the set of features
-			std::vector<double> row;
-			// sequence number of class
-			datasetFile << classDatasetList[i].genericClassName << " ";
-			row = createFeatureSet(&(classDatasetList[i].dataset[j]), &datasetFile);
-			datasetFile << "\n";
-
-			trainDataset.push_back(row);
-			trainLabels.push_back(classDatasetList[i].genericClassName);
-		}
-	}
-
-	datasetFile.close();
-}
-
-void StaticRec::createTestingFeaturesDataSet(TestingFrame &testingFrame, std::vector<double>& testDataset) {
-	// sequence number of class
-	testDataset = createFeatureSet(&(testingFrame.frame));
 }
 
 std::vector<double> StaticRec::addFeatures(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile) {

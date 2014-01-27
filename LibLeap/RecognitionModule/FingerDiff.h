@@ -25,20 +25,14 @@
 #ifndef FINGERDIFF_H_
 #define FINGERDIFF_H_
 
-class FingerDiff : AbstractSvmModule {
-
+class FingerDiff : public AbstractSvmModule<TrainingFingerDiffConf, TestingFingerDiffConf> {
 public:
 	FingerDiff();
 	~FingerDiff();
-	TrainingResult* train(TrainingClassDatasetList &classDatasetList, TrainingFingerDiffConf configuration);
-	TestingResult* classify(TestingFrame &testingFrame, TestingFingerDiffConf configuration);
 
 private:
-	LogUtil* logger;
-
-	void createTrainingFeaturesDataSet(TrainingClassDatasetList& classDatasets,
-			std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels, bool saveDatasetFile);
-	void createTestingFeaturesDataSet(TestingFrame &testingFrame, std::vector<double>& testDataset);
+	void setTrainingConfiguration(TrainingFingerDiffConf configuration);
+	void setTestingConfiguration(TestingFingerDiffConf configuration);
 
 	std::vector<double> addFeatures(GestureHand* tempHand, int fingerCount, int& attributeCounter, std::vector<double>& result, FileWriterUtil* datasetFile);
 

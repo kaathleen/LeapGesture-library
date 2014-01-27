@@ -12,7 +12,10 @@ public:
 	StaticRecFeatureVersion featureSetVersion;
 	double classificationThresholdRate;
 
-	TestingStaticRecConf();
+	TestingStaticRecConf(std::string configurationPath,
+			std::string configurationName,
+			StaticRecFeatureVersion featureSetVersion = VERSION6,
+			double classificationThresholdRate = 0.5);
 };
 
 #endif /* TESTINGSTATICRECCONF_H_ */

@@ -1,7 +1,12 @@
 #include "TestingStaticRecConf.h"
 
-TestingStaticRecConf::TestingStaticRecConf() {
-	this->classificationThresholdRate = 0.5;
-	this->featureSetVersion = VERSION6;
+TestingStaticRecConf::TestingStaticRecConf(std::string configurationPath,
+		std::string configurationName,
+		StaticRecFeatureVersion featureSetVersion,
+		double classificationThresholdRate) {
+	this->configurationPath = configurationPath;
+	this->configurationName = configurationName;
+	this->featureSetVersion = featureSetVersion;
+	this->classificationThresholdRate = classificationThresholdRate;
 }
 

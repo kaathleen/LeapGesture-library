@@ -12,7 +12,7 @@ public:
 	bool saveDatasetFile;
 	int kCrossValParam;
 
-	TrainingFingerDiffConf();
+	TrainingFingerDiffConf(std::string configurationPath = "", std::string configurationName = DEFAULT_CONF_NAME, bool saveDatasetFile = false, int kCrossValParam = 5);
 };
 
 #endif /* TRAININGFINGERDIFFCONF_H_ */

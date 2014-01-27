@@ -1,12 +1,41 @@
-#include "AbstractSvmModule.h"
+#include "AbstractSvmModuleBase.h"
 
-const int AbstractSvmModule::MAX_FINGER_COUNT = 5;
+const int AbstractSvmModuleBase::MAX_FINGER_COUNT = 5;
 
-AbstractSvmModule::AbstractSvmModule() {}
+AbstractSvmModuleBase::AbstractSvmModuleBase() {}
 
-AbstractSvmModule::~AbstractSvmModule() {}
+AbstractSvmModuleBase::~AbstractSvmModuleBase() {}
 
-std::vector<double> AbstractSvmModule::createFeatureSet(GestureFrame *gestureFrame,
+void AbstractSvmModuleBase::createTrainingFeaturesDataSet(TrainingClassDatasetList& classDatasetList,
+		std::vector<std::vector<double> >& trainDataset, std::vector<int>& trainLabels, bool saveDatasetFile) {
+	std::string datasetFilePath = PathUtil::combinePathFileNameAndExt(
+			confPath, confName, ConfExt::DAT_EXT);
+	FileWriterUtil datasetFile(datasetFilePath, !saveDatasetFile);
+	datasetFile.open();
+
+	for (unsigned int i = 0; i < classDatasetList.size(); i++) {
+		for (unsigned int j = 0; j < classDatasetList[i].dataset.size(); j++) {
+			// Defining the set of features
+			std::vector<double> row;
+			// sequence number of class
+			datasetFile << classDatasetList[i].genericClassName << " ";
+			row = createFeatureSet(&(classDatasetList[i].dataset[j]), &datasetFile);
+			datasetFile << "\n";
+
+			trainDataset.push_back(row);
+			trainLabels.push_back(classDatasetList[i].genericClassName);
+		}
+	}
+
+	datasetFile.close();
+}
+
+void AbstractSvmModuleBase::createTestingFeaturesDataSet(TestingFrame &testingFrame, std::vector<double>& testDataset) {
+	// sequence number of class
+	testDataset = createFeatureSet(&(testingFrame.frame));
+}
+
+std::vector<double> AbstractSvmModuleBase::createFeatureSet(GestureFrame *gestureFrame,
 		FileWriterUtil* datasetFile) {
 	std::vector<double> result;
 	GestureHand *tempHand = gestureFrame->getHand(0);
@@ -20,7 +49,7 @@ std::vector<double> AbstractSvmModule::createFeatureSet(GestureFrame *gestureFra
 	return result;
 }
 
-void AbstractSvmModule::createGenericClassNames(
+void AbstractSvmModuleBase::createGenericClassNames(
 		TrainingClassDatasetList& classDatasets) {
 	for (unsigned int i = 0; i < classDatasets.size(); i++) {
 		std::string className = classDatasets[i].className;
@@ -42,7 +71,7 @@ void AbstractSvmModule::createGenericClassNames(
 	}
 }
 
-void AbstractSvmModule::saveGenericClassNames() {
+void AbstractSvmModuleBase::saveGenericClassNames() {
 	std::string genericClassFilePath = PathUtil::combinePathFileNameAndExt(
 			confPath, confName, ConfExt::CLASS_MAP_EXT);
 	FileWriterUtil genericClassFile(genericClassFilePath);
@@ -53,7 +82,7 @@ void AbstractSvmModule::saveGenericClassNames() {
 	genericClassFile.close();
 }
 
-void AbstractSvmModule::loadGenericClassNames(std::string filePath) {
+void AbstractSvmModuleBase::loadGenericClassNames(std::string filePath) {
 	std::ifstream genericClassFile;
 	genericClassFile.open(filePath.c_str(), std::fstream::in);
 
@@ -70,7 +99,7 @@ void AbstractSvmModule::loadGenericClassNames(std::string filePath) {
 	genericClassFile.close();
 }
 
-void AbstractSvmModule::addAttribute(float attributeValue, int& attributeCounter,
+void AbstractSvmModuleBase::addAttribute(float attributeValue, int& attributeCounter,
 		std::vector<double> &attributes, FileWriterUtil* datasetFile) {
 	attributes.push_back(attributeValue);
 	if (datasetFile != NULL) {
