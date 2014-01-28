@@ -46,14 +46,14 @@ Elements of library:
 
 \subsection{Model}
 
-While data from the LMR files are being processed, they are stored using a specially created class representing the data. GestureFrame represents a single frame obtained from Leap Motion Controller. All gathered data is stored in a vector containing elements of GestureFrame type. GestureFrame holds information such as:
+While data obtained from Leap Motion Controller are being processed, they are stored using a specially created classes representing the data. The most important class is GestureFrame, which represents a single frame captured from device. All gathered data is stored in a vector containing elements of GestureFrame type. GestureFrame holds the following information:
 
 \begin{itemize}
 \item timestamp,
-\item list of hands occurring in the frame, stored in a vector containing elements GestureHand type.
+\item list of data of detected hands in the frame, stored in a vector containing elements of GestureHand type.
 \end{itemize}
 
-GestureHand stores parameters of hand performing gesture. In one instance of GestureFrame can be stored many instances of GestureHand. GestureHand holds following information:
+GestureHand stores parameters of hand performing a gesture. In one instance of GestureFrame many instances of GestureHand can be stored. GestureHand holds the following information:
 \begin{itemize}
 \item hand id,
 \item plam position,
@@ -64,7 +64,7 @@ GestureHand stores parameters of hand performing gesture. In one instance of Ges
 \item ordered value, obtained during hand sorting.
 \end{itemize}
 
-GestureFinger stores parameters of one finger. In one instance of GestureHand can be stored many instances of GestureFinger. GestureFinger contains:
+GestureFinger stores parameters of one finger. In one instance of GestureHand many instances of GestureFinger can be stored. GestureFinger contains:
 \begin{itemize}
 \item finger id,
 \item tip position,
@@ -78,33 +78,33 @@ GestureFinger stores parameters of one finger. In one instance of GestureHand ca
 \section{Processes}
 
 \subsection{The learning process}
-The learning process is a process, which shows how user can teach LMGesture library a new gesture. First  gestures must be recorded gestures in LMR format. To obtain recordings in this format user may use Gesture Recorder --  a module included in the library, which records data from Leap Mption Controller and saves it as LMR file. When all desired gestures are prepared, the user starts the process of learning by {\color{red}[tutaj dodać informacje jak uruchomić ten prces - prawdopodobnie jakas komenda + jakies parametry typu -d uczenie gestów dynamicznych, -s uczenie gestów statycznych + pliki LMR jako argumenty]}. 
+The learning process is a process of teaching LeapGesture library a new gesture by API user. First  gestures must be recorded gestures in LMR format. To obtain recordings in this format user may use Gesture Recorder --  a module included in the library, which records data from Leap Motion Controller and saves it as LMR file. When all desired gestures are prepared, the user starts the process of learning by {\color{red}[tutaj dodać informacje jak uruchomić ten prces - prawdopodobnie jakas komenda + jakies parametry typu -d uczenie gestów dynamicznych, -s uczenie gestów statycznych + pliki LMR jako argumenty]}.  
 
 \begin{figure}[htb]
 \centering
  \includegraphics[width=0.75\columnwidth]{figures/learningProcess.png}
- \caption{Diagram showing the learning process}
+ \caption{Diagram showing the learning process for LeapGesture library}
  \label{learningprocess}
 \end{figure}
 
-The first step in the learning process, which is performed by the system is the preprocessing of data. Training data should be deprived of noise or should not have lost fingers for several frames. According to user-specified parameters, the system will learn the gesture as a static or dynamic gesture. Appropriate way of learning corresponds to the appropriate gesture.
-For the learning static gesture system uses a support vector machine (SVM), and for dynamic gestures uses hidden Markov model (HMM). 
+The first step in the learning process, which is performed by the system is the preprocessing of data. Training data should be deprived of noise or should not have lost fingers for several frames. According to user-specified parameters, the system will learn the gesture as a static or dynamic gesture.
+System uses support vector machine (SVM) for learning of static gesture. For dynamic gestures it uses hidden Markov model (HMM). 
 The learning process for static gestures:
 \begin{enumerate}
-\item In the first stage, data which will be used during the learning is preprocessed.
+\item In the first stage, data which will be used during the learning are preprocessed.
 \item Data are scaled using internal scaling module. The result of this step are scale and range files. In the scale file scaled data is stored. The range file contains information that enables to scale any data in the same way.
-\item Scale file with scaled data is transmitted to training module. Data is processed using SVM algorithm. Additionally during learning process k-validation is performed and results are returned to the user. In process model file is created, which is used during static gesture recognition process.
+\item Scale file with scaled data is transmitted to a training module. Data is processed using SVM algorithm. Additionally during the learning process k-validation is performed and results are returned to the user. In the process model file is created, which is used during static gesture recognition process.
 \end{enumerate}
 {\color{red}[opisać learning process dla dynamicznych]}
 
 
 \subsection{The recognition process}
-The recognition process is a process in which the system attempts to match gesture given by a user, to the set of gestures obtained by the learning process. {\color{red}[Opis procesu recognition process, przedstawienie scenariusza uzycia w stosunku do architektury]}
+The recognition process is a process of recognizing the gesture performed by the API user. During this process, the system uses the information obtained from the learning process. {\color{red}[Opis procesu recognition process, przedstawienie scenariusza uzycia w stosunku do architektury]}
 
 \begin{figure}[htb]
 \centering
  \includegraphics[width=0.6\columnwidth]{figures/recognitionProcess.png}
- \caption{Diagram showing the recognition process}
+ \caption{Diagram showing the recognition process for LeapGesture library}
  \label{recognitionprocess}
 \end{figure}
 
@@ -133,7 +133,7 @@ Methods for a finger differentiation observer:
 As in the learning process for recognizing static gestures system uses SVM and for dynamic gestures -- HMM. For finger differentation system uses support vector machine. However, there are other classes than those used for static gestures recogniton.
 
 \section{Gesture recorder and visualizer}
-Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in section regards architecture of library {\color{red}[weryfikacja po skleceniu pracy]} and writes it to the LMR file, which is supported by the LMGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
+Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section $8.1.1$ and writes it to the LMR file, which is supported by the LMGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
 
 \subsection{LMR files}
 This is a file format specially developed for the LMGestue library, supported by various modules for example by the visualizer. The file structure is as follows:
@@ -143,6 +143,19 @@ This is a file format specially developed for the LMGestue library, supported by
 \item Hand parameters include: hand id, palm position, stabilized palm position, palm normal vector, palm direction vector and detected fingers parameters.
 \item Finger parameters include: finger id, finger tip position, stabilized tip position, finger direction vector, finger length and finger width.
 \end{itemize}
+
+Example lines from LMR file:
+\begin{quote}
+{\color{red}4.78984}\#{\color{blue}7 -9.15495;113.759;46.292 0;0;0 -0.157914;-0.981575;0.107585 -0.0196983;-0.105799;-0.994192}f1 {\color{green} -64.0011;122.41;-28.5433 -64.831;125.304;-38.845 -0.574857;0.0254502;-0.817858 50.4269 13.0854}
+
+{\color{red}16.6761}\#{\color{blue}7 -8.94345;113.525;46.2299 0;0;0 -0.158215;-0.981508;0.107745 -0.0193809;-0.106012;-0.994176}f1 {\color{green} -63.8514;122.144;-28.6825 -64.8135;125.248;-38.6638 -0.575861;0.0261358;-0.81713 50.4225 13.0803}
+
+{\color{red}27.4361}\#{\color{blue}7 -8.72478;113.293;46.1443 0;0;0 -0.159539;-0.981183;0.108754 -0.0203256;-0.106877;-0.994065}f1 {\color{green} -63.5346;121.826;-28.7338 -64.7892;125.183;-38.475 -0.576776;0.0265335;-0.816472 50.3783 13.1248}
+\end{quote}
+
+This example shows a frame containing a hand with one finger exposed. The color red is used to mark frame timestamp, the blue color 
+highlights information about hand, and the color green indicates information about the exposed finger.
+
 
 Technical information regards LMR files:
 \begin{itemize}
@@ -154,7 +167,7 @@ Technical information regards LMR files:
 \end{itemize}
 
 \subsection{Visualizer}
-Visualizer presents the contents of the lmr files. As mentioned earlier, each line of the file is a separately converted frame obtained from Leap Motion Controller. In one moment only one frame is displayed.
+Visualizer presents the contents of the LMR files. As mentioned earlier, each line of the file is a separately converted frame obtained from Leap Motion Controller. In one moment only one frame is displayed.
 Almost all fields of the model are visualized:
 \begin{itemize}
 \item palm position,
@@ -173,8 +186,10 @@ Almost all fields of the model are visualized:
 \end{figure}
 
 An example of parameter, which is not visualized, is finger width, in order not to obscure the image.
+
+List of Visualizer features:
 \begin{itemize}
-\item Program can read the lmr files chosen by the user.
+\item Program can read the LMR files chosen by the user.
 \item The user can load many files at once and select one of the recordings from the drop-down list.
 \item To facilitate the user work with visualizer, program has implemented windowing interface.
 \item The user has ability to rotate and zoom camera.
@@ -184,8 +199,16 @@ An example of parameter, which is not visualized, is finger width, in order not 
 \end{itemize}
 
 \subsection{Recorder}
-Recorder is part of the described module, which is responsible for collecting information from Leap Motion Controller and saving it to lmr file.
-Each frame read from the Leap Motion is captured, and then converted to the previously described model. Then the model is saved by the appropriate sub-module to LMR file. The conversion process contains also sorting hands and fingers. Hands are sorted by X coordinate of palmPosition. In the case of sorting fingers, the usual sort by X coordinate is not enough. The order of the fingers must be independent of hand rotation, therefore a different method for fingers sorting had to be proposed. Fingers are sorted by distance between finger tip position and plane, which is perpendicular to the surface of the hand and contains a direction vector of a hand. This plane can be determined using palm position, direction vector and normalized normal vector of the hand.
+Recorder is part of the described module, which is responsible for collecting information from Leap Motion Controller and saving it to LMR file.
+
+\begin{figure}[htb]
+\centering
+ \includegraphics[width=1\columnwidth]{figures/recorder.png}
+ \caption{Screenshot of the recorder}
+ \label{recorder}
+\end{figure}
+
+Each frame read from the Leap Motion is captured, and then converted to the previously described model. Then the model is saved by the appropriate sub-module to LMR file. The conversion process contains also sorting hands and fingers. Hands are sorted by X coordinate of palmPosition. In the case of sorting fingers, the usual sort by the X coordinate is not enough. The order of the fingers must be independent of hand rotation, therefore a different method for fingers sorting had to be proposed. Fingers are sorted by distance between finger tip position and the plane perpendicular to the surface of the hand. The plane has to contain the direction vector of a hand. This plane can be determined using the palm position, the direction vector and a normalized normal vector of the hand.
 Below is the formula for the distance ($d$) between finger tip position and designated plane.
 
 \[ d = -(f - pp) \cdot (\hat{hd} \times \hat{hn}) \]
@@ -193,8 +216,8 @@ Where:
 \begin{itemize}
     \item[] $f$: is the finger tip position
     \item[] $pp$: is the palm position
-    \item[] $hd$: is the hand direction vector
-    \item[] $hn$: is the hand normal vector
+    \item[] $\hat{hd}$: is a normalized hand direction vector
+    \item[] $\hat{hn}$: is a normalized hand normal vector
 \end{itemize}
 
 List of Recorder features:
@@ -204,13 +227,6 @@ List of Recorder features:
 \item The recorder cooperates with the visualizer. During recording performed gesture is visualized.
 \item There is a button to enter the visualizer mode.
 \end{itemize}
-
-\begin{figure}[htb]
-\centering
- \includegraphics[width=1\columnwidth]{figures/recorder.png}
- \caption{Screenshot of the recorder}
- \label{recorder}
-\end{figure}
 
 \section{Used external libraries}
 
