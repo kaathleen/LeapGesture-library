@@ -61,7 +61,7 @@ The algorithm utilizes a dynamic programming approach, by performing three steps
 \item computing backward probabilities,
 \item computing smoothed values.
 \end{enumerate}
-The forward pass phase for all states $i=1,..,N$ computes probability $P(X_i, o_{1:k})$, where $k$ is smaller than t, which represent the probability of ending up in state $X_i$ after first k observations. 
+The forward pass phase for all states $i=1,..,N$ computes probability $P(X_i | o_{1:k})$, where $k$ is smaller than t, which represent the probability of ending up in state $X_i$ after first k observations. 
 The backward pass computes probability $(P(o_{k+1:t}) | X_i)$, which are the probabilities of observing the rest of the observations from the state $X_i$.
 The smoothing part uses Bayes rule to compute the probability of state $X_i$ given the whole observation sequence:
 \begin{equation}
@@ -75,18 +75,20 @@ The time complexity of this algorithm is $O(N^2 T)$, where $T$ is the length of 
 The Viterbi algorithm is used to find the most likely sequence of hidden states that best explain the set of observations.
 The set of those states is called the Viterbi path. 
 The path can be found using the dynamic programming and implementing the equations:
-%\begin{equation}
-%\left\{\begin{array}{ll} V_{1,k} = P(o_1 | k)  \Pi_k & \textrm{ for } k = 1..N,
-% \\V_{t,k} = P(o_t | k)  \argmax_{x\in X}(a_{x,k}  V_{t-1,x}) & \textrm{ for } k = 1..N \textrm{ and } t = 2..T\end{array}\right
-%\end{equation}
-The solution can be understood as finding a path with maximum probability $\argmax_{x\in X}(V_{T,x})$. 
+\begin{equation}
+\begin{cases} V_{1,k} = P(o_1 | k)  \Pi_k & \mbox{for } k = 1..N \\ V_{t,k} = P(o_t | k)  \argmax_{x\in X} (a_{x,k}  V_{t-1,x}) & \mbox{for } k = 1..N\mbox{ and } t = 2..T \end{cases}
+\end{equation}
+The solution can be understood as finding a path with maximum probability $\argmax_{x\in X} (V_{T,x})$. 
 The time complexity of the algorithm is $O(N^2 T)$, where N is the number of states and T is the observation length and is equal to the complexity of the Forward-Backward algorithm.
 
 \subsection{Baum-Welch Algorithm}
 
 The Baum-Welch algorithm is the algorithm used to find the unknown parameters of the HMM.
-For each training example, the algorithms computes the state transition probabilities, observation probabilities in each state and initial probabilities, which maximize the likelihood of observation.
-Having the set of sets of observations, the algorithm can be used to train HMM to detect the sequences similar to the ones used in learning process.
+For each training example, the algorithms computes the state transition probabilities, observation probabilities in each state and initial probabilities, which maximize the likelihood of observed sequence.
+Having the set of sequences of observations, the algorithm can be used to train HMM to detect the sequences similar to the ones used in learning process.
+The algorithm uses the results obtained by the Forward-Backward algorithm to iteratively update the probabilities in the emission and the transition matrices.
+The training process is stopped after the desired level of a convergence is reached.
+
 
 \subsection{Structure of the HMM}
 
@@ -106,23 +108,23 @@ This structure after training process can be used to measure the probability tha
 \begin{figure}[htb]
 \centering
  \includegraphics[width=1\columnwidth]{figures/HMM_eng.png}
- \caption{Non-zero state transitions and states for the HMM enabling simultaneous detection of $m$ dynamic gestures}
+ \caption{Structure of the HMM's states and non-zero transitions used to simultaneously detect one of $M$ dynamic gestures}
  \label{HMMstructure}
 \end{figure}
 
-Having single dynamic gesture recognition problem modelled as the sequence of $n$ states in which $k$-th state is connected by the edges to the $k$ and $(k+1)$ state and to the all observations.
-Having the problem of distinguishing $m$ gestures translates to the problem of computing probabilities for $m$ sequential graphs.
-The problem of finding if and what dynamic gesture occurred is the problem of finding the probabilities from each $m$ HMM.
-Alternatively, the $m$ HMMs can be combined into one HMM were those single HMMs are treated as parallel paths.
-The structure of proposed single HMM is presented at fig.~\ref{HMMstructure}.
-Then the recognition process is a process of finding, which of the parallel paths is the most probable.
+Having the single dynamic gesture recognition problem modelled as the sequence of $N$ states in which $k$-th state is connected by the edges to the $k$ and $(k+1)$ state and to the all observations.
+The problem of distinguishing $M$ gestures translates to the problem of computing probabilities for $M$ sequential graphs.
+The problem of finding whether and what dynamic gesture occurred is the problem of finding the probabilities from each of the $M$ HMMs.
+Alternatively, the $M$ HMMs can be combined into one HMM were those single HMMs are treated as parallel paths.
+The structure of proposed single HMM is presented in Fig.~\ref{HMMstructure}.
+In this structure, the recognition process is a process of finding, which of the parallel paths is the most probable.
 
 \subsection{HMM observation from Leap Motion data}
 
 One of the problems when designing the system is a problem of correctly preparing the set of observations from the Leap Motion data.
-Most of the proposed solutions in the literature assume that the observations are 1-dimensional.
+Most of the proposed solutions in the literature assume that the observations are one-dimensional~\cite{hmmtutorial, hmm}.
 This poses a challenge as the raw data from Leap Motion is high-dimensional.
-That is the reason, why it is needed to reduce the dimensionality of the observation of the single hand in the predefined moment in time.
+This is the reason, why it is needed to reduce the dimensionality of the observation of the single hand in the predefined moment in time.
 
 To do this, unsupervised clustering algorithms were introduced. 
 For this task we examined 3 methods:
@@ -133,27 +135,29 @@ For this task we examined 3 methods:
 \end{itemize}
 
 Chinese whispers algorithm is an efficient randomized graph-clustering algorithm, which is time-linear in the number of edges.
-The algorithm was proposed in \cite{CW1} and thoroughly examined in Natural Language Processing problems. 
+The algorithm was proposed in work by Biemann~\cite{CW1} and thoroughly examined in Natural Language Processing problems. 
 The main advantage of the algorithm is the ability to independently determine the number of classes. 
-In tests, we used the implementation available in dLib-ml library\cite{dlib}, which provides multiple machine learning algorithms.
+In tests, we used the implementation available in dLib-ml library~\cite{dlib}, which provides multiple implementations of machine learning algorithms.
 
 Girvan-Newman clustering is a hierarchical algorithm used to detect clusters in a data represented as a graph.
-The algorithm progressively removes edges from the original network until it reaches the maximal number of iterations or the error condition is met.
-The solution iteratively calculates the eigenvalues of a created matrix using the power iteration method. 
+The algorithm progressively removes edges from the original network until it reaches the maximal number of iterations or an error condition is met.
+An adjacency matrix is used to represent the edges between data, where edge value is the similarity between two data points.
+The algorithm iteratively calculates the eigenvalues of a created matrix using the power iteration method. 
 In case of a complete graph, this algorithm is relatively slow.
 
-The another proposed approach is a k-means clustering algorithm.
-The idea for the algorithm comes from polish mathematician Hugo Steinhaus, but the first practical application has been presented in \cite{kmeans2}.
-The algorithms initially randomly selects $k$ starting points and performs iteratively 2 steps utilizing the idea of expected-maximization \cite{expectedmaximization}:
+Another proposed approach is k-means clustering algorithm.
+The idea for the algorithm comes from polish mathematician Hugo Steinhaus, but the first practical application has been presented by MacQueen~\cite{kmeans2}.
+The algorithm initially randomly selects $k$ starting points and iteratively performs two steps utilizing the idea of expected-maximization~\cite{expectedmaximization}:
 \begin{enumerate}
 \item For each data sample the algorithm calculates the distances to $k$ centroids and labels the samples with the label of the centroid with the smallest distance.
 \item For each class, the algorithm recalculates centroids position to the averaged position of all samples belonging to class.
 \end{enumerate} 
-The algorithm stops after maximum number of iterations or when the change between consecutive iterations is smaller then defined epsilon.
-Unfortunately, the algorithm requires the knowledge of the number of expected classes.
-Although there exists a heuristics methods aiding in correctly choosing the number of classes. 
-One of those methods is plotting the error sum of squares (SSE) within classes against the number of chosen classes. 
-In this plot the drastic drop of SSE is sough and the number of classes it happens is considered a good choice.
+The algorithm stops after the maximum number of iterations or when the change between two consecutive iterations is smaller then defined value.
+Unfortunately, the algorithm requires prior knowledge of the number of expected classes.
+Nevertheless, there exist heuristics methods aiding in correctly choosing the number of classes. 
+One of those methods is plotting the sum of squares error(SSE) within classes against the number of chosen classes. 
+The plot is then visually inspected and the fall in error is sough.
+The argument for which the drastic error drop is observed is believed to be the correct number of classes in the provided data.
 Another, more formal approach introduces the measure of dissimilarity and is called Silhouette width \cite{silhouette}.
 Declaring $a(i)$ as the average dissimilarity with all the other data within the same cluster and $b(i)$ as the lowest average dissimilarity to any other cluster which $i$ is not a part of, we can write a measure:
 \begin{equation}
