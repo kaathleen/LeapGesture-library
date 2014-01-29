@@ -3,36 +3,35 @@
 
 \section{Motivation}
 
-Currently human-computer interaction is based mainly on the use of pointing or typewriter-style devices. 
-Those types of interactions are limited and sometimes result in a complicated way of representing a simple operation.
-One of the examples is rotating a three-dimensional object.
+Currently, human-computer interaction is based mainly on the pointing or typewriter-style devices. 
+Those types of interactions are limited and sometimes may result in a complicated way of representing a simple operation.
+One of the overcomplicated control example is rotating a three-dimensional object.
 Using a computer mouse, user needs to grab an object and rotate it using a mouse that can only operate in a two-dimensional screen. 
-The operation is counter-intuitive and all users need a few attempts to understand how it is done. 
-When dealing with the rotation task in real work, it is simple how to move hands to rotate the object in a wanted way.
+The rotation operation represented in two-dimensional movement is counter-intuitive for humans and all users need a few attempts to understand how it is done. 
+When dealing with the rotation task in real world, it is simple how to move hands to rotate the object in a wanted way.
 Therefore, there exists a need for more natural human-computer interfaces.
-One of the proposed approaches utilizes human gestures that are interpreted by the computer.
-The most significant gestures are presented by hands.
-Utilizing hands as human-computer interface can supported by the fact, that hands are a significant part of non-verbal communication and are also used in the sign language.
-The another advantage of hands is the fact, that manipulative tasks performed in real world could be interpreted as gestures and then interpreted by the machine.
+One of the proposed approaches utilizes hand gestures that are interpreted by the computer.
+Utilizing hands as human-computer interface is supported by the fact, that hands are a significant part of a non-verbal communication and are also used in the sign language.
+The another advantage of hands is that manipulative tasks performed using hands in real world could be interpreted as a series of gestures and used as computer input.
 
-The latest technological solutions provide data that can be successfully used to control computer using gestures.
-Currently there are several devices that yield data useful for gesture recognition. 
+The newest sensors provide data that can be successfully used to control computer using gestures.
+Currently, there are several devices that yield data useful for gesture recognition. 
 An example of such a controller is Microsoft Kinect.
 The Kinect provides a three-dimensional data of the observed scene, but was designed for applications that interpret the whole body of the user. 
-That's why, it lacks the needed accuracy for hand gesture recognition
+That's why, it lacks the needed accuracy for a hand gesture recognition.
  
 Another device that is designed to track the movements of a hand and fingers is a Leap Motion Controller developed by Leap Motion, Inc. introduced in July 2013. 
-The Leap Motion as a small device, which can be placed in front of the computer, and it features extreme accuracy up to 0.01 mm. 
-The presented controller provides information about a position of each part of the hands detected in the observed space.
-The SDK attached to the device allows to recognize three simple pre-defined gestures: circle motion with one finger, swipe action and tapping the virtual keys. 
+The Leap Motion is a small device, which can be placed in front of the computer, that features extreme accuracy up to 0.01 mm. 
+The presented controller provides information about a position of each finger and part of the hand detected in the observed space.
+The SDK attached to the device allows to recognize three simple pre-defined gestures: circle motion with one finger, swipe action and tapping on the virtual keys. 
 The data contains information about every detected hand and is transmitted with frequency up 100~Hz. 
-The Leap Motion Controller is recognized to provide potential that can be used to develop more natural user interface. 
+The Leap Motion Controller is commonly recognized as a sensor that potentially revolutionize the human-computer interactions. 
 
-Currently, no library for gesture recognition supports the Leap Motion Controller and therefore potential user can not define an own database of gestures. 
-This is a important limitation when creating LM-based applications.
-When developers want to create applications utilizing the gesture recognition, they have to operate on low-level, unprocessed data.
-This results in additional work overhead to implement methods for gesture recognition.
-Therefore, the goal of this thesis is to develop the library for gesture recognition dedicated to Leap Motion device, which will satisfy the demand for this kind of library and thus help developers to implement applications using gesture human-computer interface.
+Currently, there exists no library for gesture recognition that supports the Leap Motion Controller.
+This is a important limitation when creating Leap Motion-based applications.
+Right now, when developers want to create applications utilizing the gesture recognition, they need to operate on low-level, unprocessed data.
+This results in additional work overhead of recognition implementation.
+Therefore, the goal of this thesis is to develop the library for gesture recognition dedicated to Leap Motion device, which will help developers to implement applications using human-computer interface utilizing the gestures.
 
 
 \section{Objectives}
@@ -69,7 +68,7 @@ The Chapter contains also descriptions of gestures classification, data represen
 The following Chapter 6 contains proposed methods, evaluation methodology and experiments for static gesture recognition. 
 Similarly, Chapter 7 presents a description of dynamic gesture recognition. 
 Chapter 8 summarizes the created library --- it's architecture, processes, additional modules, dependencies on other open-source libraries, and an example of it's usage. 
-Chapter 9 concludes the thesis and provides a possible future works. 
+Chapter 9 concludes the thesis and provides possible future works. 
 
 {\color{red} Michał Nowicki - svm do statycznych, hmm do dynamicznych
 Olgierd Pilarczyk - projektowanie architektury, impementacja preprocessingu
