@@ -3,25 +3,25 @@
 
 \section{Architecture}
 
-One of the main goals of creating a library for gesture recognition using Leap Motion, was simplyfying the task for end-user and creating consistent, easy to use inferface for applications use. A library can be treated like a black box which takes data frames as a input and responds only if a gesture from defined set has been recognized. Code was written using C++. Library is distributed as open source code files.
+One of the main goals of creating a library for gesture recognition using Leap Motion, was simplyfying the task for developers and creating a consistent, easy to use inferface for in--applications use. A library can be treated like a black box which takes data frames as an input and responds only if a gesture from a defined set has been recognized. It was written using C++. Library is open source.
 
 The library is divided into three main parts:
 \begin{itemize}
-\item process
-\item static gesture processing thread
-\item dynamic gesture processing thread
+\item process,
+\item static gesture processing thread,
+\item dynamic gesture processing thread.
 \end{itemize}
 
-Process part is a middle layer between user application, Leap Motion and data processing threads. That approach improves clarity of code and makes modification easy.
+Process part is a middle layer between user application, Leap Motion and data processing threads. It is reponsible for grabbing raw data, preprocessing it, and two--way communication with processing threads -- sending frames and receiving recognition events. That approach improves clarity of code and makes modifications easy.
 
-Workflow:
+After learning process has been completed, the workflow from application using the library is following:
 \begin{enumerate}
   \item User creates LeapProcess and LeapListener object.
   \item User starts processing.
   \item Library starts threads for static and dynamic processing.
   \item Leap Motion reads a frame.
   \item A frame is preprocessed and sent to processing threads.
-  \item If processing finds a gesture, an appropriate user--supplied method is invoked.
+  \item If processing thread finds a gesture, an appropriate user--supplied method is invoked.
 \end{enumerate}
 
 \begin{figure}[htb]
@@ -31,13 +31,13 @@ Workflow:
  \label{processingtimeline}
 \end{figure}
 
-Elements of library:
+Elements of library are following:
 \begin{itemize}
 \item GestureFinger, GestureHand, GestureFrame, Vertex - classes representing respectively: Frame, Hand and Finger, with additional Vertex class, which simpifies operations on 3D points
 \item StorageDriver -- class supporting reading data from .lmr files
 \item FileListener -- listener grabbing input data from file and feeding them to LeapProcess
 \item LeapListener -- listener grabbing data from Leap Motion controller
-\item LeapProcess -- class responsible for creating  (in separate threads)
+\item LeapProcess -- class responsible for starting processing threads and two-way communication with application
 \item LibLeap -- main file intented to being included by user to their project
 \item LMpre -- data preprocessing
 \item LMRecorder -- class responsible for translating Leap Motion API data structures to proposed by us
@@ -279,11 +279,15 @@ int main(int argc, char **argv) {
 	// create instance of recognized gesture actions
 	MyGestures *gst = new MyGestures();
 
-	// create new data processor
-	LeapProcess *process = new LeapProcess(gst, true, true);
+	// create new data processor (for static gestures only)
+	LeapProcess *process = new LeapProcess(gst, true, false);
 
+	// specify settings: path where model with given name is located
+	StaticSettings settings("/home/oli", "testmodel");
+	process->staticSettings = settings;
+	
 	// create a listener and attach it to a process
-	LeapListener listener;
+	LeapListener listener(3);	// 3 = radius of preprocessing windows
 	listener.attachToProcess(process);
 	
 	// create a Leap Motion controller object and direct its data output to a listener
