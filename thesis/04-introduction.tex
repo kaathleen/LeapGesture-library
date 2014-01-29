@@ -1,5 +1,4 @@
-
-\chapter{Introduction} % MN: ja bym sporo zmienił językowo - na dole macie wersje, w ktorej ja troche zmienilem. 
+\chapter{Introduction}
 
 \section{Motivation}
 
@@ -47,8 +46,7 @@ The objectives of this thesis includes:
 \item creation of a sample gestures database,
 \item performing gesture recognition tests using Leap Motion Controller.
 \end{itemize}
-
-% Moze wiecej o zalozeniach? Ze ma dzialac szybko  niz samych algorytmach?
+The additional requirement of the library is that the processing should be realized in real time.
 
 In this thesis, machine learning algorithms are used. 
 The main recognition modules are based on the Support Vector Machines (SVM) and the Hidden Markov Models (HMM). 
@@ -61,20 +59,19 @@ The thesis was developed during the from October 2013 till January 2014.
 \section{Thesis organization}
 % Wg mnie chapter x powinien byc robiony przez ref, zeby byl odnosnikiem
 The thesis is structured in following manner. 
-Chapter 1 presents the abstract of this thesis in two language versions --- English and Polish. 
-In Chapter 2 presents a motivation, objectives and a scope of this work. 
-Chapter 3 contains an overview of the literature concerning the gesture recognition problem. 
+Chapter 1 and 2 presents the abstracts of this thesis in two language versions --- Polish and English. 
+In Chapter 3 presents a motivation, objectives and a scope of this work. 
+Chapter 4 contains an overview of the literature concerning the gesture recognition problem. 
 In this part descriptions of gestures classifications and known methods used for gesture recognition are provided. 
-The presentation of Leap Motion Controller is in Chapter 4. Chapter 5 is devoted to gestures recognizing in the context of Leap Motion Controller.
+The presentation of Leap Motion Controller is in Chapter 5.
+Chapter 6 is devoted to gestures recognizing in the context of Leap Motion Controller.
 The Chapter contains also descriptions of gestures classification, data representations and additional processing steps for hand gestures recognition using the Leap Motion device. 
-The following Chapter 6 contains proposed methods, evaluation methodology and experiments for static gesture recognition. 
-Similarly, Chapter 7 presents a description of dynamic gesture recognition. 
-Chapter 8 summarizes the created library --- it's architecture, processes, additional modules, dependencies on other open-source libraries, and an example of it's usage. 
-Chapter 9 concludes the thesis and provides possible future works. 
+The following Chapter 7 contains proposed methods, evaluation methodology and experiments for static gesture recognition. 
+Similarly, Chapter 8 presents a description of dynamic gesture recognition. 
+Chapter 9 summarizes the created library --- it's architecture, processes, additional modules, dependencies on other open-source libraries, and an example of it's usage. 
+Chapter 10 concludes the thesis and provides possible future works. 
 
-{\color{red} Michał Nowicki - svm do statycznych, hmm do dynamicznych
-Olgierd Pilarczyk - projektowanie architektury, impementacja preprocessingu
-Jakub Wąsikowski - visualizer, recorder, rozróżnianie palców, wyznacznie liczby klastrów, klasyfikacja gestów
-Katarzyna Zjawin - visualizer, recorder, rozróżnianie palców, klasyfikacja gestów}
+
+In this thesis Michał Nowicki described dynamic and static gestures without finger recogniton and confusion matrix. He also implemented code of processing algorithms for static and dynamic gestures recognition without an integration into the library and performed tests evaluating the static and dynamic gesture recognition. Olgierd Pilarczyk has wrote a description of Leap Motion controller, data models, data preprocessing and library architecture. He also made Leap Motion recorder research and implemented preprocessing and integration dynamic gesture module to library. Jakub Wąsikowski wrote the introduction to gesture recognition and described classification of gestures and confusion matrix of static gestures. He also participated in research and invention of gesture classification. He implemented finger recognition, recorder and vizualizer, model and format of gestures recordings, determining the number of clusters for dynamic gestures, class for cross validation, integration static gesture and finger recognition modules to library. Katarzyna Zjawin wrote the introduction, Section regards finger recognition, description of the data model, recognition process, learning process, recorder and visualizer. She also participated in research and invention of gesture classification. She implemented and tested finger recognition, recorder i visualizer, model and format of gestures recordings.
 
 
