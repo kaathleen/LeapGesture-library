@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <string>
 
+#include "SVMclassificator.h"
+
 #include "Preprocessing/LMpre.h"
 
 #include "Model/GestureFinger.h"
@@ -203,16 +205,16 @@ vector<double> features1(GestureFrame *gestureFrame, ofstream& svmGesture) {
 			result, svmGesture);*/
 
 	//ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
-	/*nearestFingersDistancesRatiosAttribute(tempHand, fingerCount, attributeCounter,
-			result, svmGesture);*/
+	nearestFingersDistancesRatiosAttribute(tempHand, fingerCount, attributeCounter,
+			result, svmGesture);
 
 	//ratio of the finger thickness to the maximal finger thickness
 	fingerThicknessRatiosAttribute(fingerCount, tempHand, attributeCounter,
 			result, svmGesture);
 
 	// angles between fingers
-	/*anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
-			result, svmGesture);*/
+	anglesBetweenFingersAttribute(tempHand, fingerCount, attributeCounter,
+			result, svmGesture);
 
 	// angles between finger and first finger relative to palmPosition
 	anglesBetweenFingersRelativeToPalmPosAttribute(tempHand, fingerCount,
@@ -291,22 +293,103 @@ void createFeaturesDataSets(const int& NUMBER_OF_CLASSES, char** argv,
 int main(int argc, char **argv) {
 
 	if (argc < 3) {
-		printf("Usage: %s file_class1 file_class2 ...\n", argv[0]);
-		exit(1);
+			printf("Usage: %s file_class1 file_class2 ...\n", argv[0]);
+			exit(1);
 	}
 	const int NUMBER_OF_FILES = argc - 1;
 
 	// For every class we have a matrix:
-	//  - in which each row is a row of features for 1 example
-	//  - number of rows = number of samples
+	// - in which each row is a row of features for 1 example
+	// - number of rows = number of samples
 	vector<vector<vector<double> > > featuresInSamplesInClasses;
 
 	vector<string> classNames;
 
 	// Create features data sets
 	createFeaturesDataSets(NUMBER_OF_FILES, argv,
-			featuresInSamplesInClasses, classNames);
+					featuresInSamplesInClasses, classNames);
 
+	
+
+	cout << "Preprocessing" << endl;
+	/*int window_size = 5;
+	 for (int i=0;i<NUMBER_OF_CLASSES;i++)
+	 {
+	 for (int j=0;j<setSize[j];j+=window_size)
+	 {
+	 for (int k=0;k<window_size;k++)
+	 {
+	 feature[i][j+k];
+	 }
+
+	 }
+	 cout << setSize[i] << endl;
+	 }
+
+	 feature[0].erase( feature[0].begin());
+	 */
+
+	// Number of class
+	const int NUMBER_OF_CLASS = featuresInSamplesInClasses.size();
+
+	cout << "Learning" << endl;
+	for (int i = 0; i < NUMBER_OF_CLASS; i++) {
+			cout << featuresInSamplesInClasses[i].size() << endl;
+	}
+
+	// Separation of data into learning and testing sets
+	int trainSetSize = 0;
+	int testSetSize = 0;
+
+	vector<int> trainLabel, testLabel;
+	vector<vector<double> > trainFeatures, testFeatures;
+	for (int i = 0; i < NUMBER_OF_CLASS; i++) {
+			int class_train_size = (featuresInSamplesInClasses[i].size() * TRAIN_TEST_PERCENT) / 100;
+			int class_test_size = featuresInSamplesInClasses[i].size() - class_train_size;
+			trainSetSize += class_train_size;
+			testSetSize += class_test_size;
+
+			for (int j = 0; j < class_train_size; j++) {
+					trainLabel.push_back(i + 1);
+					trainFeatures.push_back(featuresInSamplesInClasses[i][j]);
+			}
+			for (int j = class_train_size; j < featuresInSamplesInClasses[i].size(); j++) {
+					testLabel.push_back(i + 1);
+					testFeatures.push_back(featuresInSamplesInClasses[i][j]);
+			}
+	}
+
+	cout << "Train: " << trainLabel.size() << " " << trainFeatures[0].size()
+					<< endl;
+
+	cout << "Prepared test set" << endl;
+	// Creating an object responsible for learning
+	SVMclassificator SVM;
+
+	// Learning the classifier
+	SVM.train(trainFeatures, trainLabel, NUMBER_OF_CLASS);
+	
+	cout << "Model learned" << endl;
+
+	/*cout << "Model learned" << endl;
+	// Predicting the labels on the other TRAIN_TEST_PERCENT
+	vector<int> pred = SVM.classify(testFeatures);
+
+	// Counting the number of correctly recognized labels
+	int count = 0;
+	for (int i = 0; i < testSetSize; i++) {
+			if (pred[i] == testLabel[i]) {
+					count++;
+			}
+	}
+
+	// Printing results
+	cout << endl << "-------- Result --------" << endl;
+	cout << "Recognition rate [%] : " << (count * 1.0 / testSetSize * 100.0)
+					<< "%" << endl;
+	cout << "Correctly recognized [number] : " << count << endl;
+	cout << "Total size of test set [number] : " << testSetSize << endl;
+*/
 	return 0;
 }
 

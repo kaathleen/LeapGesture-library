@@ -228,6 +228,30 @@ Model/Vertex.cpp.s:
 	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/Model/Vertex.cpp.s
 .PHONY : Model/Vertex.cpp.s
 
+Preprocessing/LMpre.o: Preprocessing/LMpre.cpp.o
+.PHONY : Preprocessing/LMpre.o
+
+# target to build an object file
+Preprocessing/LMpre.cpp.o:
+	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/Preprocessing/LMpre.cpp.o
+.PHONY : Preprocessing/LMpre.cpp.o
+
+Preprocessing/LMpre.i: Preprocessing/LMpre.cpp.i
+.PHONY : Preprocessing/LMpre.i
+
+# target to preprocess a source file
+Preprocessing/LMpre.cpp.i:
+	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/Preprocessing/LMpre.cpp.i
+.PHONY : Preprocessing/LMpre.cpp.i
+
+Preprocessing/LMpre.s: Preprocessing/LMpre.cpp.s
+.PHONY : Preprocessing/LMpre.s
+
+# target to generate assembly for a file
+Preprocessing/LMpre.cpp.s:
+	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/Preprocessing/LMpre.cpp.s
+.PHONY : Preprocessing/LMpre.cpp.s
+
 SVMclassificator.o: SVMclassificator.cpp.o
 .PHONY : SVMclassificator.o
 
@@ -300,6 +324,9 @@ help:
 	@echo "... Model/Vertex.o"
 	@echo "... Model/Vertex.i"
 	@echo "... Model/Vertex.s"
+	@echo "... Preprocessing/LMpre.o"
+	@echo "... Preprocessing/LMpre.i"
+	@echo "... Preprocessing/LMpre.s"
 	@echo "... SVMclassificator.o"
 	@echo "... SVMclassificator.i"
 	@echo "... SVMclassificator.s"

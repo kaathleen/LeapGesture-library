@@ -19,7 +19,7 @@
 class SVMclassificator
 {
 public:
-	svm_problem *problem;
+	svm_problem *svmTrainingSet;
 	svm_model *svmModel;
 
 	int NUMBER_OF_CLASSES;
