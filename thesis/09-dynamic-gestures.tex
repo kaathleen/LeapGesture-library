@@ -25,7 +25,7 @@ Each HMM can be fully defined by the ($T$, $E$, $\Pi$).
 
 \begin{figure}[htbp!]
 \centering
- \includegraphics[width=0.8\columnwidth]{figures/HMM_wiki.png}
+ \includegraphics[width=0.7\columnwidth]{figures/HMM1.jpg}
  \caption[]{Solution blocks of learning and testing parts in task of dynamic gesture recognition\footnotemark}
  \label{dynamicgestureswiki}
 \end{figure}
@@ -92,9 +92,9 @@ The training process is stopped after the desired level of a convergence is reac
 
 \subsection{Structure of the HMM}
 
-\begin{figure}[htb]
+\begin{figure}[htbp!]
 \centering
- \includegraphics[width=1\columnwidth]{figures/SingleHMM.png}
+ \includegraphics[width=1\columnwidth]{figures/HMMSingle.jpg}
  \caption{Structure of the HMM's states and non-zero transitions used to detect a single dynamic gesture}
  \label{singlehmm}
 \end{figure}
@@ -105,12 +105,7 @@ The states can be understood as the phases of hand movement that happen when a w
 The self-transitions are used to model the different speeds of the gestures and thus allow to achieve a more robust system.
 This structure after training process can be used to measure the probability that the dynamic gesture occurred given the set of observations.
 
-\begin{figure}[htb]
-\centering
- \includegraphics[width=1\columnwidth]{figures/HMM_eng.png}
- \caption{Structure of the HMM's states and non-zero transitions used to simultaneously detect one of $M$ dynamic gestures}
- \label{HMMstructure}
-\end{figure}
+
 
 Having the single dynamic gesture recognition problem modelled as the sequence of $N$ states in which $k$-th state is connected by the edges to the $k$ and $(k+1)$ state and to the all observations.
 The problem of distinguishing $M$ gestures translates to the problem of computing probabilities for $M$ sequential graphs.
@@ -118,6 +113,13 @@ The problem of finding whether and what dynamic gesture occurred is the problem 
 Alternatively, the $M$ HMMs can be combined into one HMM were those single HMMs are treated as parallel paths.
 The structure of proposed single HMM is presented in Fig.~\ref{HMMstructure}.
 In this structure, the recognition process is a process of finding, which of the parallel paths is the most probable.
+
+\begin{figure}[htbp!]
+\centering
+ \includegraphics[width=1\columnwidth]{figures/HMM_eng.jpg}
+ \caption{Structure of the HMM's states and non-zero transitions used to simultaneously detect one of $M$ dynamic gestures}
+ \label{HMMstructure}
+\end{figure}
 
 \subsection{HMM observation from Leap Motion data}
 
@@ -174,7 +176,7 @@ The $s(i)$ values are used to find the proper number of clusters.
 
 \begin{figure}[htb]
 \centering
- \includegraphics[width=1\columnwidth]{figures/DynamicGestures.png}
+ \includegraphics[width=1\columnwidth]{figures/DynamicGestures2.jpg}
  \caption{Solution blocks of learning and testing parts used in the dynamic gesture recognition}
  \label{dynamicgesturesflow}
 \end{figure}
