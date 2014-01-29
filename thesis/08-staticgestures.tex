@@ -13,7 +13,7 @@ The static gesture recognition problem can be stated as a problem invariant to t
 That means that for each detected hand, it's position and orientation can be treated as a new data point, uncorrelated to previously shown gestures.
 With this assumption, one can easily generate multiple samples from the sensors in short time, but it also gives an opportunity to look at the static gesture recognition problem as a problem of classification.
 
-In literature, most of the approaches uses two-dimensional representation of gestures, which makes recognition problems relatively simple and therefore allows to use simple classification algorithms, e.g., k-NNs \cite{gestureRecognitionToolbox}. 
+In literature, most of the approaches uses two-dimensional representation of gestures, which makes recognition problems relatively simple and therefore allows to use simple classification algorithms, e.g., k-NNs~\cite{gestureRecognitionToolbox}. 
 The three-dimensional representation of data is more complicated to model by the set of features and finally successfully label.
 The 3D data yield by the sensor is represented in the sensor's coordinate system. 
 Due to this fact, even a small change of the position or orientation of a hand with respect to the location of the sensor can negatively affect the gesture recognition system.
@@ -83,13 +83,13 @@ The task is approached in experimental Section~\ref{static:exp}.
 \subsection{Assumptions}\label{staticAssumptions}
 To provide a user with a library working in different conditions, it was assumed that a gesture is treated as the same one independently with respect to the translation, rotation and scale of the hand. 
 This assumption means that the static gesture rotated by unknown angles, translated in the sensor coordinate system and also with different hand sizes should still be recognized as the same gesture.
-Invariance to the rotation, translation and scale poses a great challenge to the recognition, but allows the future users of API to fully utilize the power of the library.
+Invariance to the rotation, translation and scale poses a great challenge to the recognition, but allows the future users of the API to fully utilize the power of the library.
 It is worth mentioning that, it does not reduce the possible applications of the library, as an assignment of a static gesture to an already defined class allows to find the transformation between the model of the class and the observed gesture.
 This transformation can be used to examine the parameters of the instance of the model, e.g., rotation of the hand.
 
 \subsection{Recorded Datasets}
 
-To propose and test the quality of the features twelve static gestures were chosen:
+To propose and test the quality of the features ten static gestures were chosen:
 \begin{enumerate}
 \item the peace sign,
 \item a fist,
@@ -109,11 +109,12 @@ To propose and test the quality of the features twelve static gestures were chos
  \caption{Recorded static gestures used for evaluation}
  \label{staticgesturesdata}
 \end{figure}
-The gestures are also presented in Fig.~\ref{staticgesturesdata}.
+The gestures are also presented in Fig.~\ref{staticgesturesdata}. 
 
 The sample data of each gestures were recorded using the continuous mode of recording, while moving the hands in different directions and changing the orientation of the hands.
 The hands were moved and rotated as each repeated static gesture is always a little bit different from the previously recorded samples.
 In total, for each of the proposed classes, each author of this thesis recorded approximately 1000 samples.
+The recorded dataset was called the static 10 set and was used in further evaluation.
 
 Having samples with known labels, the whole dataset was separated into training and testing sets in relation $2:1$. 
 For the training, the k-fold cross-validation (CV) scheme was used, which searches for optimal $C$ and $\gamma$ parameters of SVM.
@@ -139,18 +140,19 @@ The goal of the first experiments was to find the proper set of features. Severa
 This feature set did not take into account the relative position of fingers to the hand.
 The second feature set is the first feature set extended by the distances between consecutive finger tips and the position of the hand's palm.
 The third feature set contains features from the second feature set extended by the five angles between fingers and normal of hand's palm.
-The firstly tested set of all static gestures contained gestures, which were undistinguishable for the Leap Motion, because they did not take into account the way, the Leap Motion works. 
-For gestures like fist, the recorded data contained almost no information how to classify those gestures.
-That's why the experiments were repeated on the five gestures, which could be easily distinguish using the data provided by Leap Motion. 
-For this experiment the gestures peace, hand, ''I love you'', fist with thump up and rotating knob by 5 fingers were chosen.
-The results achieved by those methods are presented in Table~\ref{staticfeat}.
+The firstly tested set of all static gestures contained other then described gestures, but some of them were undistinguishable for the Leap Motion as the gestures did not have any visible fingers.
+Few of those gestures like fist or ``Time'' were used in classification to examine, how and if the recorded data with almost no information can be used to classify more challenging gestures.
+But for experiments the five gestures set was also chosen, which could be distinguishable using the data provided by Leap Motion. 
+The gestures: peace, hand, ''I love you'', fist with thump up and rotating knob by 5 fingers were chosen and called the static 5 set.
+The experiments were also conducted for the static 5 set.
+The results achieved using proposed feature sets on the static 5 set and the static 10 set are presented in Table~\ref{staticfeat}.
 
 \begin{table}[htp!]
 	\label{staticfeat}
 	\caption{Results obtained by proposed feature sets using the libSVM library}
     \begin{tabular}{ccccc}
     \hline
-    ~                                                   & $5$ gestures, CV & $5$ gestures, test set & $10$ gestures, CV  & $10$ gestures, test set \\ \hline
+    ~                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline
     feature set $1$                     & $87.1\%$ & $87.9\%$ & $70.0\%$ & $68.4\%$   \\ \hline
     feature set $2$                     & $87.1\%$ & $87.9\%$ & $70.0\%$ & $68.4\%$          \\ \hline
     feature set $3$                     & $87.1\%$ & $87.9\%$ & $70.0\%$ & $68.4\%$           \\ \hline
@@ -160,21 +162,21 @@ The results achieved by those methods are presented in Table~\ref{staticfeat}.
     \end{tabular}
 \end{table}
 
-For the problem of recognition of five gestures, three first feature sets resulted in over $87\%$ recognition rate on testing sets.
+For the problem of recognition on the static 5 set, three first feature sets resulted in over $87\%$ recognition rate on testing sets.
 The same tests for the problem of recognition of $10$ gestures resulted in lower recognition rates.
 For feature sets 1--3 the recognition rate was below $70\%$, which could be unsatisfying from the perspective of the purpose of the application.
-The low recognition rate was analysed.  
-The analysis revealed that the fingers are numbered by Leap Motion accordingly to the position in Z axis of the tip of the finger.
+The results for feature sets 1--3 are the same, which suggests than additional information in the feature set 2--3 is not used for classification.  
+The further analysis revealed that the fingers in the data provided by Leap Motion SDK are numbered accordingly to the position in Z axis of the tip of the finger.
 This means that when finger's tips are approximately on the same position in Z axis, the numbering can change rapidly and proposed features are compared between different fingers.
 To achieve features that would be invariant to the numbering of the fingers, the feature set was slightly modified.
 Instead of containing the absolute angles and distances between consecutive fingers, it was proposed to contain the five greatest values of angles and five greatest values of distances between all combinations of finger pairings.
 The same sorting approach was used for the angles and distances between fingers and hand's palm.
 The feature sets $1$, $2$, $3$ with sorting scheme were respectively called feature sets $4$, $5$, $6$.
-Again, the same dataset with $5$ and $10$ gestures was used to evaluate those methods. 
+Again, the static 5 set and the static 10 set were used to evaluate those methods. 
 The results are presented in Table~\ref{staticfeat}.
 This approach was tested on the same training set and allowed to increase the recognition rate.
 The best results in both tasks were achieved in case of feature sets $6$.
-The simple alleviation of finger numbering problem allowed to top the previous results with recognition rates $93.096\%$ for $5$ gesture problem and $81.235\%$ for $10$ gestures problem. 
+The simple alleviation of finger numbering problem allowed to top the previous results with recognition rates $93.096\%$ for the static five set and $81.235\%$ for the static 10 set. 
 
 \begin{table}[htp!]
 \begin{center}
@@ -182,7 +184,7 @@ The simple alleviation of finger numbering problem allowed to top the previous r
 	\caption{Results obtained by proposed feature sets using the libLinear library}
     \begin{tabular}{ccccc}
     \hline
-    ~                                                   & $5$ gestures, CV & $5$ gestures, test set & $10$ gestures, CV  & $10$ gestures, test set \\ \hline
+    ~                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline
     feature set $1$                     & $78.3\%$ & $78.3\%$  & $50.6\%$ & $50.6\%$ \\ \hline
     feature set $2$                     & $78.3\%$ & $78.3\%$  & $50.6\%$ & $50.6\%$ \\ \hline
     feature set $3$                     & $78.3\%$ & $78.3\%$  & $50.6\%$ & $50.6\%$ \\ \hline
@@ -193,7 +195,7 @@ The simple alleviation of finger numbering problem allowed to top the previous r
     \end{center}
 \end{table}
 
-While using more data and longer feature sets usually allows to achieve better results, it is worth to notice the increased learning time. 
+While using more data and longer feature sets usually allows to achieve better results, it also increases the learning time. 
 In case of $5000$ training samples the typical training process of radial SVM took approximately $12$ hours on a desktop PC with Intel Core i7 and 6 GB of RAM. 
 This computing time can be unacceptable by the users of the library. 
 This is why the tests with another SVM library, libLinear~\cite{libLinear} were performed. 
@@ -201,9 +203,9 @@ The libLinear's implementation of SVM utilizes linear kernels and is dedicated f
 This library reduced the training time to about $5$ seconds.
 Again, the same tests as for the libSVM were performed to compare both approaches.
 All achieved results are presented in Table~\ref{staticfeatlin}.
-For the 5 gestures case, the libLinear achieved $88.1\%$ on the testing set while using feature set 6 compared to $93.1\%$ achieved by libSVM in the same condition.
+For the static 5 set, the libLinear achieved $88.1\%$ on the testing set while using feature set 6 compared to $93.1\%$ achieved by libSVM in the same condition.
 In this case, the libLinear might be good choice as the recognition rate is lower only by about $5\%$.
-For 10 gestures case, libLinear achieved $64.830\%$ compared to $81.235\%$ of LibSVM, which is a significantly lower recognition rate.
+For the static 10 set, libLinear achieved $64.830\%$ compared to $81.235\%$ of LibSVM, which is a significantly lower recognition rate.
 It's up to user to decide which library to use, but in most recognition applications, the library can be learnt offline and only used online.
 That is why, the authors of this thesis recommend the SVM with RBF kernels for static gesture recognition task.
 
@@ -216,7 +218,11 @@ From the results obtained by the libSVM and libLinear on different feature sets,
  \label{staticClassesRecognitionRates}
 \end{figure}
 
-For the problem of recognition of $10$ gestures were performed an additional experiment on the test set, which presents the recognition rates achieved for each class. As a result, can be checked, for which gesturesselected feature set was the best, and for which was wrong. The fig.~\ref{staticClassesRecognitionRates} shows the results of the experiment in the form of confusion matrix. Gestures of two hands fared the worst. The reason for such low recognition rate errors can be reading error from the device, which performs poorly with overlapping objects. For gesture ``Time'' additional problems which may affect the reading of data, can be hand position perpendicular to the Leap Motion and join the finger tips of one palm to the other. Can be also noticed that the fist is often confused with exposed thumb gesture (no. $6$).
+For the problem of recognition on the static 10 set, an additional experiment on the testing set was performed, which presents the recognition rates achieved for each class. 
+As a result, the confusion matrix was computed, which can be used to check which static gesture is hard to recognize. The fig.~\ref{staticClassesRecognitionRates} shows the results of the experiment. 
+Gestures containing two hands have the smallest recognition rate. 
+The reason for such low recognition rate can be caused by reading error from the device, which performs poorly with overlapping objects. 
+For gesture ``Time'', the perpendicular position of hands to the Leap Motion and joined finger tips of one palm to the other are another problem. It can be also noticed that the fist is often confused with exposed thumb gesture (no. $6$).
 
 \subsection{Preprocessing}
 
@@ -227,8 +233,8 @@ The typical library usage allowed to gather data with $60Hz$, while it is assume
 For this reason, the experiments with no preprocessing and preprocessing with width size equal to $5$, $10$, $15$, $20$, $30$ were performed and the influence on the recognition rate was examined.
 The results are presented in Table~\ref{staticpre}.
 The achieved results confirm the need and importance of proper data preparation in task of data classification.
-For gesture recognition task containing $5$ gesture poses, preprocessing allowed to increase the recognition rate from $93.1\%$ to over $99\%$ for window sizes equal or wider than $15$. 
-In task of recognition 10 gestures, the preprocessing allowed to increase recognition rate from $81.2\%$ to over $84\%$ for windows sizes equal or wider than $10$.
+For gesture recognition task using static 5 set, preprocessing allowed to increase the recognition rate from $93.1\%$ to over $99\%$ for window sizes equal or wider than $15$. 
+In recognition of static 10 set, the preprocessing allowed to increase recognition rate from $81.2\%$ to over $84\%$ for windows sizes equal or wider than $10$.
 From those results, the preprocessing width of $10$ was chosen as the one allowing to significantly improve recognition rate in almost any possible application of the library.
 The preprocessing of width $10$ was used for all further experiments if not stated otherwise.
 
@@ -238,7 +244,7 @@ The preprocessing of width $10$ was used for all further experiments if not stat
 	\caption{The recognition rate achieved with feature set $6$ and different sizes of preprocessing window}
     \begin{tabular}{ccccc}
     \hline
-    preprocessing                                                   & $5$ gestures, CV & $5$ gestures, test set & $10$ gestures, CV  & $10$ gestures, test set \\ \hline
+    preprocessing                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline
     off                     & $92.8\%$ & $93.1\%$  & $80.5\%$ & $81.2\%$ \\ \hline
     width = $2$               & $95.6\%$ & $96.5\%$  & $82.7\%$ & $83.2\%$ \\ \hline
     width = $5$               & $95.9\%$ & $96.7\%$  & $83.1\%$ & $83.6\%$ \\ \hline
@@ -254,11 +260,11 @@ The preprocessing of width $10$ was used for all further experiments if not stat
 
 
 All of already presented experiments, treated the classification results of consecutive hand poses as time-independent and not correlated with each other.
-In real applications, it can be safely assumed that the consecutively detected hands are similar to each other and probably define the same gesture.
-The remaining question to be answered was the impact of combining the consecutive recognition results for the total recognition percentage.
-It is important to use not only the class labels for the tested dataset, but the whole information provided by SVM containing the measure of classification rate to all possible classes.
+In real applications, it can be safely assumed that the consecutively detected hands are similar to each other and there is a non-zero probability that those hands define the same gesture.
+The remaining question to be answered was the impact of combining the consecutive recognition results for the achieved, total recognition rate.
+It is important to use not only the class labels for the tested dataset, but also the measure of classification rate for all possible classes provided by SVM.
 This data can be combined to measure the membership rate for each class in a window of chosen width.
-Then the predicted class is the class with maximal measure.
+Then the predicted class is the class with a maximal measure.
 Formally, when there is a need to classify between $k$ classes, the result for $i$-th data in dataset can be represented as:
 \begin {equation}
 l(i) = [l_{i1}, l_{i2}, ..., l_{ik}],
@@ -289,7 +295,7 @@ The recognized label is the number of the vector component with the highest valu
 The first approach to defining the sum operator is the operator of simple adding the elements of vectors $l$.
 The second proposition is to multiple the corresponding elements of vectors $l$. 
 The third approach utilizes the idea of calculating the median elements of vectors $l$.
-The three approaches were compared using feature set 6 with preprocessing width equal to 10 for 5 and 10 gestures already used in previous experiments.
+The three approaches were compared using feature set 6 with preprocessing width equal to 10 for the static 5 and the static 10s sets already used in previous experiments.
 Simultaneously, the test were performed for different widths of window and are presented in Fig.~\ref{staticoper}.
 For almost all possible widths, the summation operator demonstrated the best recognition rate.
 For 5 static gestures, the summation with width equal to 10 allowed to achieve the recognition rate over $99.5$\% gaining over $0.5\%$ when compared to solution without postprocessing.
@@ -301,7 +307,7 @@ Also, too wide window may not lead to better results.
 Therefore, the postprocessing window size of 10--15 is recommended by the authors of this thesis.
 
 
-Using summation as the aggregation operator treats the currently achieved result and the results from the previous as equally affecting the current recognition. 
+Using summation as the aggregation operator treats the currently achieved result and the results from the previous classifications as equally affecting the current recognition. 
 Especially for wider windows, it can be assumed that the current measurement is more important than the measurement from the distant past.
 That is why, the idea of weighted sum was introduced.
 The chosen weights should have the highest weight for the current measurement and smaller values for results that were achieved earlier in time.
@@ -319,7 +325,7 @@ The chosen weights should have the highest weight for the current measurement an
 For this task, the weights can be taken from half of the Gaussian distribution with maximal peak reached for the currently achieved result with weights slowly decreasing for measurements further away in time.
 For Gaussian, the mean was assumed to be equal to $0$.
 The standard deviation $\sigma$ was the parameter, for which different values were tested.
-The results were obtained on the 5 and 10 static gestures.
+The results were obtained on the five and ten static sets.
 The achieved results are presented in Fig.~\ref{staticgauss}.
 For 5 gestures, small $\sigma$ resulted in the weights equal to $0$ for the wider window size and therefore not using the whole information available in the specified window. 
 For greater $\sigma$, it can be observed that the achieved recognition rate is similar.
@@ -374,7 +380,7 @@ During testing a new feature was created based on the feature 2:\newline
 This feature is very similar to the previous one. The difference is that in this case ratio of distances is used instead of the actual values. Thanks to this, this feature is independent of the size of hand.
 
 \section{Experiments}
-Tests were performed using cross validation and test set. In the case of the test set ratio of training set to testing set was 2:1.
+Tests were performed using cross validation and testing set. In the case of the testing set ratio of training set to testing set was 2:1.
 
 For the tests created several combinations of previously described features:
 \begin{itemize}
@@ -392,7 +398,7 @@ All sets of features have been tested for all four datasets. The recognition rat
 	\caption{Results obtained by experimental feature sets for different data collections}
     \begin{tabular}{|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|}
     \hline
-    features & dataset A, CV[\%] & dataset A, test set[\%] & dataset B, CV[\%] & dataset B, test set[\%] & dataset C, CV[\%]& dataset C, test set[\%]  & dataset D, CV[\%] & dataset D, test set[\%]  \\ \hline
+    features & dataset A, CV[\%] & dataset A, testing set[\%] & dataset B, CV[\%] & dataset B, testing set[\%] & dataset C, CV[\%]& dataset C, testing set[\%]  & dataset D, CV[\%] & dataset D, testing set[\%]  \\ \hline
     1,2,4	& 75.4\% & 74.9\% & 87.3\%  & 86.9\% & 78.4\% & 77.9\% & 90.6\% & 90.3\% \\ \hline
     1,3,5     	& 76.3\% & 75.4\% & 87.5\%  & 87.1\% & 79.6\% & 78.9\% & 91.5\% & 91.2\% \\ \hline
     1,3,4,5    	& 78.1\% & 75.4\% & 87.5\%  & 87.1\% & 79.6\% & 78.9\% & 91.5\% & 91.2\% \\ \hline
@@ -427,7 +433,7 @@ In the second round of tests was verified how preprocessing will affect the fing
 	\caption{Comparison of the recognition rate achieved with and without preprocessing with feature set 1,2,3,4,5}
     \begin{tabular}{|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|}
     \hline
-    features & dataset A, CV[\%] & dataset A, test set[\%] & dataset B, CV[\%] & dataset B, test set[\%] & dataset C, CV[\%]& dataset C, test set[\%]  & dataset D, CV[\%] & dataset D, test set[\%]  \\ \hline
+    features & dataset A, CV[\%] & dataset A, testing set[\%] & dataset B, CV[\%] & dataset B, testing set[\%] & dataset C, CV[\%]& dataset C, testing set[\%]  & dataset D, CV[\%] & dataset D, testing set[\%]  \\ \hline
     with preprocessing          & 83.3\% & 82.8\%  & 90.5\% & 90.0\% & 86.5\% & 86.0\% & 93.3 \% & 93.0\% \\ \hline
     without preprocessing   	& 83.2\% & 81.5\% & 90.3\%  & 89.8\% & 85.8\% & 85.1\% & 93.0\% & 92.8\% \\ \hline
     \end{tabular}
