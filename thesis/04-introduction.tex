@@ -1,10 +1,16 @@
 
-\chapter{Introduction}
+\chapter{Introduction} % MN: ja bym sporo zmienił językowo - na dole macie wersje, w ktorej ja troche zmienilem. 
 
 \section{Motivation}
 
-Currently human-computer interaction is based mainly on the use of pointing or typewriter-style devices. For this reason, the use of natural gestures for computer control is limited. For instance, to rotate the object in a virtual world user need to click the mouse and move it in 2D plane. Rotating objects in the real world involces simply grabbing it and turning using one's hands. To make the usage of computer more intuitive and natural, the best solution would be to transfer gestures performed on a daily basis into the virtual world. The latest technological solutions allow to control computer using gestures.
-Hands are a fundamental tools of every human being. With them people perform hundreds of operations every day. Without this basic manipulator people are not able to cope with the simplest activities. They are even used for non-verbal communication, such as sign or body language.
+Currently human-computer interaction is based mainly on the use of pointing or typewriter-style devices. 
+Therefore, the use of natural gestures for computer control is limited. 
+For instance, to rotate the object in a virtual world user need to click the mouse and move it in 2D plane. 
+Rotating objects in the real world involves simply grabbing it and turning using one's hands. 
+To make the usage of computer more intuitive and natural, the best solution would be to transfer gestures performed on a daily basis into the virtual world. 
+The latest technological solutions allow to control computer using gestures.
+Hands are a fundamental tools of every human being. With them people perform hundreds of operations every day. 
+Without this basic manipulator people are not able to cope with the simplest activities. They are even used for non-verbal communication, such as sign or body language.
 
 Currently there are several devices that support gesture recognition. An example of such a controller is Microsoft Kinect, but it is not highly accurate for hand gesture recognition. It is suitable for applications that use the whole body of the user, but for the recognition of hand gestures may be no useful. 
 
@@ -41,3 +47,80 @@ The structure of the thesis is as follows. Chapter 1 presents the abstract of th
 Olgierd Pilarczyk - projektowanie architektury, impementacja preprocessingu
 Jakub Wąsikowski - visualizer, recorder, rozróżnianie palców, wyznacznie liczby klastrów, klasyfikacja gestów
 Katarzyna Zjawin - visualizer, recorder, rozróżnianie palców, klasyfikacja gestów}
+
+%%%%%%% MN down
+
+
+\chapter{Introduction}
+
+\section{Motivation}
+
+Currently human-computer interaction is based mainly on pointing or typewriter-style devices. 
+The natural gestures that could make some operations easier are not commonly used. 
+For instance, to rotate an object in a virtual world user needs to click a mouse and move it in 2D plane. 
+Objects rotation in the real world involves simple grabbing and turning using one hand. 
+To making computer interfaces more intuitive and natural is the goal of recently developed trends. 
+One of the best solutions would be to translate gestures performed on a daily basis into the virtual world. 
+The latest technological solutions allow to control computer using gestures.
+Hands are a fundamental part of every human being. They are used to perform hundreds of operations every day. 
+Without this basic manipulator people are not able to cope with the simplest activities. 
+They are even used for non-verbal communication, such as sign or body language.
+
+Currently there are several devices that yield data useful for gesture recognition. 
+An example of such a controller is a Microsoft Kinect.
+The Microsoft Kinect is designed to observe whole body motion and therefore it lacks the needed accuracy for hand gesture recognition.  
+Another device that is designed to track the movements of a hand and fingers is a Leap Motion Controller developed by Leap Motion, Inc. introduced in July 2013. 
+The Leap Motion as a small device, which can be placed in front of the computer, and is extremely accurate up to 0.01 mm. 
+The presented controller provides information about a position of each part of the hands in space.
+The SDK attached to the device allows to recognize three simple pre-defined gestures: circle motion with one finger, swipe action and tapping the virtual keys. 
+The data contains information about every detected hand and is transmitted with frequency up 100~Hz. 
+The Leap Motion Controller is recognized to provide potential that can be used to develop more natural user interface. 
+
+Currently, no library for gesture recognition supports the Leap Motion Controller and therefore potential user can not define an own database of gestures. 
+This is a important limitation when creating LM-based applications.
+When developers want to create applications utilizing the gesture recognition, they have to operate on low-level, unprocessed data.
+This results in additional work overhead to implement methods for gesture recognition.
+Therefore, the goal of this thesis is to develop the library for gesture recognition dedicated to Leap Motion device, which will satisfy the demand for this kind of library and thus help developers to implement applications using gesture human-computer interface.
+
+
+\section{Objectives}
+
+The main goal of this thesis is to design a library, which allow developers of LM-based applications to easily incorporate gesture recognition into theirs applications.
+
+The objectives of this thesis includes:
+\begin{itemize}
+\item designing a library architecture, 
+\item a comparison of existing methods in the context of a hand gesture recognition,
+\item a selection and an implementation of algorithms for the gesture recognition,
+\item an implementation of additional modules enabling the recording and reviewing of gestures saved in a format supported by the library,
+\item creation of a sample gestures database,
+\item performing gesture recognition tests using Leap Motion Controller.
+\end{itemize}
+
+In this thesis, machine learning algorithms are used. 
+The main recognition modules are based on the Support Vector Machines (SVM) and the Hidden Markov Models (HMM). 
+The SVM is a supervised learning algorithm, where the algorithm trains on an input data with known responses, and tries to create a predictor model that generates correct predictions for a new input data.
+The HMM is an example of an unsupervised learning algorithm, where model tries to find a hidden structure of data using provided training samples. 
+
+The thesis was developed during the from October 2013 till January 2014.
+
+
+\section{Thesis organization}
+% Wg mnie chapter x powinien byc robiony przez ref, zeby byl odnosnikiem
+The thesis is structured in following manner. 
+Chapter 1 presents the abstract of this thesis in two language versions --- English and Polish. 
+In Chapter 2 presents a motivation, objectives and a scope of this work. 
+Chapter 3 contains an overview of the literature concerning the gesture recognition problem. 
+In this part descriptions of gestures classifications and known methods used for gesture recognition are provided. 
+The presentation of Leap Motion Controller is in Chapter 4. Chapter 5 is devoted to gestures recognizing in the context of Leap Motion Controller.
+The Chapter contains also descriptions of gestures classification, data representations and additional processing steps for hand gestures recognition using the Leap Motion device. 
+The following Chapter 6 contains proposed methods, evaluation methodology and experiments for static gesture recognition. 
+Similarly, Chapter 7 presents a description of dynamic gesture recognition. 
+Chapter 8 summarizes the created library --- it's architecture, processes, additional modules, dependencies on other open-source libraries, and an example of it's usage. 
+Chapter 9 concludes the thesis and provides a possible future works. 
+
+{\color{red} Michał Nowicki - svm do statycznych, hmm do dynamicznych
+Olgierd Pilarczyk - projektowanie architektury, impementacja preprocessingu
+Jakub Wąsikowski - visualizer, recorder, rozróżnianie palców, wyznacznie liczby klastrów, klasyfikacja gestów
+Katarzyna Zjawin - visualizer, recorder, rozróżnianie palców, klasyfikacja gestów}
+
