@@ -1,25 +1,25 @@
 \chapter{Conclusions}
 
-% Tnijcie. Ja napisalem, zeby juz cos bylo :)
-
 The thesis contains a thorough evaluation of proposed approaches to the gesture recognition.
 The results obtained for the static gesture recognition suggest than those gestures are easy to recognize using the SVM with appropriate pre and postprocessing.
-The presented results shown that choosing different feature sets can have a great impact on the performance of recognition.
+The presented results shown that choosing different feature sets can have a major impact on the performance of recognition.
 Additionally, it is important not to undermine the influence of the data preparation. 
 Even the usage of the relatively simple median filter and tracking discontinuities allowed to boost the recognition rate.
 Although, the authors believe the proposed parameters of processing module to work well in many scenarios, they might some specific cases that need different parameters or different feature sets to achieve good results.
 It is also worth noting, that this and any another approach will not work correctly if the performed static gestures are not correctly recognized by the Leap Motion.
 Therefore it is recommended to always choose a gestures that have visible and separated fingers from the sensor perspective.
+For adopted assumptions, recognition rate of $99\%$ for five gestures and $85\%$ for ten gestures in the static gesture recognition module was achieved. Finger recognition also obtained satisfactory results with $93\%$ accuracy for the reduced number of classes.
 
 When it comes to the task of dynamic gestures recognition Leap Motion might not be the best sensor choice.
 The data from Leap Motion provides great accuracy for a static hand and fingers, but the data for dynamically moved hands is usually noisy.
 The problems arises with short, lost finger tracking, a temporal finger occlusions or an erratic finger numbering that are hard to detect and cope with on the library-level.
 The proposed preprocessing module tries to alleviate a negative impacts, but the recorded data is far from ideal.
-However, proposed approach with Hidden Markov Models allowed to recognize five dynamic gestures with 80\% accuracy.
+However, proposed approach with Hidden Markov Models allowed to recognize five dynamic gestures with $80\%$ accuracy.
 
- 
-
-The main outcome of this thesis is the open-source gesture recognition library, which contains high-level interface for complicated gesture recognition tools.
+The main outcome of this thesis is the open-source gesture recognition library dedicated for Leap Motion device, which contains high-level interface for complicated gesture recognition tools. 
+Developed library provides recognition of all types of action gestures and also supports globally parameterized gestures and part of locally parameterized gestures.
 The experiments performed with the library has shown that Leap Motion can be successfully used as a sensor providing data to recognize gestures.
-The successful results obtained on various recorded gestures support the idea, that the library can be used in any, possible application. 
+
+
+In summary, in this thesis, gesture recognition library dedicated for Leap Motion Controller has been done. This library contains modules for static and dynamic gesture recognition and finger recognition and also supports parameterized gestures. Additionally, comparison of existing gesture recognition methods, implementation of additional modules enabling the recording and reviewing of gestures, creation of sample gestures database and performation of tests using Leap Motion Controller has been conducted. The successful results obtained on various recorded gestures support the idea, that the library can be used in any, possible application. 
 
