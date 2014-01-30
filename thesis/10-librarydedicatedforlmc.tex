@@ -1,7 +1,7 @@
 
 \chapter{LMGesture library dedicated for Leap Motion controller}\label{libraryChapter}
 
-\section{Architecture}
+\section{Architecture} \label{architectureSection}
 
 One of the main goals of creating a library for gesture recognition using Leap Motion, was simplyfying the task for developers and creating a consistent, easy to use inferface for in--applications use. A library can be treated like a black box which takes data frames as an input and responds only if a gesture from a defined set has been recognized. It was written using C++. Library is open source.
 
@@ -44,7 +44,7 @@ Elements of library are following:
 \item RecognizedGesture -- abstract class, user should override its methods in order to handle actions which will execute after a gesture was successfully recognized
 \end{itemize}
 
-\subsection{Model}
+\subsection{Model}\label{modelSubsection}
 
 While data obtained from Leap Motion Controller are being processed, they are stored using a specially created classes representing the data. The most important class is GestureFrame, which represents a single frame captured from device. All gathered data is stored in a vector containing elements of GestureFrame type. GestureFrame holds the following information:
 
@@ -75,7 +75,7 @@ GestureFinger stores parameters of one finger. In one instance of GestureHand ma
 \item ordered value, obtained during finger sorting.
 \end{itemize}
 
-\section{Processes}
+\section{Processes}\label{processesSection}
 
 \subsection{The learning process}
 The learning process is a process of teaching LeapGesture library a new gesture by API user. First  gestures must be recorded gestures in LMR format. To obtain recordings in this format user may use Gesture Recorder --  a module included in the library, which records data from Leap Motion Controller and saves it as LMR file. When all desired gestures are prepared, the user starts the process of learning by {\color{red}[tutaj dodać informacje jak uruchomić ten prces - prawdopodobnie jakas komenda + jakies parametry typu -d uczenie gestów dynamicznych, -s uczenie gestów statycznych + pliki LMR jako argumenty]}.  
@@ -132,7 +132,7 @@ Methods for a finger differentiation observer:
 
 As in the learning process for recognizing static gestures system uses SVM and for dynamic gestures -- HMM. For finger differentation system uses support vector machine. However, there are other classes than those used for static gestures recogniton.
 
-\section{Gesture recorder and visualizer}
+\section{Gesture recorder and visualizer}\label{recordvisualSection}
 Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section $8.1.1$ and writes it to the LMR file, which is supported by the LMGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
 
 \subsection{LMR files}
@@ -228,7 +228,7 @@ List of Recorder features:
 \item There is a button to enter the visualizer mode.
 \end{itemize}
 
-\section{Used external libraries}
+\section{Used external libraries} \label{librariesSection}
 
 \begin{itemize} 
 \item LeapSDK -- allows to access Leap Motion device and its API
@@ -238,7 +238,7 @@ List of Recorder features:
 \item HMMlib -- a C++ library for general hidden Markov Models
 \end{itemize}
 
-\section{Samples of code using the library dedicated to Leap Motion Controller}
+\section{Samples of code using the library dedicated to Leap Motion Controller} \label{sampleSection}
 
 Here's an example of code required to use gesture recognition features.
 
