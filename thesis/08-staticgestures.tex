@@ -152,7 +152,7 @@ The results achieved using proposed feature sets on the static 5 set and the sta
 	\caption{Results obtained by proposed feature sets using the libSVM library}
     \begin{tabular}{ccccc}
     \hline
-    ~                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline
+    ~                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline \hline
     feature set $1$                     & $87.1\%$ & $87.9\%$ & $70.0\%$ & $68.4\%$   \\ \hline
     feature set $2$                     & $87.1\%$ & $87.9\%$ & $70.0\%$ & $68.4\%$          \\ \hline
     feature set $3$                     & $87.1\%$ & $87.9\%$ & $70.0\%$ & $68.4\%$           \\ \hline
@@ -184,7 +184,7 @@ The simple alleviation of finger numbering problem allowed to top the previous r
 	\caption{Results obtained by proposed feature sets using the libLinear library}
     \begin{tabular}{ccccc}
     \hline
-    ~                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline
+    ~                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline \hline
     feature set $1$                     & $78.3\%$ & $78.3\%$  & $50.6\%$ & $50.6\%$ \\ \hline
     feature set $2$                     & $78.3\%$ & $78.3\%$  & $50.6\%$ & $50.6\%$ \\ \hline
     feature set $3$                     & $78.3\%$ & $78.3\%$  & $50.6\%$ & $50.6\%$ \\ \hline
@@ -219,7 +219,7 @@ From the results obtained by the libSVM and libLinear on different feature sets,
 \end{figure}
 
 For the problem of recognition on the static 10 set, an additional experiment on the testing set was performed, which presents the recognition rates achieved for each class. 
-As a result, the confusion matrix was computed, which can be used to check which static gesture is hard to recognize. The fig.~\ref{staticClassesRecognitionRates} shows the results of the experiment. 
+As a result, the confusion matrix was computed, which can be used to check which static gesture is hard to recognize. The ig.~\ref{staticClassesRecognitionRates} shows the results of the experiment. 
 Gestures containing two hands have the smallest recognition rate. 
 The reason for such low recognition rate can be caused by reading error from the device, which performs poorly with overlapping objects. 
 For gesture ``Time'', the perpendicular position of hands to the Leap Motion and joined finger tips of one palm to the other are another problem. It can be also noticed that the fist is often confused with exposed thumb gesture (no. $6$).
@@ -244,7 +244,7 @@ The preprocessing of width $10$ was used for all further experiments if not stat
 	\caption{The recognition rate achieved with feature set $6$ and different sizes of preprocessing window}
     \begin{tabular}{ccccc}
     \hline
-    preprocessing                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline
+    preprocessing                                                   & $5$ gestures, CV & $5$ gestures, testing set & $10$ gestures, CV  & $10$ gestures, testing set \\ \hline \hline
     off                     & $92.8\%$ & $93.1\%$  & $80.5\%$ & $81.2\%$ \\ \hline
     width = $2$               & $95.6\%$ & $96.5\%$  & $82.7\%$ & $83.2\%$ \\ \hline
     width = $5$               & $95.9\%$ & $96.7\%$  & $83.1\%$ & $83.6\%$ \\ \hline
@@ -342,10 +342,10 @@ Finger recognition module is responsible to verify which particular fingers are 
 \subsection{Methods}
 For this module the same classification algorithms (kernel functions) were used as those which had the best results in static gesture recognition. As in the case of static gesture recognition libSVM library was used with RBF kernel.
 \subsection{Evaluation methodology} \label{fdEvaluationMethodology}
-In the objectives for static gesture recognitions (Subsection ~\ref{staticAssumptions}) it was mentioned that the process must be independent of the position, rotation, sizes of hand and fingers. This objective applies also to finger recognition. However, this assumption is still does not contain one element, from which the recognition process should be independent --- arrangement of hand. Whether forefinger is straight or bent, it is the same class, where only this one finger is taken out.
+In the objectives for static gesture recognitions (Subsection ~\ref{staticAssumptions}) it was mentioned that the process must be independent of the position, rotation, sizes of hand and fingers. This objective applies also to finger recognition. However, for the fingers recognition one additional objective was determined. This process should be independent of fingers arrangement. For example it does not matter whether the forefinger is straightened or bent, because this is the same finger. For the static gesture recognition fingers arrangement should be taken into consideration, because two static gestures, which use the same fingers and have other arrangement of fingers, should be distinguished.
 
 \subsubsection{Recorded dataset}
-The dataset was collected by two different people. Each of them  recorded 32 classes, which reflect all the possible permutations of fingers arrangements. The next step was to select from 32 gestures, those which are the most frequently used by people in everyday life. Those 15 selected gestures are natural for human and do not cause pain. People use them as specific sign like peace sign. From the dataset four data collections were created used in the experiments:
+The dataset was collected by two different people. Each of them  recorded 32 classes, which reflect all the possible combinations of fingers arrangements. The next step was to select from 32 classes of gestures, those which are the most frequently used by people in everyday life. Those 15 selected classes contained gestures, which are natural for human and do not cause pain. People use them as specific sign like peace sign. From the dataset four data collections were created used in the experiments:
 \begin{itemize}
 \item dataset A -- 32 gestures recorded by two people -- this dataset consists of 58614 samples,
 \item dataset B -- 15 gestures recorded by two people -- 28729 samples,
@@ -359,7 +359,7 @@ As mentioned in the previous section it is important that the fingers recognitio
 \begin{enumerate}
 \item Finger count. 
 \item Distance between two nearest base points of a finger (example of base point has been marked in Fig.~\ref{fingfifffeatures}.1 as point B).
-To appoint a finger base point has to be reversed normalized direction vector multiplied by the length of a finger. Subsequent as the beginning of the vector thus formed is set finger tip position. The end of the vector indicates the finger base point (Fig.~\ref{fingfifffeatures}.1). An example of distance between two nearest base points of a finger is showed in Fig.~\ref{fingfifffeatures}.2.
+To appoint a finger base point a reversed normalized direction vector has to be multiplied by the length of a finger. Then the beginning of this vector is placed in the finger tip position. The end of the vector indicates the finger base point (Fig.~\ref{fingfifffeatures}.1). An example of distance between two nearest base points of a fingers is showed in Fig.~\ref{fingfifffeatures}.2.
 \item Ratio of a finger's thickness to the maximal finger's thickness. 
 Leap Motion controller can return information about the thickness of the fingers (Fig.~\ref{fingfifffeatures}.3). There are known relationships between the thicknesses of the fingers, for example that the thumb is the thickest finger. Just like in the previous feature ratio was used in order to become independent of size of finger.
 \item Angles between two nearest fingers.
@@ -380,9 +380,7 @@ The next step is to determine the line segments between palm position and finger
  \label{fingfifffeatures}
 \end{figure}
 
-During testing a new feature was created based on the feature 2:\newline
-2b. ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points
-This feature is very similar to the previous one. The difference is that in this case ratio of distances is used instead of the actual values. Thanks to this, this feature is independent of the size of hand.
+During testing a new feature was created based on the feature 2 called 2b. This feature is a ratio of distance between two nearest base points of a finger to the minimal (non-zero) distance between two nearest base points. It is very similar to the previous one. The difference is that in this case ratio of distances is used instead of the actual values. Thanks to this, the feature 2b is independent of the size of hand.
 
 \section{Experiments}
 Tests were performed using cross validation and testing set. In the case of the testing set ratio of training set to testing set was 2:1.
@@ -395,19 +393,19 @@ For the tests several combinations of previously described features were created
 \item 1,2,3,4,5
 \end{itemize}
 
-All sets of features have been tested for all four datasets described in Subsection ~\ref{fdEvaluationMethodology}. The recognition rate can be seen in Table~\ref{findiff}. It can be concluded that the best match is when the all features are used. However, feature 2 is not independent of the size of the hand. Therefore, a new feature has been designed using the ratio of two values obtained from feature 2. Then the test was performed for a set of: 1, 2b, 3, 4, 5 for all datasets. The result for this test is in the last line of the Table~\ref{findiff}. Interestingly, despite the fact that the modified feature is independent of the size of a hand, feature 2b had an inferior influence on the recognition rate. The feature 2, which operates on the actual value of the distance between fingers, had a greater impact on the recognition rate by about $5.4\%$. 
+All sets of features have been tested for all four datasets described in Subsection ~\ref{fdEvaluationMethodology}. The recognition rate can be seen in Table~\ref{findiff}. It can be concluded that the highest recognition rate is achieved when all features are used. However, feature 2 is not independent of the size of the hand. Therefore, a new feature has been designed using the ratio of two values obtained from feature 2. Then the test was performed for a set of: 1, 2b, 3, 4, 5 for all datasets. The result for this test is in the last line of the Table~\ref{findiff}. Interestingly, despite the fact that the modified feature is independent of the size of a hand, feature 2b had an inferior influence on the recognition rate. The feature 2, which operates on the actual value of the distance between fingers, had a greater impact on the recognition rate by about $5.4\%$. 
 
 \begin{table}[htp!]
 \begin{center}
 	\label{findiff}
 	\caption{Results obtained by experimental feature sets for different data collections}
-    \begin{tabular}{|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|}
-    \hline
-    features & dataset A, CV[\%] & dataset A, testing set[\%] & dataset B, CV[\%] & dataset B, testing set[\%] & dataset C, CV[\%]& dataset C, testing set[\%]  & dataset D, CV[\%] & dataset D, testing set[\%]  \\ \hline
-    1,2,4	& 75.4\% & 74.9\% & 87.3\%  & 86.9\% & 78.4\% & 77.9\% & 90.6\% & 90.3\% \\ 
-    1,3,5     	& 76.3\% & 75.4\% & 87.5\%  & 87.1\% & 79.6\% & 78.9\% & 91.5\% & 91.2\% \\ 
-    1,3,4,5    	& 78.1\% & 75.4\% & 87.5\%  & 87.1\% & 79.6\% & 78.9\% & 91.5\% & 91.2\% \\ 
-    1,2,3,4,5   & 83.2\% & 81.5\% & 90.3\%  & 89.8\% & 85.8\% & 85.1\% & 93.0\% & 92.8\% \\ 
+    \begin{tabular}{p{1.3cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}}
+    \hline 
+    features & dataset A,\linebreak CV[\%] & dataset A,\linebreak testing set[\%] & dataset B,\linebreak CV[\%] & dataset B,\linebreak testing set[\%] & dataset C,\linebreak CV[\%]& dataset C,\linebreak testing set[\%]  & dataset D,\linebreak CV[\%] & dataset D,\linebreak testing set[\%]  \\ \hline \hline
+    1,2,4	& 75.4\% & 74.9\% & 87.3\%  & 86.9\% & 78.4\% & 77.9\% & 90.6\% & 90.3\% \\ \hline
+    1,3,5     	& 76.3\% & 75.4\% & 87.5\%  & 87.1\% & 79.6\% & 78.9\% & 91.5\% & 91.2\% \\ \hline
+    1,3,4,5    	& 78.1\% & 75.4\% & 87.5\%  & 87.1\% & 79.6\% & 78.9\% & 91.5\% & 91.2\% \\ \hline
+    1,2,3,4,5   & 83.2\% & 81.5\% & 90.3\%  & 89.8\% & 85.8\% & 85.1\% & 93.0\% & 92.8\% \\ \hline
     1,2b,3,4,5	& 76.6\% & 75.8\% & 87.6\%  & 87.3\% & 79.8\% & 79.2\% & 91.6\% & 91.2\% \\ \hline
     \end{tabular}
     \end{center}
@@ -416,12 +414,6 @@ All sets of features have been tested for all four datasets described in Subsect
 It is worth to mention that it seemed that the feature 4 (angles between two nearest fingers) will have a substantial contribution to finger recognition. However, the results showed that this feature has impact only on dataset A processed using cross-validation, while in other cases brought nothing.
 
 Distinguishing coefficient of particular classes for a set of features: 1, 2, 3, 4, 5 for 15 classes recorded by two people is shown in Fig.~\ref{classRateFD}.
-The graph indicates that classes with the worst recognition rates are:
-\begin{itemize}
-\item the clenched fist (no fingers), and
-\item the hand with stretched out index finger.
-\end{itemize}
-The rest of the gesture recognition has a level of approximately 90\% and above. Based on these tests it can be deduced that the fewer fingers to differentiate, the worse the outcome is. This is due to the characteristics of the feature sets, because the vast majority of the features is based on dependency between two fingers. So when the number of fingers is low, the finger recognition module receives too little information to differentiate fingers.
 
 \begin{figure}[htb]
 \centering
@@ -430,6 +422,15 @@ The rest of the gesture recognition has a level of approximately 90\% and above.
  \label{classRateFD}
 \end{figure}
 
+The graph indicates that classes with the worst recognition rates are:
+\begin{itemize}
+\item the clenched fist (no fingers), and
+\item the hand with stretched out index finger.
+\end{itemize}
+The rest of the gesture recognition has a level of approximately 90\% and above. Based on these tests it can be deduced that the fewer fingers to differentiate, the worse the outcome is. This is due to the characteristics of the feature sets, because the vast majority of the features is based on dependency between two fingers. So when the number of fingers is low, the finger recognition module receives too little information to differentiate fingers.
+
+
+
 \subsubsection{Preprocessing}
 In the second round of tests it was verified how preprocessing will affect the finger recognition process. The set of features 1, 2, 3, 4, 5, which achieved the best recognition rate in previous test, was also used in this test. Also all datasets (A, B, C, D) were used. For tests the preprocessing width of 4 was chosen.
 
@@ -437,11 +438,11 @@ In the second round of tests it was verified how preprocessing will affect the f
 \begin{center}
 	\label{findiffpre}
 	\caption{Comparison of the recognition rate achieved with and without preprocessing with feature set 1,2,3,4,5}
-    \begin{tabular}{|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|p{1.3cm}|}
+    \begin{tabular}{p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}}
     \hline
-    features & dataset A, CV[\%] & dataset A, testing set[\%] & dataset B, CV[\%] & dataset B, testing set[\%] & dataset C, CV[\%]& dataset C, testing set[\%]  & dataset D, CV[\%] & dataset D, testing set[\%]  \\ \hline
-    with preprocessing          & 83.3\% & 82.8\%  & 90.5\% & 90.0\% & 86.5\% & 86.0\% & 93.3 \% & 93.0\% \\ 
-    without preprocessing   	& 83.2\% & 81.5\% & 90.3\%  & 89.8\% & 85.8\% & 85.1\% & 93.0\% & 92.8\% \\ \hline
+    prepro-cessing & dataset A,\linebreak CV[\%] & dataset A,\linebreak testing set[\%] & dataset B,\linebreak CV[\%] & dataset B,\linebreak testing set[\%] & dataset C,\linebreak CV[\%]& dataset C,\linebreak testing set[\%]  & dataset D,\linebreak CV[\%] & dataset D,\linebreak testing set[\%]  \\ \hline \hline
+    on        & 83.3\% & 82.8\%  & 90.5\% & 90.0\% & 86.5\% & 86.0\% & 93.3 \% & 93.0\% \\ \hline
+    off   	  & 83.2\% & 81.5\% & 90.3\%  & 89.8\% & 85.8\% & 85.1\% & 93.0\% & 92.8\% \\ \hline
     \end{tabular}
     \end{center}
 \end{table}
