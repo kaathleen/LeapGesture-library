@@ -12,15 +12,13 @@ Moduł rozróżniania palców ręki dla badanych zbiorów osiągnął dokładno�
 W bibliotece zostały zaimplementowane wyżej wymienione podejścia w języku C++, dzięki czemu biblioteka LeapGesture może być użyta w aplikacji każdego typu.
 
 \chapter{Abstract}
-Since the invention of computers there exists a need to develop more intuitive human-computer interfaces.
-There has been keyboards, mouses, but those solutions are not as natural as gestures, which are essential part of a human expression.
 This thesis studies the new possibilities to gesture interfaces that emerged with a Leap Motion sensor.
-The work also proposes a new gesture classification into action and parameterized gestures, which is defined strictly in the context of gesture recognition.
 The Leap Motion is an innovative, 3D motion capturing device designed especially for hands and fingers tracking with precision up to $0.01$mm.
-The authors examined the sensor's data and possible usage as the gesture interface utilizing two types of action gestures: static and dynamic.
-The static gestures understood as poses of a hand and fingers are recognized using the Support Vector Machine (SVM) with intelligent pre- and postprocessing.
-The proposed approach allowed to recognize five gestures with $99\%$ accuracy and ten gestures with $85\%$.
-The dynamic gestures that are movements of a hand and fingers in time are recognized with the Hidden Markov Models (HMM). 
-The adopted approach allowed to achieve accuracy up to $80\%$ for five dynamic gestures.
-The thesis contains also experiments of the proposed finger recognition module working with $93\%$ accuracy. This module is also based on SVM.
-The main outcome of the thesis is the open-source library LeapGesture dedicated to the developers for Leap Motion Controller, that supports parameterized gestures, apart from the recognition of standard action gestures and contains presented approaches using a high-level C++ interface making gesture recognition easy to utilize in any application.
+The main outcome of the thesis is the open-source LeapGesture library dedicated to the developers for Leap Motion Controller that contains algorithms allowing to learn and recognize gestures.
+The authors examined the data provided by the sensor in context of recognition of hand poses (static gestures), hand movements (dynamic gestures) and in task of a finger recognition.
+The static gestures are recognized using the Support Vector Machine (SVM) with median filtering an input data and using the correspondences between consecutive recognitions.
+The proposed approach allowed to recognize a set of five gestures with $99\%$ accuracy and a set of ten gestures with $85\%$.
+The dynamic gestures (movements of a hand and fingers) are recognized with the Hidden Markov Models (HMM). 
+Recognition with HMMs allowed to achieve accuracy of $80\%$ for a set containing six dynamic gestures.
+Finger recognition algorithms proposed in this thesis works with $93\%$ accuracy on a recorded dataset.
+The LeapGesture library contains presented approaches using a C++ interface, that can be easily used in every application.
