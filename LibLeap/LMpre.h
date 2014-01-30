@@ -32,9 +32,9 @@ public:
 	vector<GestureFrame> process();
 	void displayRes();
 	vector<GestureFrame> outFrames;
+	vector<GestureFrame> frames;
 
 private:
-	vector<GestureFrame> frames;
 	BinaryFileStorageDriver input;
 	vector < vector<int> > fids;
 	set<int> uniqueFingers;

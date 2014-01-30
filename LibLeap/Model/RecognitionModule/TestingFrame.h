@@ -8,6 +8,7 @@ class TestingFrame {
 public:
 	GestureFrame frame;
 
+	TestingFrame();
 	TestingFrame(GestureFrame frame);
 };
 

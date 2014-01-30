@@ -18,14 +18,14 @@ LeapProcess::LeapProcess(RecognizedGestureListener *gesture, bool enaStat, bool 
 
 void LeapProcess::start() {
 
-	pthread_mutex_lock(&finished);
+	pthread_mutex_unlock(&finished);
 
-	if(enableStatic) {
+	if(enableDynamic) {
 		pthread_mutex_lock(&mutexStat);
 		pthread_create(&staticProcess, NULL, &LeapProcess::runDynamic, this);
 	}
 
-	if(enableDynamic) {
+	if(enableStatic) {
 		pthread_mutex_lock(&mutexDyn);
 		pthread_create(&dynamicProcess, NULL, &LeapProcess::runStatic, this);
 	}
@@ -36,23 +36,40 @@ void *LeapProcess::staticThread(void) {
 
 	cout << "[RUNNING] Static processing" << endl;
 
-	// inicjalizacja obiektu przetwarzania równoległego, bla, bla
+	StaticRec staticRec;
+	TestingStaticRecConf testingStaticRecConf(staticConf->configurationPath, staticConf->configurationName);
+	TestingFrame testingFrame;
+	TestingResult *testingResult;
 
-	// Przetwarzarka p = new Przetwarzarka();
+	cout << "K starting" << endl;
+	pthread_mutex_lock(&mutexStat);
 
+	LogUtil::setQuietMode(true);
 
 	while(1) {
 		pthread_mutex_lock(&mutexStat);
 
-//		cout << "[STA] processing..." << endl;
-//		 przetwarzanie
+		{
+			testingFrame.frame = *dataFrame;
+			testingResult = staticRec.classify(testingFrame, testingStaticRecConf);
 
-		for(int i=0; i<1000; i++) usleep(1000);
+			cout<<"Is recognized: "<<testingResult->recognized<<endl;
+			if (testingResult->recognized)
+				cout<<"Test result: "<<testingResult->className<<", timestamp: "<<testingResult->frameTimestamp<<endl;
+			for (unsigned int j=0; j<testingResult->classificationClassResults.size(); j++) {
+				cout << "Test result for \""
+						<< testingResult->classificationClassResults[j].className << "\" class: "
+						<< testingResult->classificationClassResults[j].classTrainRate << endl;
+			}
+		}
 
-//		cout << "[STA] finished..." << endl;
+
 		pthread_mutex_unlock(&finished);
-		if(dataFrame->getHandCount() > 1)
-			rg->onStaticRecognized(/*typ zwracany?*/);
+		if(dataFrame->getHandCount() >= 1 && dataFrame->getHand(0)->getFingerCount() >= 2){
+
+			rg->onStaticRecognized(testingResult);
+
+		}
 	}
 
 
@@ -75,7 +92,7 @@ void *LeapProcess::dynamicThread(void) {
 
 		for(int i=0; i<4000; i++) usleep(1000);
 
-//		cout << "[DYN] finished..." << endl;
+		cout << "[DYN] finished..." << endl;
 		pthread_mutex_unlock(&finished);
 		//rg->onDynamicRecognized(/*typ zwracany?*/);
 	}
@@ -99,7 +116,10 @@ void LeapProcess::stop() {
 }
 
 void LeapProcess::loadFrame(GestureFrame *frame) {
-
 	dataFrame = frame;
+}
 
+void LeapProcess::loadFrameClone(GestureFrame frame) {
+	g = frame;
+	cout << "got new frame" << endl;
 }

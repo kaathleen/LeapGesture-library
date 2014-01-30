@@ -50,7 +50,7 @@ all: LibLeap
 LibLeap: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L/home/kuba/Pobrane/Leap_Developer_Kit_0.8.0_5300_Linux/LeapSDK/lib/x64 -o "LibLeap" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L/home/oli/Pobrane/libsvm-master -L/home/oli/Pobrane/Leap_Developer_Kit_0.8.0_5300_Linux/LeapSDK/lib/x64 -o "LibLeap" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

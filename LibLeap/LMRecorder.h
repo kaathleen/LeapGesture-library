@@ -10,6 +10,7 @@ class LMRecorder : public Leap::Listener {
 public:
 
 	void prepareData(const Leap::Frame frame, GestureFrame *currentFrame, double timestamp);
+	GestureFrame prepareDataClone(const Leap::Frame frame, double timestamp);
 
 private:
     	
@@ -18,4 +19,3 @@ private:
 };
 
 #endif
-
