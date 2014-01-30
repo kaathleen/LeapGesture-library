@@ -10,7 +10,7 @@ public:
 	bool recognized;
 	std::string className;
 	int genericClassName;
-	std::vector<TestingClassResult> classificationClassResults;
+	std::vector<TestingClassResult> testClassResults;
 
 	double frameTimestamp;
 

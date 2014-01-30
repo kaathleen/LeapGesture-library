@@ -75,10 +75,10 @@ public:
 			testResult->className = genericClassNames[testResult->genericClassName];
 			testResult->frameTimestamp = testingFrame.frame.getTimestamp();
 			for (unsigned int i = 0;
-					i < testResult->classificationClassResults.size(); i++) {
+					i < testResult->testClassResults.size(); i++) {
 				int genericClassIndex =
-						testResult->classificationClassResults[i].genericClassName;
-				testResult->classificationClassResults[i].className =
+						testResult->testClassResults[i].genericClassName;
+				testResult->testClassResults[i].className =
 						genericClassNames[genericClassIndex];
 			}
 		}

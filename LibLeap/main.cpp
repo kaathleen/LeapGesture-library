@@ -16,7 +16,7 @@ class MyGestures: public RecognizedGestureListener {
 
 	void onStaticRecognized(TestingResult *tr) {
 
-		if(tr->classificationClassResults[0].classTrainRate > 0.5) {
+		if(tr->testClassResults[0].classTrainRate > 0.5) {
 			cout << "CLASS 0!" << endl;
 		}
 			else cout << "CLASS 1!" << endl;
@@ -163,10 +163,10 @@ void testStaticRec() {
 		cout<<"Is recognized: "<<testingResult->recognized<<endl;
 		if (testingResult->recognized)
 			cout<<"Test result: "<<testingResult->className<<", timestamp: "<<testingResult->frameTimestamp<<endl;
-		for (unsigned int j=0; j<testingResult->classificationClassResults.size(); j++) {
+		for (unsigned int j=0; j<testingResult->testClassResults.size(); j++) {
 			cout << "Test result for \""
-					<< testingResult->classificationClassResults[j].className << "\" class: "
-					<< testingResult->classificationClassResults[j].classTrainRate << endl;
+					<< testingResult->testClassResults[j].className << "\" class: "
+					<< testingResult->testClassResults[j].classTrainRate << endl;
 		}
 	}
 
@@ -224,10 +224,10 @@ void testFingerDiff() {
 		cout<<"Is recognized: "<<testingResult->recognized<<endl;
 		if (testingResult->recognized)
 			cout<<"Test result: "<<testingResult->className<<", timestamp: "<<testingResult->frameTimestamp<<endl;
-		for (unsigned int j=0; j<testingResult->classificationClassResults.size(); j++) {
+		for (unsigned int j=0; j<testingResult->testClassResults.size(); j++) {
 			cout << "Test result for \""
-					<< testingResult->classificationClassResults[j].className << "\" class: "
-					<< testingResult->classificationClassResults[j].classTrainRate << endl;
+					<< testingResult->testClassResults[j].className << "\" class: "
+					<< testingResult->testClassResults[j].classTrainRate << endl;
 		}
 	}
 

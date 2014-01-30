@@ -96,7 +96,7 @@ TestingResult* SVMclassificator::classify(
 		TestingClassResult classResult = TestingClassResult();
 		classResult.classTrainRate = prob_est[k];
 		classResult.genericClassName = k;
-		classificationResult->classificationClassResults.push_back(classResult);
+		classificationResult->testClassResults.push_back(classResult);
 
 		logger->sdebug()<<"classTrainRate: "<<prob_est[k]<<endl;
 		logger->sdebug()<<"k: "<<k<<endl;

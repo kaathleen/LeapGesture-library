@@ -56,10 +56,10 @@ void *LeapProcess::staticThread(void) {
 			cout<<"Is recognized: "<<testingResult->recognized<<endl;
 			if (testingResult->recognized)
 				cout<<"Test result: "<<testingResult->className<<", timestamp: "<<testingResult->frameTimestamp<<endl;
-			for (unsigned int j=0; j<testingResult->classificationClassResults.size(); j++) {
+			for (unsigned int j=0; j<testingResult->testClassResults.size(); j++) {
 				cout << "Test result for \""
-						<< testingResult->classificationClassResults[j].className << "\" class: "
-						<< testingResult->classificationClassResults[j].classTrainRate << endl;
+						<< testingResult->testClassResults[j].className << "\" class: "
+						<< testingResult->testClassResults[j].classTrainRate << endl;
 			}
 		}
 
