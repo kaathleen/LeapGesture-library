@@ -344,7 +344,7 @@ For this module the same classification algorithms (kernel functions) were used 
 \subsection{Evaluation methodology} \label{fdEvaluationMethodology}
 In the objectives for static gesture recognitions (Subsection ~\ref{staticAssumptions}) it was mentioned that the process must be independent of the position, rotation, sizes of hand and fingers. This objective applies also to finger recognition. However, for the fingers recognition one additional objective was determined. This process should be independent of fingers arrangement. For example it does not matter whether the forefinger is straightened or bent, because this is the same finger. For the static gesture recognition fingers arrangement should be taken into consideration, because two static gestures, which use the same fingers and have other arrangement of fingers, should be distinguished.
 
-\subsubsection{Recorded dataset}
+\subsubsection*{Recorded dataset}
 The dataset was collected by two different people. Each of them  recorded 32 classes, which reflect all the possible combinations of fingers arrangements. The next step was to select from 32 classes of gestures, those which are the most frequently used by people in everyday life. Those 15 selected classes contained gestures, which are natural for human and do not cause pain. People use them as specific sign like peace sign. From the dataset four data collections were created used in the experiments:
 \begin{itemize}
 \item dataset A -- 32 gestures recorded by two people -- this dataset consists of 58614 samples,
@@ -431,7 +431,7 @@ The rest of the gesture recognition has a level of approximately 90\% and above.
 
 
 
-\subsubsection{Preprocessing}
+\subsubsection*{Preprocessing}
 In the second round of tests it was verified how preprocessing will affect the finger recognition process. The set of features 1, 2, 3, 4, 5, which achieved the best recognition rate in previous test, was also used in this test. Also all datasets (A, B, C, D) were used. For tests the preprocessing width of 4 was chosen.
 
 \begin{table}[htp!]
