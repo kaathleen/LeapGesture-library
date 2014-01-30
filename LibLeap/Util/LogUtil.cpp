@@ -64,7 +64,7 @@ std::ostream& LogUtil::sinfo() {
 }
 
 void LogUtil::printMsg(std::string msg) {
-	*outStream<<" "<<className<<" - ";
-	*outStream<<msg<<"\n";
+//	*outStream<<" "<<className<<" - ";
+//	*outStream<<msg<<"\n";
 }
 

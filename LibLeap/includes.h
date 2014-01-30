@@ -14,10 +14,14 @@
 
 #include "StorageDriver/BinaryFileStorageDriver.h"
 
+#include "StaticSettings.h"
+#include "Learning.h"
+
 #include <Leap.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <string>
 #include <vector>
+#include <utility>
 
 #endif /* INCLUDES_H_ */
