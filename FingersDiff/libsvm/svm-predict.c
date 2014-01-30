@@ -53,6 +53,18 @@ void predict(FILE *input, FILE *output)
 	int nr_class=svm_get_nr_class(model);
 	double *prob_estimates=NULL;
 	int j;
+	
+	///
+	int i;
+	int classesCorrect[100];
+	int classesAll[100];
+	for (i=0; i<100; i++)
+	{
+		classesCorrect[i] = 0;
+		classesAll[i] = 0;
+	}
+	int maxClass = 0;
+	///
 
 	if(predict_probability)
 	{
@@ -133,6 +145,18 @@ void predict(FILE *input, FILE *output)
 
 		if(predict_label == target_label)
 			++correct;
+		
+		///
+		if (maxClass<target_label)
+			maxClass = (int)target_label;
+				
+		classesAll[(int)target_label]++;
+		if(predict_label == target_label)
+		{
+			classesCorrect[(int)target_label] ++;
+		}
+		///
+			
 		error += (predict_label-target_label)*(predict_label-target_label);
 		sump += predict_label;
 		sumt += target_label;
@@ -150,8 +174,16 @@ void predict(FILE *input, FILE *output)
 			);
 	}
 	else
+	{
 		info("Accuracy = %g%% (%d/%d) (classification)\n",
 			(double)correct/total*100,correct,total);
+		
+		info("Accuracy for classes:\n");
+		for (i=1; i<=maxClass; i++)
+		{
+			info("%d: %g%%\n", i, 100.0*classesCorrect[i]/classesAll[i]);
+		}
+	}
 	if(predict_probability)
 		free(prob_estimates);
 }

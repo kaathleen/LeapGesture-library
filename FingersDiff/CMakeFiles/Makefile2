@@ -56,7 +56,7 @@ CMAKE_BINARY_DIR = /home/kuba/git/projekt-inzynierski/FingersDiff
 CMakeFiles/FingersDiff.dir/all:
 	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/depend
 	$(MAKE) -f CMakeFiles/FingersDiff.dir/build.make CMakeFiles/FingersDiff.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles  1 2 3 4 5 6 7
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles  1 2 3 4 5 6 7 8
 	@echo "Built target FingersDiff"
 .PHONY : CMakeFiles/FingersDiff.dir/all
 
@@ -66,7 +66,7 @@ all: CMakeFiles/FingersDiff.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/FingersDiff.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/FingersDiff.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/kuba/git/projekt-inzynierski/FingersDiff/CMakeFiles 0
 .PHONY : CMakeFiles/FingersDiff.dir/rule

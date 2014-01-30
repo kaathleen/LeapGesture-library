@@ -2,28 +2,38 @@
 
 using namespace std;
 
-// Data scaling to interval [0.0 , 1.0]
-void SVMclassificator::dataScaling(vector<vector<double> >& data) {
-
-	int trainSetSize = data.size();
+// Data scaling to interval [LOWER_RANGE, UPPER_RANGE]
+void SVMclassificator::dataScaling(vector<vector<double> >& trainDataset) {
 	scaling = new double*[2];
-	scaling[0] = new double [ featureSize ];
-	scaling[1] = new double [ featureSize ];
+	scaling[0] = new double[featureSize];
+	scaling[1] = new double[featureSize];
+	
+	int LOWER_RANGE = -1;
+	int UPPER_RANGE = 1;
+	int NEUTRAL_VALUE = 0;
 
 	for (int j = 0; j < featureSize; j++) {
-		double min_val = data[0][j], max_val = data[0][j];
-		for (int i = 0; i < trainSetSize; i++) {
-			if (data[i][j] < min_val) {
-				min_val = data[i][j];
+		double min_val = trainDataset[0][j], max_val = trainDataset[0][j];
+		for (unsigned int i = 0; i < trainDataset.size(); i++) {
+			if (trainDataset[i][j] < min_val) {
+				min_val = trainDataset[i][j];
 			}
-			if (data[i][j] > max_val) {
-				max_val = data[i][j];
+			if (trainDataset[i][j] > max_val) {
+				max_val = trainDataset[i][j];
 			}
 		}
 		scaling[0][j] = min_val;
-		scaling[1][j] = max_val - min_val;
-		for (int i = 0; i < trainSetSize; i++) {
-			data[i][j] = (data[i][j] - scaling[0][j]) / (scaling[1][j]);
+		scaling[1][j] = max_val;
+
+		for (unsigned int i = 0; i < trainDataset.size(); i++) {
+			if (max_val - min_val > 0) {
+				trainDataset[i][j] = (trainDataset[i][j] - min_val)
+						* (UPPER_RANGE - LOWER_RANGE) / (max_val - min_val)
+						+ LOWER_RANGE;
+			}
+			else {
+				trainDataset[i][j] = NEUTRAL_VALUE;
+			}
 		}
 	}
 }
@@ -50,32 +60,32 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 	printf("Data scaled properly\n");
 
 	// Defining training set
-	problem = new svm_problem;
-	memset(problem, 0, sizeof(svm_problem));
+	svmTrainingSet = new svm_problem;
+	memset(svmTrainingSet, 0, sizeof(svm_problem));
 
-	problem->l = trainSetSize;
+	svmTrainingSet->l = trainSetSize;
 
 	//dynamically allocate the trainSetSize * featureSize matrix
-	problem->x = new svm_node*[trainSetSize];
+	svmTrainingSet->x = new svm_node*[trainSetSize];
 	for (int row = 0; row < trainSetSize; ++row)
-		problem->x[row] = new svm_node[featureSize + 1];
+		svmTrainingSet->x[row] = new svm_node[featureSize + 1];
 
 	// dynamically allocate the labels
-	problem->y = new double[trainSetSize];
+	svmTrainingSet->y = new double[trainSetSize];
 
 	// filling main matrix
 	for (int row = 0; row < trainSetSize; ++row) {
 		for (int col = 0; col < featureSize; ++col) {
-			problem->x[row][col].index = col + 1;
-			problem->x[row][col].value = data[row][col];
+			svmTrainingSet->x[row][col].index = col + 1;
+			svmTrainingSet->x[row][col].value = data[row][col];
 		}
 
 		// ending the sequence of features
-		problem->x[row][featureSize].index = -1;
-		problem->x[row][featureSize].value = 0;
+		svmTrainingSet->x[row][featureSize].index = -1;
+		svmTrainingSet->x[row][featureSize].value = 0;
 
 		// defining the label
-		problem->y[row] = label[row];
+		svmTrainingSet->y[row] = label[row];
 	}
 
 	// Setting parameters
@@ -103,18 +113,28 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 			svmParameter->gamma = pow(2, gamma);
 
 
-			svm_model *svmModel = svm_train(problem, svmParameter);
+			svm_model *svmModel = svm_train(svmTrainingSet, svmParameter);
 
 			double target[trainSetSize];
-			svm_cross_validation(problem, svmParameter, 15, target);
+			svm_cross_validation(svmTrainingSet, svmParameter, 5, target);
 
-			int count = 0;
+			/*int count = 0;
 			for (int j = 0; j < trainSetSize; j++) {
 				if (target[j] == label[j]) {
 					count++;
 				}
 			}
-			double cross = (count * 1.0 / trainSetSize * 100.0);
+			double cross = (count * 1.0 / trainSetSize * 100.0);*/
+			
+			int correct = 0;
+			for(int i=0; i<svmTrainingSet->l; i++)
+			{
+				if(target[i] == svmTrainingSet->y[i])
+				{
+					correct++;
+				}
+			}
+			double cross = 100.0*(correct / svmTrainingSet->l);
 
 			cv<<"C: "<<c<<" gamma: "<<gamma<<" Recognition: "<<cross<<"%"<<std::endl;
 			cout<<"-----------------------------------------------------------------"<<endl;
@@ -128,6 +148,8 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 			}
 		}
 	}
+	
+	cv<<std::endl<<"--------------BEST!-------------"<<std::endl<<"C: "<<best_c<<" gamma: "<<best_g<<" Recognition: "<<best_cross<<"%"<<std::endl;
 	cv.close();
 
 	// Using best model
@@ -135,7 +157,7 @@ void SVMclassificator::train(vector< vector<double> > data, vector<int> label, c
 	svmParameter->gamma = pow(2, best_g);
 
 
-	svmModel = svm_train(problem, svmParameter);
+	svmModel = svm_train(svmTrainingSet, svmParameter);
 }
 
 std::vector<int> SVMclassificator::classify(
