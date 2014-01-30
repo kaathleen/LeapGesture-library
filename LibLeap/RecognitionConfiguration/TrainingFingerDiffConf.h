@@ -5,14 +5,15 @@
 
 class TrainingFingerDiffConf {
 public:
-	const static std::string DEFAULT_CONF_NAME;
-
 	std::string configurationPath;
 	std::string configurationName;
 	bool saveDatasetFile;
+	bool saveScaleFile;
 	int kCrossValParam;
 
-	TrainingFingerDiffConf(std::string configurationPath = "", std::string configurationName = DEFAULT_CONF_NAME, bool saveDatasetFile = false, int kCrossValParam = 5);
+	TrainingFingerDiffConf(std::string configurationPath,
+			std::string configurationName,
+			bool saveDatasetFile = false, bool saveScaleFile = false, int kCrossValParam = 5);
 };
 
 #endif /* TRAININGFINGERDIFFCONF_H_ */

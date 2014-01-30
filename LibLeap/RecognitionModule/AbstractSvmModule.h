@@ -39,12 +39,12 @@ public:
 		std::vector<std::vector<double> > trainDataset; //features in samples
 		std::vector<int> trainLabels;
 		createTrainingFeaturesDataSet(classDatasetList, trainDataset, trainLabels,
-				configuration.saveDatasetFile);
+				saveDatasetFile);
 
 		SVMclassificator svm;
 		TrainingResult *trainResult = svm.train(trainDataset, trainLabels,
 				genericClassNames.size(), confPath, confName,
-				configuration.saveDatasetFile, configuration.kCrossValParam);
+				saveScaleFile, configuration.kCrossValParam);
 
 		for (unsigned int i = 0; i < trainResult->trainClassResults.size(); i++) {
 			trainResult->trainClassResults[i].className = genericClassNames[i];

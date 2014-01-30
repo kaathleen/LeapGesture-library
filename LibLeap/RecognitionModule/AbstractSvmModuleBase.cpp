@@ -2,7 +2,10 @@
 
 const int AbstractSvmModuleBase::MAX_FINGER_COUNT = 5;
 
-AbstractSvmModuleBase::AbstractSvmModuleBase() {}
+AbstractSvmModuleBase::AbstractSvmModuleBase() {
+	saveDatasetFile = false;
+	saveScaleFile = false;
+}
 
 AbstractSvmModuleBase::~AbstractSvmModuleBase() {}
 

@@ -10,11 +10,12 @@ public:
 	std::string configurationPath;
 	std::string configurationName;
 	bool saveDatasetFile;
+	bool saveScaleFile;
 	StaticRecFeatureVersion featureSetVersion;
 	int kCrossValParam;
 
 	TrainingStaticRecConf(std::string configurationPath,
-			std::string configurationName, bool saveDatasetFile = false,
+			std::string configurationName, bool saveDatasetFile = false, bool saveScaleFile = false,
 			StaticRecFeatureVersion featureSetVersion = VERSION6, int kCrossValParam = 5);
 };
 

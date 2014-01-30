@@ -35,6 +35,8 @@ protected:
 
 	std::string confPath;
 	std::string confName;
+	bool saveDatasetFile;
+	bool saveScaleFile;
 
 	std::vector<std::string> genericClassNames;
 

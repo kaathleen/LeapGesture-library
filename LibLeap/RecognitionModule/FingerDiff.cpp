@@ -11,6 +11,8 @@ FingerDiff::~FingerDiff() {
 void FingerDiff::setTrainingConfiguration(TrainingFingerDiffConf configuration) {
 	this->confPath = configuration.configurationPath;
 	this->confName = configuration.configurationName;
+	this->saveDatasetFile = configuration.saveDatasetFile;
+	this->saveScaleFile = configuration.saveScaleFile;
 }
 
 void FingerDiff::setTestingConfiguration(TestingFingerDiffConf configuration) {

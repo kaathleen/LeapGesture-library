@@ -11,6 +11,8 @@ StaticRec::~StaticRec() {
 void StaticRec::setTrainingConfiguration(TrainingStaticRecConf configuration) {
 	this->confPath = configuration.configurationPath;
 	this->confName = configuration.configurationName;
+	this->saveDatasetFile = configuration.saveDatasetFile;
+	this->saveScaleFile = configuration.saveScaleFile;
 	this->featureVersion = configuration.featureSetVersion;
 }
 
