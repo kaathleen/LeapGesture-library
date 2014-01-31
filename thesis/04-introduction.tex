@@ -2,76 +2,105 @@
 
 \section{Motivation}
 
-Currently, human-computer interaction is mainly based on the pointing or typewriter-style devices. 
-Those types of interactions can limit the user expression and sometimes result in a complicated representation of a simple operation.
+Nowadays, human-computer interaction is mainly based on the pointing or typewriter-style devices. 
+This kind of interaction can limit the natural ways of manipulation using the hands, which may result in a complication of simple tasks.
 One of the overcomplicated control examples is rotating a three-dimensional object.
-Using a computer mouse, user needs to grab an object and rotate it using a mouse that can only operate in a two-dimensional screen. 
-The rotation operation represented by mouse's movement is counter-intuitive for humans and all users need a few attempts to understand how it is done. 
-When dealing with the rotation task in real world, it is simple how to move hands to rotate the object in a wanted way.
+Using a computer mouse, a user needs to grab the object and rotate it using the mouse, which can only operate in a two-dimensional space. 
+The rotation operation represented by the mouse's movement is unintuitive for humans and users need a few attempts to understand how it works. 
+In the real world, however, the rotation task is natural thus it is simple how to move hands to rotate the object in a desired way.
+
 Therefore, there exists a need for more natural human-computer interfaces.
-One of the proposed approaches utilizes hand gestures that are interpreted by the computer.
-Utilizing hands as human-computer interface is supported by the fact, that hands are a significant part of a non-verbal communication and are also used in the sign language.
-The another advantage of hands is that manipulative tasks performed using hands in real world could be interpreted as a series of gestures and used as computer input.
+One of the proposed approaches involves hand gestures that are interpreted by a computer.
+Utilizing hands in a human-computer interface is supported by the fact, that they are even used for non-verbal communication, such as sign or body language.
+The another advantage of hands is that manipulative tasks performed using hands in real the world could be interpreted as a series of gestures and used as computer input.
 
 The newest sensors provide data that can be successfully used to recognize gestures and therefore control a computer.
-Currently, there are several devices that yield a data useful for the gesture recognition. 
-An example of such a controller is a Microsoft Kinect.
-The Kinect provides a three-dimensional data of the observed scene, but was designed for applications that interpret the movement of the whole body of the user. 
-That's why, it lacks the needed accuracy for a hand gesture recognition.
+Currently, there are several devices that yield data useful for the gesture recognition. 
+An example of such a controller is Microsoft Kinect.
+It provides a three-dimensional image of the observed scene, but was designed for applications that interpret the movement of the whole body of the user. 
+That is why it lacks the needed accuracy for hand gesture recognition.
  
-Another device that is designed to track the movements of a hand and fingers is a Leap Motion Controller developed by Leap Motion, Inc. introduced in July 2013. 
-The Leap Motion is a small device, which can be placed in front of the computer, that features extreme finger detection accuracy up to 0.01 mm. 
-The presented controller provides information about a position of each finger and a hand detected in the observed space.
+Another device that is designed to track the movements of a hand and fingers is Leap Motion Controller developed by Leap Motion, Inc. released in July 2013. 
+The Leap Motion is a small device, which can be placed in front of a computer. It features extreme finger detection accuracy up to 0.01 mm. 
+The controller provides information about a position of each finger and a hand detected in the observed space.
 The SDK attached to the device allows to recognize three pre-defined gestures: a circle motion with one finger, a swipe action and tapping on the virtual keys. 
-The Leap Motion Controller provides information about every detected hand and is transmitted with frequency up 100~Hz. 
-The Leap Motion Controller is commonly recognized as a sensor that can potentially revolutionize the human-computer interactions. 
+The Leap Motion Controller provides information about every detected hand. This device transmits data with frequency up to 100~Hz. 
+Leap Motion Controller is a sensor that can potentially revolutionize the human-computer interactions. 
 
 Currently, there exists no library for gesture recognition that supports the data provided by the Leap Motion Controller.
-This is a important limitation when creating Leap Motion-based applications.
-Right now, when developers want to create applications utilizing the gesture recognition, they need to operate on low-level, unprocessed data and need to implement the gesture recognition.
-The additional work overhead could be minimized using open-source high level library.
-Therefore, the goal of this thesis is to develop the library for gesture recognition dedicated to Leap Motion device, which will help developers to implement applications using gestures as a human-computer interface.
-
+This is an important limitation when creating Leap Motion-based applications.
+Right now, when developers want to create applications utilizing the gesture recognition, they need to operate on low-level, unprocessed data and need to implement the gesture recognition on their own.
+This additional work overhead could be minimized using high-level library.
 
 \section{Objectives}
 
-The main goal of this thesis is to design a library, which allow developers of LM-based applications to easily incorporate a gesture recognition into theirs applications.
+Therefore, the goal of this thesis is to develop the library for gesture recognition dedicated to Leap Motion device, which will help developers to implement applications using gestures as a human-computer interface.
 
-The objectives of this thesis includes:
+The goal will be achieved by meeting the following objetives:
 \begin{itemize}
-\item designing a library architecture, 
-\item a comparison of existing methods in the context of a hand gesture recognition,
-\item a selection and an implementation of algorithms for the gesture recognition,
-\item an implementation of additional modules enabling the recording and reviewing of gestures saved in a format supported by the library,
-\item creation of a sample gestures database,
-\item performing gesture recognition tests using Leap Motion Controller.
+\item to design the library architecture, 
+\item to compare existing methods in the context of hand gesture recognition,
+\item to select and implement algorithms for gesture recognition,
+\item to implement additional modules enabling the recording and reviewing of gestures saved in a format supported by the library,
+\item to create a sample gestures database,
+\item to perform gesture recognition tests using Leap Motion Controller.
 \end{itemize}
 The additional requirement of the library is that the processing should be realized in real time.
 
-In this thesis, machine learning algorithms are used. 
-The main recognition modules are based on the Support Vector Machines (SVM) and the Hidden Markov Models (HMM). 
-The SVM is a supervised learning algorithm, where the algorithm trains on an input data with known responses, and tries to create a predictor model that generates correct predictions for a new input data.
-The HMM is an example of an unsupervised learning algorithm, where model tries to find a hidden structure of data using provided training samples. 
 
-The thesis was developed during the from October 2013 till January 2014.
+The recognition modules are based on Support Vector Machines (SVM) and Hidden Markov Models (HMM). 
+SVM is a supervised learning algorithm, which uses set of hyperplanes for non-linearly division of input vectors to different classes. 
+HMM is an example of an unsupervised learning algorithm, where model tries to find a hidden structure of data using provided training samples. 
+Algorithms used in this thesis belong to a group of machine learning algorithms.
+
+The thesis was developed from October 2013 till January 2014.
 
 
 \section{Thesis organization}
-% Wg mnie chapter x powinien byc robiony przez ref, zeby byl odnosnikiem
-The thesis is structured in following manner. 
-Chapter 1 and 2 presents the abstracts of this thesis in two language versions --- Polish and English. 
-In Chapter 3 presents a motivation, objectives and a scope of this work. 
-Chapter 4 contains an overview of the literature concerning the gesture recognition problem. 
-In this part descriptions of gestures classifications and known methods used for gesture recognition are provided. 
-The presentation of Leap Motion Controller is in Chapter 5.
-Chapter 6 is devoted to gestures recognizing in the context of Leap Motion Controller.
-The Chapter contains also descriptions of gestures classification, data representations and additional processing steps for hand gestures recognition using the Leap Motion device. 
-The following Chapter 7 contains proposed methods, evaluation methodology and experiments for static gesture recognition. 
-Similarly, Chapter 8 presents a description of dynamic gesture recognition. 
-Chapter 9 summarizes the created library --- it's architecture, processes, additional modules, dependencies on other open-source libraries, and an example of it's usage. 
-Chapter 10 concludes the thesis and provides possible future works. 
+The thesis is structured in the following manner. 
+Chapter~\ref{introGRChapter} contains an overview of the literature concerning the gesture recognition problem. 
+This part includes descriptions of gestures taxonomies and state of the art methods used for gesture recognition.
+The presentation of Leap Motion Controller is in Chapter~\ref{LMCChapter}.
+Chapter~\ref{GestureRecChapter} is devoted to gestures recognizing in the context of Leap Motion Controller.
+It contains also descriptions of gestures classification, data representations and additional processing steps for hand gestures recognition using the Leap Motion device. 
+The following Chapter~\ref{staticChapter} describes proposed methods, evaluation methodology and experiments for static gesture recognition. 
+Chapter~\ref{dynamicChapter} presents a description of dynamic gesture recognition. 
+Chapter~\ref{libraryChapter} contains a description of the created library --- its architecture, processes, modules, dependencies on other open-source libraries, and an example of its usage. 
+Chapter~\ref{conclusionsChapter} concludes the thesis and provides possible future works. 
 
+\section{Contributions}
+Michał Nowicki:
+\begin {itemize} 
+\item described dynamic gestures (Chapter~\ref{dynamicChapter}),
+\item described static gestures (Chapter~\ref{staticChapter} expect Section~\ref{fingerSection}), 
+\item implemented code of processing algorithms for static and dynamic gestures recognition without an integration into the library,
+\item performed experiments evaluating the static and dynamic gesture recognition. 
+\end {itemize}
 
-In this thesis Michał Nowicki described dynamic and static gestures without finger recogniton and confusion matrix. He also implemented code of processing algorithms for static and dynamic gestures recognition without an integration into the library and performed tests evaluating the static and dynamic gesture recognition. Olgierd Pilarczyk has wrote a description of Leap Motion controller, data models, data preprocessing and library architecture. He also made Leap Motion recorder research and implemented preprocessing and integration dynamic gesture module to library. Jakub Wąsikowski wrote the introduction to gesture recognition and described classification of gestures and confusion matrix of static gestures. He also participated in research and invention of gesture classification. He implemented finger recognition, recorder and vizualizer, model and format of gestures recordings, determining the number of clusters for dynamic gestures, class for cross validation, integration static gesture and finger recognition modules to library. Katarzyna Zjawin wrote the introduction, Section regards finger recognition, description of the data model, recognition process, learning process, recorder and visualizer. She also participated in research and invention of gesture classification. She implemented and tested finger recognition, recorder i visualizer, model and format of gestures recordings.
+Olgierd Pilarczyk:
+\begin{itemize}
+\item wrote the description of Leap Motion controller (Chapter~\ref{LMCChapter}),
+\item described data models (Section~\ref{datarepSection}), data preprocessing (Section~\ref{PreprocessingSection}),
+\item described library architecture (Section~\ref{architectureSection} expect Subsection~\ref{modelSubsection}, Section~\ref{librariesSection}, Section~\ref{sampleSection}),
+\item implemented preprocessing and integration dynamic gesture module to library. 
+\end {itemize}
+
+Jakub Wąsikowski:
+\begin {itemize}
+\item wrote the introduction to gesture recognition (Chapter~\ref{introGRChapter}),
+\item described classification of gestures (Section~\ref{classificationSection}) and confusion matrix of static gestures,
+\item participated in research and definition of gesture classification,
+\item implemented finger recognition, recorder and vizualizer, model and format of gestures recordings, determining the number of clusters for dynamic gestures, class for cross validation, integration static gesture and finger recognition modules to library.
+\end{itemize}
+
+Katarzyna Zjawin: 
+\begin{itemize}
+\item wrote the introduction (Chapter~\ref{introGRChapter}),
+\item described finger recognition (Section~\ref{fingerSection}),
+\item described the data model (Subsection~\ref{modelSubsection}), processes (Section~\ref{processesSection}), recorder and visualizer (Section~\ref{recordvisualSection}),
+\item participated in research and definition of gesture classification,
+\item implemented and tested finger recognition,
+\item implemented recorder and visualizer, model and format of gestures recordings.
+\end{itemize}
 
 

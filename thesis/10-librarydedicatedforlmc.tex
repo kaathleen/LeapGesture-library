@@ -1,5 +1,5 @@
 
-\chapter{LMGesture library dedicated for Leap Motion controller}\label{libraryChapter}
+\chapter{LeapGesture library dedicated for Leap Motion controller}\label{libraryChapter}
 
 \lstset{ %
 language=C++,                % choose the language of the code
@@ -354,11 +354,47 @@ List of Recorder features:
 \item LeapSDK -- allows to access Leap Motion device and its API
 \item pthread -- library used to create lightweight processes (threads), to allow simulteanous (multithreaded) processing and provide task synchronization
 \item LIBSVM -- ''A Library for Support Vector Machines'', provides SVM classifying abilities
+<<<<<<< HEAD
 \item Dlib -- provides k-means clustering, Chinese Whispers and Newman's Clustering algorithms
 \item HMMlib -- a C++ library for general hidden Markov Models
 \item Boost -- C++ extensions library, provides smart pointer mechanism for HMMlib
 \end{itemize}
 
+=======
+\item Dlib -- provides linear algebra operations and machine learning ?
+\item HMMlib -- a C++ library for general Hidden Markov Models
+\end{itemize}
+
+\section{Samples of code using the library dedicated for Leap Motion Controller} \label{sampleSection}
+
+Here's an example of code required to use gesture recognition features.
+
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=b,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+\begin{lstlisting}
+// specifies method which will be executed after successful recognition
+class MyGestures: public RecognizedGestureListener {
+
+	void onStaticRecognized() {
+		cout << "Recognized static gesture!" << endl;
+	}
+>>>>>>> 5a2a69d087015176fbe6360cb31162bc163d6fc3
 
 
 
