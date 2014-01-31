@@ -52,27 +52,27 @@ In this thesis all mentioned types of action gestures are considered. Recognitio
 
 \section{Gesture data representation} \label{datarepSection}
 
-LeapSDK provides built-in classes representing real--world object seen by the controller. The basic data unit we get from Leap Motion is a Frame. Frame contains objects like Hands and Pointables (Fingers and Tools), described by features directly related real attributes.
+LeapSDK provides built-in classes representing real-world object seen by the controller. The basic data unit we get from Leap Motion is a Frame. Frame contains objects like Hands and Pointables (Fingers and Tools), described by features directly related real attributes.
 
 Hand is an object representing a regular human hand. It contains Fingers, and is described by three dimensional values, like: position of center of hand, normal vector and direction vector (pointing from the center to the end of fingers). 
 
 Pointables are objects like Fingers or Tools (which are longer and thinner than Fingers). Both are described by the same set of features: position of tip, pointing direction vector, length and width.
 
-\begin{itemize}
-	\item Frame:
-	\begin{itemize}
-		\item Hands (position of center, normal vector, direction vector)
-			\begin{itemize}
-				\item Pointables: (tip position, pointing direction, length, width)
-				\begin{itemize}
-					\item Fingers
-					\item Tools
-				\end{itemize}
-			\end{itemize}
-	\end{itemize}
-\end{itemize}
+%\begin{itemize}
+%	\item Frame:
+%	\begin{itemize}
+%		\item Hands (position of center, normal vector, direction vector)
+%			\begin{itemize}
+%				\item Pointables: (tip position, pointing direction, length, width)
+%				\begin{itemize}
+%					\item Fingers
+%					\item Tools
+%				\end{itemize}
+%			\end{itemize}
+%	\end{itemize}
+%\end{itemize}
 
-All positions are expressed in millimeters, relative to position of controller which is always located in the center of the 3D space. Manufacturer claims, that the accuracy of device is about 0.01mm. Experiments shown results better than 0.2mm, using an industrial robot moving an object in controllers' field of view. This is more than enough, as accuracy of positioning human hand is about 0.4mm.~\cite{lmAN} 
+All positions are expressed in millimeters, relative to position of controller which is always located in the center of the 3D space. Manufacturer claims, that the accuracy of device is about $0.01$mm. Experiments shown results better than $0.2$mm, using an industrial robot moving an object in controllers' field of view. This is more than enough, as accuracy of positioning human hand is about $0.4$mm~\cite{lmAN}.
 
 \section{Preprocessing} \label{PreprocessingSection}
 
@@ -95,9 +95,9 @@ If the finger does not exist in a current frame and described check indicates th
 
 It is worth noticing, that preprocessing introduces delay in data transmission to the next processing blocks of gesture recognition. 
 Using wider width of preprocessing causes linear grow in delay time.
-For example, while capturing data with framerate equal to 50 frames per second and a window size equal four, the delay would be equal to:
+For example, while capturing data with framerate equal to $50$ frames per second and a window size equal four, the delay would be equal to:
 
 \begin{equation}
  \frac{w/2+1}{fps} = \frac{3}{50} = 0.06s.
 \end{equation}
-The delay of $0.06s$ is not affecting the recognition speed, but larger windows may introduce noticeable delay that might be undesirable in the application of the library. 
+The delay of $0.06$s is not affecting the recognition speed, but larger windows may introduce noticeable delay that might be undesirable in the application of the library. 
