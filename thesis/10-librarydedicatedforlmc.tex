@@ -65,9 +65,10 @@ Sample code illustrating the reading recorded data, including the configuration 
 
 \subsection{Testing}
 
-Testing is about gathering data from Leap Motion controller and processing them in a separate threads.
+Testing (recognition) process is a process performed to compute if and what gesture is recognized. 
+The testing process gathers data from the Leap Motion controller and process them in a separate threads.
 
-The general workflow is as following:
+The general workflow can be defined in a following way:
 \begin{enumerate}
   \item Developer creates object of his own class, implementing RecognizedGestureListener,
   \item Developer creates LeapProcess object, specifies which modules should be run and supplies RecognizedGestureListener object,
