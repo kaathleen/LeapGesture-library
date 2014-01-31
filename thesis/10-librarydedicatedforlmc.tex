@@ -20,7 +20,8 @@ breakatwhitespace=false,    % sets if automatic breaks should only happen at whi
 escapeinside={\%*}{*)}          % if you want to add a comment within your code
 }
 
-One of the main goals of creating a library for gesture recognition using Leap Motion, was simplifying the task for developers and creating a consistent, easy to use interface for in-applications use. A library can be treated as a black box which takes data frames as an input and responds only if a gesture from a defined set has been recognized. It was written using C++.
+A library cointaining previously described gesture recognition methods has been created. It is designed as an aid for developers who would like to use gesture input in their applications, but do not want to implement recognition methods manually. Using it does not require deep knowledge about gesture recognition methods -- a library is like a black box: after initial learning process, it is feed with frames from Leap Motion, and responds if there is a match to previously learned gesture. Code was written in C++, so it is intended to be used in C++ applications. 
+
 
 \section{Architecture} \label{architectureSection}
 
@@ -31,22 +32,13 @@ The library is divided into three main modules:
 \item fingers recognition module.
 \end{itemize}
 
-Each of those modules has its own separate API --- for learning, and for testing (recognition).
+Each of those modules has its own separate methods -- for learning new gestures, and for further operational work (recognition). 
 	
 \subsection{Learning}
 
-Learning process does not use separate threads. It is intented to be run single time by developer. As an input, it takes:
-\begin{enumerate}
-	\item set of recordings,
-	\item learning configuration (parameters specific for given module).
-\end{enumerate}
-Returned output is:
-\begin{enumerate}
-	\item results -- assessment of process, achieved recognition rate,
-	\item model, usually a file, which can be used for recognition process.
-\end{enumerate}
+Learning process is intended to be run only once. Its goal is to create model, which will be later used in recognition. As an input, it takes a set of recordings -- files with gestures recorded using Leap Motion and Recorder application and configuration -- specific for given module. Output of learning process is a model file, for further use, and learning results -- class containing data describing how well did the learning process went, like recognition rates for classes.
 
-Sample code presenting how to perform static gesture learning for two classes:
+Sample code presenting how to perform static gesture learning for two gestures (two classes):
 \begin{lstlisting}
 	vector<pair<const char*, const char*> > input;
 	input.push_back(make_pair("gesture1.lmr", "gesture1"));
