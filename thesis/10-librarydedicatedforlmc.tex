@@ -1,5 +1,5 @@
 
-\chapter{LMGesture library dedicated for Leap Motion controller}\label{libraryChapter}
+\chapter{LeapGesture library dedicated for Leap Motion controller}\label{libraryChapter}
 
 \section{Architecture} \label{architectureSection}
 
@@ -88,7 +88,7 @@ The learning process is a process of teaching LeapGesture library a new gesture 
 \end{figure}
 
 The first step in the learning process, which is performed by the system is the preprocessing of data. Training data should be deprived of noise or should not have lost fingers for several frames. According to user-specified parameters, the system will learn the gesture as a static or dynamic gesture.
-System uses support vector machine (SVM) for learning of static gesture. For dynamic gestures it uses hidden Markov model (HMM). 
+System uses support vector machine (SVM) for learning of static gesture. For dynamic gestures it uses Hidden Markov Model (HMM). 
 The learning process for static gestures:
 \begin{enumerate}
 \item In the first stage, data which will be used during the learning are preprocessed.
@@ -133,10 +133,10 @@ Methods for a finger differentiation observer:
 As in the learning process for recognizing static gestures system uses SVM and for dynamic gestures -- HMM. For finger differentation system uses support vector machine. However, there are other classes than those used for static gestures recogniton.
 
 \section{Gesture recorder and visualizer}\label{recordvisualSection}
-Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section $8.1.1$ and writes it to the LMR file, which is supported by the LMGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
+Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section~\ref and writes it to the LMR file, which is supported by the LeapGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
 
 \subsection{LMR files}
-This is a file format specially developed for the LMGestue library, supported by various modules for example by the visualizer. The file structure is as follows:
+This is a file format specially developed for the LeapGesture library, supported by various modules for example by the visualizer. The file structure is as follows:
 \begin{itemize}
 \item Line represents one frame.
 \item One frame contains: timestamp and hand parameters.
@@ -235,10 +235,10 @@ List of Recorder features:
 \item pthread -- library used to create lightweight processes (threads), to allow simulteanous (multithreaded) processing and provide task synchronization
 \item LIBSVM -- ''A Library for Support Vector Machines'', provides SVM classifying abilities
 \item Dlib -- provides linear algebra operations and machine learning ?
-\item HMMlib -- a C++ library for general hidden Markov Models
+\item HMMlib -- a C++ library for general Hidden Markov Models
 \end{itemize}
 
-\section{Samples of code using the library dedicated to Leap Motion Controller} \label{sampleSection}
+\section{Samples of code using the library dedicated for Leap Motion Controller} \label{sampleSection}
 
 Here's an example of code required to use gesture recognition features.
 
