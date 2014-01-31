@@ -197,34 +197,34 @@ GestureFinger stores parameters of one finger. In one instance of GestureHand ma
 \section{Processes}\label{processesSection}
 
 \subsection{The learning process}
-The learning process is a process of teaching the LeapGesture library a new gestures by API user. 
-First  gestures must be recorded in LMR format. 
-To obtain recordings in this format API user may use the Gesture Recorder ---  a module included in the library, which records data captured by Leap Motion Controller and saves it as LMR file. 
-Each of the LMR file should contains only one class of gesture, but for one class may be several LMR files. 
-In the case of static gestures one recording should represent one gesture recorded at different angles and in the case of dynamic gestures recording should include only one execution of a gesture.
+The learning process is a process of teaching the LeapGesture library a new gestures by an API user. 
+Gestures to be learnt are recorded and stored in a LMR format. 
+The recordings in the LMR format can done using the Gesture Recorder ---  a module included in the library, which records data captured by Leap Motion Controller/. 
+Every LMR file contains only one class of gesture, but each class can be represented by several LMR files. 
+In the case of static gestures, one recording should represent one gesture recorded at different angles and in the case of dynamic gestures recording should include only one execution of a gesture.
 
 When all desired gestures are prepared, the API user starts the process of learning by calling \texttt{train} method of appropriate module indicating the training set using \texttt{TrainingClassDatasetList} class and the configuration of learning using the object of appropriate configuration class:
 \begin{itemize}
-\item \texttt{TrainingStaticRecConf} for static gesture recognition,
-\item \texttt{TrainingDynamicRecConf} for dynamic gesture recognition,
-\item \texttt{TrainingFingerRecConf} for fingers recognition.
+\item \texttt{TrainingStaticRecConf} for the static gesture recognition,
+\item \texttt{TrainingDynamicRecConf} for the dynamic gesture recognition,
+\item \texttt{TrainingFingerRecConf} for the fingers recognition.
 \end{itemize}
 
 
 \begin{figure}[htb]
 \centering
  \includegraphics[width=0.75\columnwidth]{figures/learningProcess.png}
- \caption{Diagram showing the learning process for LeapGesture library}
+ \caption{A diagram presenting the learning process implemented in the LeapGesture library}
  \label{learningprocess}
 \end{figure}
 
-Then the library executes preprocessing on the given training set and starts training by using the selected module by API user:
+Then, the library executes preprocessing on the given training set and starts training, using the selected module by an API user:
 \begin{itemize}
-\item for static gesture recognition and fingers recognition modules -- the result of training is saved in MODEL and RANGE files. Those files are needed for proper work of classification. The former stores learned support vectors, the latter contains scaling parameters of learning dataset. In addition, a CLASSMAP file is created, which contains mapping from class names specified by API user to class names supported by SVM. Intermediate files can also be created such as DAT file (raw dataset) or SCALE file (scaled dataset) depending on the established configuration,
+\item in case of the static gesture recognition and the fingers recognition modules, the results of training are saved in the MODEL and RANGE files. Those files are needed for proper classification. The former stores learnt model of the Support Vector Machine, the latter contains scaling parameters of learning dataset. In addition, a CLASSMAP file is created, which contains mapping from class names specified by API user to class names supported by the SVM. Some additional files can also be created such as DAT file (raw dataset) or SCALE file (scaled dataset) depending on the established configuration,
 \item {\color{red}for dynamic gesture recognition -- .}
 \end{itemize}
 
-The library returns information about the outcome of learning process in the object of \linebreak \texttt{TrainingResult} class.
+The library returns information about the outcome of a learning process in the object of \linebreak \texttt{TrainingResult} class.
 
 
 \subsection{The recognition process}
@@ -232,9 +232,9 @@ The recognition process is a process of recognizing the gesture performed by the
 
 The API user implements \texttt{RecognizedGestureListener} class and creates object of this listener. Then the API user creates an object of \texttt{LeapProcess} class specifying in its constructor which modules should be executed and passes previously initialized object of the listener. The API user also assigns the appropriate configuration object to the corresponding fields of \texttt{LeapProcess} class, which refer to particular modules:
 \begin{itemize}
-\item for static gesture recognition the object of \texttt{TestingStaticRecConf} class is assigned to the field \texttt{staticRecConfiguration},
-\item for dynamic gesture recognition the object of \texttt{TestingDynamicRecConf} class is assigned to the field \texttt{dynamicRecConfiguration},
-\item for fingers recognition the object of \texttt{TestingFingerRecConf} class is assigned to the field \texttt{fingerRecConfiguration}.
+\item for the static gesture recognition the object of \texttt{TestingStaticRecConf} class is assigned to the field \texttt{staticRecConfiguration},
+\item for the dynamic gesture recognition the object of \texttt{TestingDynamicRecConf} class is assigned to the field \texttt{dynamicRecConfiguration},
+\item for the fingers recognition the object of \texttt{TestingFingerRecConf} class is assigned to the field \texttt{fingerRecConfiguration}.
 \end{itemize}
 Then the API user adds an object of \texttt{LeapListener} or \texttt{FileListener} to the object of \texttt{LeapProcess} and starts the recognition process.
 
@@ -242,14 +242,14 @@ Then the API user adds an object of \texttt{LeapListener} or \texttt{FileListene
 \begin{figure}[htb]
 \centering
  \includegraphics[width=0.6\columnwidth]{figures/recognitionProcess.png}
- \caption{Diagram showing the recognition process for LeapGesture library}
+ \caption{A diagram presenting the recognition process implemented in the LeapGesture library}
  \label{recognitionprocess}
 \end{figure}
 
-After the start of recognition process LeapGesture library notifies the object of \texttt{RecognizedGestureListener} regards the occurrence of gestures recognition events.
+After the start of recognition process LeapGesture library notifies the object of \texttt{RecognizedGestureListener} in case of the occurrence of gestures recognition events.
 
 \section{Gesture recorder and visualizer}\label{recordvisualSection}
-Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section~\ref and writes it to the LMR file, which is supported by the LeapGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
+The recorder and visualizer module is an additional part of the library that allows users easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section~\ref and writes it to the LMR file, which is supported by the LeapGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
 
 \subsection{LMR files}
 This is a file format specially developed for the LeapGesture library, supported by various modules for example by the visualizer. The file structure is as follows:
