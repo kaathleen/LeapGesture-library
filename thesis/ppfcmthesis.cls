@@ -182,7 +182,7 @@ Typeset using \LaTeX\ in Computer Modern.
 \renewcommand{\and}{\unskip{} $\backslash$and }%
 \medskip\noindent Bib\TeX{}:\\[1ex]
 \tiny\texttt{%
-@mastersthesis\{ key,\\
+@mastersthesis\{ LeapGesture2014,\\
 \hspace*{2em}author = "\@author",\\
 \hspace*{2em}title = "\{\@title\}",\\
 \hspace*{2em}school = "Poznan University of Technology",\\
