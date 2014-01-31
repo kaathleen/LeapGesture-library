@@ -1,25 +1,25 @@
 \chapter*{Streszczenie}
 Niniejsza praca jest poświęcona nowym możliwościom zastosowania gestów do interakcji człowieka z komputerem, które pojawiły się wraz z wprowadzeniem na rynek urządzenia Leap Motion.
 Leap Motion to innowacyjne urządzenie, które udostępnia dane dotyczące pozycji rąk oraz palców w przestrzeni trójwymiarowej z dokładnością do $0,01$mm.
-Rezultatem niniejszej pracy jest przeznaczona dla programistów, dedykowana dla kontrolera Leap Motion, biblioteka LeapGesture udostępniona na licencji open-source, która zawiera algorytmy do nauki oraz rozpoznawania gestów.
-Autorzy pracy zbadali możliwości sensora w zastosowaniu rozpoznawania układów dłoni (gestów statycznych), wykonywanych ruchów ręki (gestów dynamicznych) oraz rozróżniania palców.
+Rezultatem niniejszej pracy jest przeznaczona dla programistów oraz dedykowana dla kontrolera Leap Motion, biblioteka LeapGesture, która zawiera algorytmy do nauki oraz rozpoznawania gestów.
+Autorzy pracy zbadali możliwości sensora w zastosowaniu do rozpoznawania układów dłoni (gestów statycznych), wykonywanych ruchów ręki (gestów dynamicznych) oraz rozróżniania palców.
 Statyczne gesty są rozpoznawane za pomocą mechanizmu maszyn wektorów wspierających (SVM) z wykorzystaniem filtracji medianowej danych wejściowych oraz przy wykorzystaniu zależności pomiędzy kolejnymi rozpoznanymi gestami w danym oknie czasowym.
-Praca zawiera także badania różnych używanych wektorów cech, których wybór ma znaczny wpływ na uzyskiwane rezultaty.
+Praca zawiera także badania różnych wektorów cech, których wybór ma znaczny wpływ na uzyskiwane rezultaty.
 Zaproponowane podejście do wybranych cech umożliwiło rozpoznawanie zbioru gestów należących do pięciu klas z dokładnością $99\%$ oraz zbioru gestów należących do dziesięciu klas z dokładnością $85\%$.
 Gesty dynamiczne (ruch ręki oraz palców) są rozpoznawane za pomocą ukrytych modeli Markowa (HMM).
 Przyjęte podejście umożliwiło osiągnięcie $80\%$ skuteczności rozpoznawania gestów dynamicznych należących do sześciu klas.
 Moduł rozróżniania palców ręki dla badanych zbiorów osiągnął dokładność rozpoznawania wynoszącą $93\%$. 
-W bibliotece zostały zaimplementowane wyżej wymienione podejścia w języku C++, dzięki czemu biblioteka LeapGesture może być użyta w aplikacji każdego typu.
+W bibliotece zostały zaimplementowane wyżej wymienione podejścia w języku C++, dzięki czemu biblioteka LeapGesture może być użyta w aplikacji dowolnego typu dla wielu zastosowań.
 
 \chapter*{Abstract}
 This thesis studies the new possibilities to gesture interfaces that emerged with a Leap Motion sensor.
 The Leap Motion is an innovative, 3D motion capturing device designed especially for hands and fingers tracking with precision up to $0.01$mm.
-The outcome of the thesis is the open-source LeapGesture library dedicated to the developers for Leap Motion Controller that contains algorithms allowing to learn and recognize gestures.
+The outcome of the thesis is the LeapGesture library dedicated to the developers for Leap Motion Controller that contains algorithms allowing to learn and recognize gestures.
 The authors examined the data provided by the sensor in context of recognition of hand poses (static gestures), hand movements (dynamic gestures) and in task of a finger recognition.
 The static gestures are recognized using the Support Vector Machine (SVM) with median filtering an input data and using the correspondences between consecutive recognitions.
 The thesis contains evaluation of different feature sets, which have a significant impact on the recognition rate.
 The chosen feature set allowed to recognize a set of five gestures with $99\%$ accuracy and a set of ten gestures with $85\%$.
 The dynamic gestures (movements of a hand and fingers) are recognized with the Hidden Markov Models (HMM). 
-Recognition with HMMs allowed to achieve accuracy of $80\%$ for a set containing six dynamic gestures.
+Recognition with HMMs allowed to achieve accuracy of $80\%$ for a set containing six classes of dynamic gestures.
 Finger recognition algorithms proposed in this thesis works with $93\%$ accuracy on a recorded dataset.
-The LeapGesture library contains presented approaches using a C++ interface, that can be easily used in every application.
+The LeapGesture library contains presented approaches using a C++ interface, that can be easily used in any application for many purposes.
