@@ -46,8 +46,8 @@ The library can be divided into learning (offline) and recognition (online) part
 	
 \subsection{Learning}
 
-Learning process is intended to be run only once and it has to be done before user decides to recognize gestures. Its goal is to create a model, which will be can be later used in recognition task. As an input, the learning needs a set of recordings. The recordings are files with gestures recorded using the Leap Motion and the Recorder application. Additionally, learning process requires a configuration file containing learning parameters. The output of learning process is a model file used in recognition process. 
-The learning process informs about the what is the expected recognition measured on the training set.
+Learning process is intended to be run only once and it has to be done before user decides to recognize gestures. Its goal is to create a model, which will be later used in recognition task. As an input, the learning needs a set of recordings. The recordings are files with gestures recorded using the Leap Motion and the Recorder application. Additionally, learning process requires a configuration file containing learning parameters. The output of learning process is a model file used in recognition process. 
+The learning process informs about the what is the expected recognition rate measured on the training set.
 
 Sample code illustrating the reading recorded data, including the configuration file and performing a process of learning two classes of static gestures:
 \begin{lstlisting}
@@ -138,6 +138,9 @@ int main(int argc, char **argv) {
 \end{lstlisting}
 
 \subsection{Elements of library}
+
+
+
 \begin{itemize}
 \item LeapProcess -- main class, acting as an interface between Leap Motion device, application and processing threads.
 \item LeapListener -- class responsible for gathering data from Leap Motion and feeding them to processing threads (via LeapProcess).
