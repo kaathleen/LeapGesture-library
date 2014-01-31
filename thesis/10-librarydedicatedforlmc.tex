@@ -221,7 +221,7 @@ When all desired gestures are prepared, the API user starts the process of learn
 Then, the library executes preprocessing on the given training set and starts training, using the selected module by an API user:
 \begin{itemize}
 \item in case of the static gesture recognition and the fingers recognition modules, the results of training are saved in the MODEL and RANGE files. Those files are needed for proper classification. The former stores learnt model of the Support Vector Machine, the latter contains scaling parameters of learning dataset. In addition, a CLASSMAP file is created, which contains mapping from class names specified by API user to class names supported by the SVM. Some additional files can also be created such as DAT file (raw dataset) or SCALE file (scaled dataset) depending on the established configuration,
-\item in case of a dynamic gesture recognition the trained Hidden Markov Models are stored in the HMMMODEL files. The feature scaling is also presented and parameters are stored in the RANGE files. The information to form an observation sequence are stored in file CENTR containing the values of centroids of clusters detected using the k-means algorithm. 
+\item in case of a dynamic gesture recognition the trained Hidden Markov Models are stored in the HMMMODEL files. The feature scaling is also presented and parameters are stored in the RANGE files. The information to form an observation sequence are stored in file CENTR containing the centroids positions of clusters detected using the k-means algorithm. 
 \end{itemize}
 
 The library returns information about the outcome of a learning process in the object of \linebreak \texttt{TrainingResult} class.
