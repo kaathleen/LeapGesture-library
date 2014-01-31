@@ -74,25 +74,42 @@ The testing process gathers data from the Leap Motion controller and processes t
  \label{processingtimeline}
 \end{figure}
 
-The general workflow can be defined in a following way:
-\begin{enumerate}
-  \item developer creates object of his own class, implementing \texttt{RecognizedGestureListener},
-  \item developer creates LeapProcess object, specifies which modules should be run and supplies RecognizedGestureListener object,
-  \item developer creates configuration object and sets it as appropriate field in LeapProcess:
-  \begin{enumerate}
-   \item class TestingStaticRecConf, field staticRecConfiguration -- for static gesture recognition,
-   \item class TestingDynamicRecConf, field dynamicRecConfiguration -- for dynamic gesture recognition,
-   \item class TestingFingerRecConf, field fingerRecConfiguration -- for fingers recognition,
-  \end{enumerate}
-  \item developer attaches LeapListener object to the LeapProcess object,
-  \item developer starts the process,
-  \item if a gesture recognition event had happened, an user supplied method is executed.
-\end{enumerate}
-
-Sample code showing testing (recognition) for model prepared in previous step:
+Sample code showing testing (recognition) for model prepared in learning step:
 \begin{lstlisting}
 // specifies method which will be executed after successful recognition
 class MyGestures: public RecognizedGestureListener {
+
+// executed when a static module starts recognizing a gesture
+void staticRec_onStart(TestingResult testingResult){};
+
+// executed after a frame is processed by static module
+void staticRec_onFrame(TestingResult testingResult){
+if(tr.testClassResults[0].classTrainRate > 0.5) {
+cout << "CLASS 0!" << endl;
+}
+else cout << "CLASS 1!" << endl;
+}
+
+// executed when a static gesture stops being recognized or changes into another gesture, className specifies name of class
+void staticRec_onEnd(string className){};
+
+// executed when a dynamic module starts recognizing a gesture
+void dynamicRec_onStart(TestingResult testingResult){};
+
+// executed when a frame is processed by dynamic gesture
+void dynamicRec_onFrame(TestingResult testingResult){};
+
+// executed when a dynamic gesture stops being recognized or changes into another one, className specifies name of that gesture
+void dynamicRec_onEnd(string className){};
+
+// executed when a fingers recognition module starts recognizing a class
+void fingerRec_onStart(TestingResult testingResult){};
+
+// executed after a frame is processed by fingers recognition module
+void fingerRec_onFrame(TestingResult testingResult){};
+
+// executed when a combination of fingers stops being recognized or changes into another one, className specifies name of that class
+void fingerRec_onEnd(string className){};
 
 void onStaticRecognized(TestingResult *tr) {
 if(tr->testClassResults[0].classTrainRate > 0.5) {
@@ -138,34 +155,32 @@ c.removeListener(listener);
 
 \subsection{Elements of library}
 
-
-
 \begin{itemize}
-\item LeapProcess -- main class, acting as an interface between Leap Motion device, application and processing threads.
-\item LeapListener -- class responsible for gathering data from Leap Motion and feeding them to processing threads (via LeapProcess).
-\item FileListener -- as above, but data comes from a file, not controller. Used mainly for testing.
-\item TestingResult -- class containing results of testing process:
+\item \texttt{LeapProcess} -- main class, acting as an interface between Leap Motion device, application and processing threads,
+\item \texttt{LeapListener} -- class responsible for gathering data from Leap Motion. Captured data are sent to processing threads (instance of \texttt{LeapProcess} class),
+\item \texttt{FileListener} -- as above, but data comes from a file, not controller. Used mainly for testing,
+\item \texttt{TestingResult} -- class containing results of testing process. It includes following fields:
 \begin{itemize}
-\item bool recognized -- notifies if a gesture has been recognized
-\item string className -- name of class with highest recognition rate
-\item string genericClassName -- generic name of class with highest recognition rate
-\item vector\textless TestingClassResult \textgreater testClassResults -- vector of TestingClassResult
+\item \texttt{bool recognized} -- notifies if a gesture has been recognized,
+\item \texttt{string className} -- name of class with highest recognition rate,
+\item \texttt{string genericClassName} -- generic name of class with highest recognition rate,
+\item \texttt{vector\textless TestingClassResult\textgreater~testClassResults} -- vector of \texttt{TestingClassResult} class,
 \end{itemize}
-\item TestingClassResult -- contains testing results for a single class
+\item \texttt{TestingClassResult} -- contains testing results for a single class. It includes following fields:
 \begin{itemize}
-\item double classTrainRate -- recognition rate for given class
-\item string className -- name of a classs
-\item string genericClassName -- generic name of class
+\item \texttt{double classTrainRate} -- recognition rate for given class,
+\item \texttt{string className} -- name of a classes,
+\item \texttt{string genericClassName} -- generic name of class,
 \end{itemize}
 
-\item RecognizedGesture -- abstract class containing methods which will be executed after successful recognition
-\item GestureFinger, GestureHand, GestureFrame, Vertex - classes representing respectively: Frame, Hand and Finger, with additional Vertex class, which simpifies operations on 3D points
-\item StorageDriver -- class for I/O operations on LMR files
-\item LMpre -- class containing data preprocessing methods
+\item \texttt{RecognizedGesture} -- abstract class containing methods which will be executed after successful recognition,
+\item \texttt{GestureFinger}, \texttt{GestureHand}, \texttt{GestureFrame}, \texttt{Vertex} - classes representing respectively: Frame, Hand and Finger, with additional \texttt{Vertex} class, which simpifies operations on 3D points,
+\item \texttt{StorageDriver} -- class for I/O operations on LMR files described in Section~\ref{lmrFilesSection},
+\item \texttt{LMpre} -- class containing data preprocessing methods.
 
 \end{itemize}
 
-\subsection{Model}\label{modelSubsection}
+\subsection{Recordings model}\label{modelSubsection}
 
 While data obtained from Leap Motion Controller are being processed, they are stored using a specially created classes representing the data. The most important class is GestureFrame, which represents a single frame captured from device. All gathered data is stored in a vector containing elements of GestureFrame type. GestureFrame holds the following information:
 
@@ -232,7 +247,7 @@ Technical information regards LMR files:
 \subsection{The learning process}
 The learning process is a process of teaching the LeapGesture library a new gestures by an API user.
 Gestures to be learnt are recorded and stored in a LMR format.
-The recordings in the LMR format can done using the Gesture Recorder --- a module included in the library, which records data captured by Leap Motion Controller/.
+The recordings in the LMR format can done using the Gesture Recorder --- a module included in the library, which records data captured by Leap Motion Controller.
 Every LMR file contains only one class of gesture, but each class can be represented by several LMR files.
 In the case of static gestures, one recording should represent one gesture recorded at different angles and in the case of dynamic gestures recording should include only one execution of a gesture.
 
