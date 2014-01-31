@@ -76,17 +76,23 @@ All positions are expressed in milimeters, relative to position of controller wh
 
 \section{Preprocessing} \label{PreprocessingSection}
 
-Stability of images acquired by Leap Motion can vary, which occurs as noise on captured data -- sometimes fingers may flicker, or nonexisting objects appear in view. Those malfunctions happen for a very short period of time, usually less then 5 frames. 
+Stability of images acquired by Leap Motion can vary, which results in captured noisy data -- sometimes fingers may flicker, or non-existing objects appear in a view. Those malfunctions happen for a very short period of time, usually less then 5 frames. 
 
-To improve data stability, a simple preprocessing has been created. Its principle is based on median filter -- it uses a window with custom definied size. For a given frame, for every unique finger which have been captured in the the window, algorithm checks if it should be present in current frame, by checking its neighboor frames within defined radius $r$. It counts occurences of a finger ($f_0$) in a neighboorhood and decides:
+To improve data stability, a simple preprocessing has been proposed. Its principle is based on a median filter -- it uses a window with custom defined size. For a given frame, for every unique finger which have been captured in the window, the algorithm checks if it should be present in a current frame, by checking its neighbour frames.
+The neighbourhood of width $w$ is understood as $w/2$ frames that were recorded earlier that currently analyzed frame and $w/2$ frames that were recorded later. 
+In this neighbourhood, the occurrences of a finger ($f_0$) are counter and decision is made:
 
 \begin{itemize}
-\item if $f_0 > r$, a finger should appear in that frame
-\item otherwise, there should not be a finger
+\item if $f_0 > w/2$ then a finger should appear in that frame,
+\item otherwise, a finger is believed to be a noise in the data.
 \end{itemize}
 
-If the finger does not exist in current frame and a check indicates it should, its position is calculated using finger positions in two closest frames where that finger appears, using linear interpolation. Otherwise, a finger is simply removed.
+If the finger does not exist in a current frame and described check indicates that it should, then its position is calculated using linear interpolation of finger positions in two closest frames. Otherwise, a finger is simply removed.
 
-Using data preprocessing causes delay in data transmission to processing threads, proportional $r+1$. For example, while capturing with 50 frames per second, with window radius $r=4$, the delay would be:
+It is worth noticing, that preprocessing introduces delay in data transmission to the next processing blocks of gesture recognition. 
+Using wider width of preprocessing linearly causes greater delay.
+For example, while capturing data with framerate equal to 50 frames per second and window size equal four, the delay would be:
 
-$$ \frac{r+1}{fps} = \frac{5}{50} = 0.1 second $$
+$$ \frac{w/2+1}{fps} = \frac{3}{50} = 0.06s $$
+
+The delay of $0.06s$ is not affecting the recognition speed, but larger windows may introduce noticeable delay. 
