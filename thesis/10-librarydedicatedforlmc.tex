@@ -20,7 +20,12 @@ breakatwhitespace=false,    % sets if automatic breaks should only happen at whi
 escapeinside={\%*}{*)}          % if you want to add a comment within your code
 }
 
-A library cointaining previously described gesture recognition methods has been created. It is designed as an aid for developers who would like to use gesture input in their applications, but do not want to implement recognition methods manually. Using it does not require deep knowledge about gesture recognition methods -- a library is like a black box: after initial learning process, it is feed with frames from Leap Motion, and responds if there is a match to previously learned gesture. Code was written in C++, so it is intended to be used in C++ applications. 
+A library containing previously described gesture recognition methods has been created. 
+It is designed as an aid for developers who would like to use gesture input in their applications, but do not want to implement recognition methods manually.
+Using it does not require deep knowledge about gesture recognition methods -- a library is like a black box: after initial learning process, it is feed with frames from Leap Motion, and responds if there is a match to previously learnt gesture. 
+Code was written in C++, so it can be used on many platforms.
+When there is a need to use the library in an application written in different programming language, the library can be compiled into dynamic-link library (DLL) or dynamic shared object (DSO) and linked in a project.
+Thus, the library can be easily used in many projects.
 
 
 \section{Architecture} \label{architectureSection}
@@ -32,13 +37,19 @@ The library is divided into three main modules:
 \item fingers recognition module.
 \end{itemize}
 
-Each of those modules has its own separate methods -- for learning new gestures, and for further operational work (recognition). They are implemented using the observer pattern. For each of the modules, there are specified relevant events that are fired in the key moments of recognition such as: moment in which particular gesture began to be recognized, moment in which the particular gesture stopped being recognized, moment in which frame processing is finished.
+Each of those modules has its own separate methods -- for learning new gestures, and for further operational work (recognition). They are implemented using the observer pattern. 
+The main processing of the library is performed within a separate thread, that creates certain list of events.
+The set of observers is defined to be called on the library's events.
+The most important events that are fired in the key moments of recognition include: an event when particular gesture began to be recognized, an event when the particular gesture has being recognized, an event when a frame processing is finished.
+
+The library can be divided into learning (offline) and recognition (online) parts.
 	
 \subsection{Learning}
 
-Learning process is intended to be run only once. Its goal is to create model, which will be later used in recognition. As an input, it takes a set of recordings -- files with gestures recorded using Leap Motion and Recorder application and configuration -- specific for given module. Output of learning process is a model file, for further use, and learning results -- class containing data describing how well did the learning process went, like recognition rates for classes.
+Learning process is intended to be run only once and it has to be done before user decides to recognize gestures. Its goal is to create a model, which will be can be later used in recognition task. As an input, the learning needs a set of recordings. The recordings are files with gestures recorded using the Leap Motion and the Recorder application. Additionally, learning process requires a configuration file containing learning parameters. The output of learning process is a model file used in recognition process. 
+The learning process informs about the what is the expected recognition measured on the training set.
 
-Sample code presenting how to perform static gesture learning for two gestures (two classes):
+Sample code illustrating the reading recorded data, including the configuration file and performing a process of learning two classes of static gestures:
 \begin{lstlisting}
 	vector<pair<const char*, const char*> > input;
 	input.push_back(make_pair("gesture1.lmr", "gesture1"));
