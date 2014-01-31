@@ -72,27 +72,32 @@ Pointables are objects like Fingers or Tools (which are longer and thinner than 
 	\end{itemize}
 \end{itemize}
 
-All positions are expressed in milimeters, relative to position of controller which is always located in the center of the 3D space. Manufacturer claims, that the accuracy of device is about 0.01mm. Experiments shown results better than 0.2mm, using an industrial robot moving an object in controllers' field of view. This is more than enough, as accuracy of positioning human hand is about 0.4mm.~\cite{lmAN} 
+All positions are expressed in millimeters, relative to position of controller which is always located in the center of the 3D space. Manufacturer claims, that the accuracy of device is about 0.01mm. Experiments shown results better than 0.2mm, using an industrial robot moving an object in controllers' field of view. This is more than enough, as accuracy of positioning human hand is about 0.4mm.~\cite{lmAN} 
 
 \section{Preprocessing} \label{PreprocessingSection}
 
-Stability of images acquired by Leap Motion can vary, which results in captured noisy data -- sometimes fingers may flicker, or non-existing objects appear in a view. Those malfunctions happen for a very short period of time, usually less then 5 frames. 
+Stability of images acquired and used by Leap Motion to provide the information about hands and finger can be different.
+Strong sunlight or fast movements may result in obtaining data that is noisy.
+Sometimes, the noisy information processed by Leap Motion result short-time lost tracking of fingers, or non-existing objects appear in a view. 
+Those short-time malfunctions happen usually last less then five frames and additional preprocessing can be introduced. 
 
-To improve data stability, a simple preprocessing has been proposed. Its principle is based on a median filter -- it uses a window with custom defined size. For a given frame, for every unique finger which have been captured in the window, the algorithm checks if it should be present in a current frame, by checking its neighbour frames.
-The neighbourhood of width $w$ is understood as $w/2$ frames that were recorded earlier that currently analyzed frame and $w/2$ frames that were recorded later. 
-In this neighbourhood, the occurrences of a finger ($f_0$) are counter and decision is made:
+The preprocessing principle is based on a median filter -- it uses a window with defined size $w$ to detect and remove noisy information. 
+For a given frame and every unique finger detected in the window of frames, the algorithm checks if the processed finger is a real finger or a noise information.
+The neighbourhood of width $w$ can be understood as set of $w/2$ frames that were recorded earlier that the currently analyzed frame and $w/2$ frames that were recorded later. 
+In this neighbourhood, the occurrences of a finger ($f_x$) are counter and decision is made:
 
 \begin{itemize}
-\item if $f_0 > w/2$ then a finger should appear in that frame,
-\item otherwise, a finger is believed to be a noise in the data.
+\item if $f_x > w/2$ then a finger is believed to be a real finger,
+\item otherwise, a finger is believed to be a data noise.
 \end{itemize}
 
 If the finger does not exist in a current frame and described check indicates that it should, then its position is calculated using linear interpolation of finger positions in two closest frames. Otherwise, a finger is simply removed.
 
 It is worth noticing, that preprocessing introduces delay in data transmission to the next processing blocks of gesture recognition. 
-Using wider width of preprocessing linearly causes greater delay.
-For example, while capturing data with framerate equal to 50 frames per second and window size equal four, the delay would be:
+Using wider width of preprocessing causes linear grow in delay time.
+For example, while capturing data with framerate equal to 50 frames per second and a window size equal four, the delay would be equal to:
 
-$$ \frac{w/2+1}{fps} = \frac{3}{50} = 0.06s $$
-
-The delay of $0.06s$ is not affecting the recognition speed, but larger windows may introduce noticeable delay. 
+\begin{equation}
+ \frac{w/2+1}{fps} = \frac{3}{50} = 0.06s $.
+\end{equation}
+The delay of $0.06s$ is not affecting the recognition speed, but larger windows may introduce noticeable delay that might be undesirable in the application of the library. 
