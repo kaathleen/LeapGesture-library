@@ -252,15 +252,15 @@ After the start of recognition process LeapGesture library notifies the object o
 The recorder and visualizer module is an additional part of the library that allows users easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section~\ref{} and writes it to the LMR file, which is supported by the LeapGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.
 
 \subsection{LMR files}
-This is a file format specially developed for the LeapGesture library, supported by various modules for example by the visualizer. The file structure is as follows:
+This is a file format specially developed for the LeapGesture library, supported by various modules, i.e., by the visualizer. The file structure is as follows:
 \begin{itemize}
-\item Line represents one frame.
+\item Each line represents one frame.
 \item One frame contains: timestamp and hand parameters.
 \item Hand parameters include: hand id, palm position, stabilized palm position, palm normal vector, palm direction vector and detected fingers parameters.
 \item Finger parameters include: finger id, finger tip position, stabilized tip position, finger direction vector, finger length and finger width.
 \end{itemize}
 
-Example lines from LMR file:
+Exemplary lines from a LMR file:
 \begin{quote}
 {\color{red}4.78984}\#{\color{blue}7 -9.15495;113.759;46.292 0;0;0 -0.157914;-0.981575;0.107585 -0.0196983;-0.105799;-0.994192}f1 {\color{green} -64.0011;122.41;-28.5433 -64.831;125.304;-38.845 -0.574857;0.0254502;-0.817858 50.4269 13.0854}
 
@@ -269,7 +269,7 @@ Example lines from LMR file:
 {\color{red}27.4361}\#{\color{blue}7 -8.72478;113.293;46.1443 0;0;0 -0.159539;-0.981183;0.108754 -0.0203256;-0.106877;-0.994065}f1 {\color{green} -63.5346;121.826;-28.7338 -64.7892;125.183;-38.475 -0.576776;0.0265335;-0.816472 50.3783 13.1248}
 \end{quote}
 
-This example shows a frame containing a hand with one finger exposed. The color red is used to mark frame timestamp, the blue color 
+This example shows a frame containing a hand with one finger. The color red is used to mark frame timestamp, the blue color 
 highlights information about hand, and the color green indicates information about the exposed finger.
 
 
@@ -349,8 +349,8 @@ List of Recorder features:
 \begin{itemize} 
 \item LeapSDK -- allows to access Leap Motion device and its API
 \item pthread -- library used to create lightweight processes (threads), to allow simulteanous (multithreaded) processing and provide task synchronization
-\item LIBSVM -- ''A Library for Support Vector Machines'', provides SVM classifying abilities
-\item Dlib -- provides k--means clustering, Chinese Whispers and Newman's Clustering algorithms
-\item HMMlib -- a C++ library for general Hidden Markov Models
-\item Boost -- C++ extensions library, provides smart pointer mechanism for HMMlib
+\item LIBSVM -- ''A Library for Support Vector Machines'', provides SVM classifying algorithm,
+\item Dlib -- provides k--means clustering, Chinese Whispers and Newman's Clustering algorithms,
+\item HMMlib -- a C++ library containing optimized version of the Hidden Markov Models,
+\item Boost -- C++ extensions library, provides smart pointer mechanism for HMMlib.
 \end{itemize}
