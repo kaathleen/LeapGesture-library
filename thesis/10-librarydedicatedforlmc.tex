@@ -32,7 +32,7 @@ The library is divided into three main modules:
 \item fingers recognition module.
 \end{itemize}
 
-Each of those modules has its own separate methods -- for learning new gestures, and for further operational work (recognition). 
+Each of those modules has its own separate methods -- for learning new gestures, and for further operational work (recognition). They are implemented using the observer pattern. For each of the modules, there are specified relevant events that are fired in the key moments of recognition such as: moment in which particular gesture began to be recognized, moment in which the particular gesture stopped being recognized, moment in which frame processing is finished.
 	
 \subsection{Learning}
 
