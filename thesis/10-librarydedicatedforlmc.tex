@@ -166,7 +166,7 @@ GestureHand stores parameters of hand performing a gesture. In one instance of G
 \item plam position,
 \item stabilized palm position,
 \item palm normal vector,
-\item palm direction,
+\item palm direction vector,
 \item list of fingers of particular hand, stored in a vector containing elements GestureFinger type,
 \item ordered value, obtained during hand sorting.
 \end{itemize}
@@ -176,7 +176,7 @@ GestureFinger stores parameters of one finger. In one instance of GestureHand ma
 \item finger id,
 \item tip position,
 \item stabilized tip position,
-\item finger direction,
+\item finger direction vector,
 \item finger length,
 \item finger width,
 \item ordered value, obtained during finger sorting.
@@ -185,7 +185,19 @@ GestureFinger stores parameters of one finger. In one instance of GestureHand ma
 \section{Processes}\label{processesSection}
 
 \subsection{The learning process}
-The learning process is a process of teaching LeapGesture library a new gesture by API user. First  gestures must be recorded gestures in LMR format. To obtain recordings in this format user may use Gesture Recorder --  a module included in the library, which records data from Leap Motion Controller and saves it as LMR file. When all desired gestures are prepared, the user starts the process of learning by {\color{red}[tutaj dodać informacje jak uruchomić ten prces - prawdopodobnie jakas komenda + jakies parametry typu -d uczenie gestów dynamicznych, -s uczenie gestów statycznych + pliki LMR jako argumenty]}.  
+The learning process is a process of teaching the LeapGesture library a new gestures by API user. 
+First  gestures must be recorded in LMR format. 
+To obtain recordings in this format API user may use the Gesture Recorder ---  a module included in the library, which records data captured by Leap Motion Controller and saves it as LMR file. 
+Each of the LMR file should contains only one class of gesture, but for one class may be several LMR files. 
+In the case of static gestures one recording should represent one gesture recorded at different angles and in the case of dynamic gestures recording should include only one execution of a gesture.
+
+When all desired gestures are prepared, the API user starts the process of learning by calling \texttt{train} method of appropriate module indicating the training set using \texttt{TrainingClassDatasetList} class and the configuration of learning using the object of appropriate configuration class:
+\begin{itemize}
+\item \texttt{TrainingStaticRecConf} for static gesture recognition,
+\item \texttt{TrainingDynamicRecConf} for dynamic gesture recognition,
+\item \texttt{TrainingFingerRecConf} for fingers recognition.
+\end{itemize}
+
 
 \begin{figure}[htb]
 \centering
@@ -194,19 +206,26 @@ The learning process is a process of teaching LeapGesture library a new gesture 
  \label{learningprocess}
 \end{figure}
 
-The first step in the learning process, which is performed by the system is the preprocessing of data. Training data should be deprived of noise or should not have lost fingers for several frames. According to user-specified parameters, the system will learn the gesture as a static or dynamic gesture.
-System uses Support Vector Machine (SVM) for learning of static gesture. For dynamic gestures it uses Hidden Markov Model (HMM). 
-The learning process for static gestures:
-\begin{enumerate}
-\item In the first stage, data which will be used during the learning are preprocessed.
-\item Data are scaled using internal scaling module. The result of this step are scale and range files. In the scale file scaled data is stored. The range file contains information that enables to scale any data in the same way.
-\item Scale file with scaled data is transmitted to a training module. Data is processed using SVM algorithm. Additionally during the learning process k-validation is performed and results are returned to the user. In the process model file is created, which is used during static gesture recognition process.
-\end{enumerate}
-{\color{red}[opisać learning process dla dynamicznych]}
+Then the library executes preprocessing on the given training set and starts training by using the selected module by API user:
+\begin{itemize}
+\item for static gesture recognition and fingers recognition modules -- the result of training is saved in MODEL and RANGE files. Those files are needed for proper work of classification. The former stores learned support vectors, the latter contains scaling parameters of learning dataset. In addition, a CLASSMAP file is created, which contains mapping from class names specified by API user to class names supported by SVM. Intermediate files can also be created such as DAT file (raw dataset) or SCALE file (scaled dataset) depending on the established configuration,
+\item {\color{red}for dynamic gesture recognition -- .}
+\end{itemize}
+
+The library returns information about the outcome of learning process in the object of \linebreak \texttt{TrainingResult} class.
 
 
 \subsection{The recognition process}
-The recognition process is a process of recognizing the gesture performed by the API user. During this process, the system uses the information obtained from the learning process. {\color{red}[Opis procesu recognition process, przedstawienie scenariusza uzycia w stosunku do architektury]}
+The recognition process is a process of recognizing the gesture performed by the API user. During this process, the system uses the information obtained from the learning process. 
+
+The API user implements \texttt{RecognizedGestureListener} class and creates object of this listener. Then the API user creates an object of \texttt{LeapProcess} class specifying in its constructor which modules should be executed and passes previously initialized object of the listener. The API user also assigns the appropriate configuration object to the corresponding fields of \texttt{LeapProcess} class, which refer to particular modules:
+\begin{itemize}
+\item for static gesture recognition the object of \texttt{TestingStaticRecConf} class is assigned to the field \texttt{staticRecConfiguration},
+\item for dynamic gesture recognition the object of \texttt{TestingDynamicRecConf} class is assigned to the field \texttt{dynamicRecConfiguration},
+\item for fingers recognition the object of \texttt{TestingFingerRecConf} class is assigned to the field \texttt{fingerRecConfiguration}.
+\end{itemize}
+Then the API user adds an object of \texttt{LeapListener} or \texttt{FileListener} to the object of \texttt{LeapProcess} and starts the recognition process.
+
 
 \begin{figure}[htb]
 \centering
@@ -215,29 +234,7 @@ The recognition process is a process of recognizing the gesture performed by the
  \label{recognitionprocess}
 \end{figure}
 
-Modules handlers are implemented using the Observer pattern. For each of the modules are specified relevant events that are reported in the key moments of recognition such as: moment in which particular gesture began to be recognized, moment in which the particular gesture stopped being recognized, moment in which frame processing is finished.
-The user can handle events received in specific module by implementing appropriate listener interface and adding reference to listener list in specific library module. During gesture recognition process user can use from 1 to 3 listeners. Each listener is on a separate thread.
-
-Methods for a static gesture observer:
-\begin {itemize}
-\item onStart -- signals the start of the gesture,
-\item onFrame -- returns a list of recognized gestures with matching probabilities,
-\item onGesture -- signals the end of the gesture and returns a list of recognized gestures with matching probabilities.
-\end {itemize}
-
-Methods for a dynamic gesture observer:
-\begin {itemize}
-\item onStart, onFrame -- have the same purposes as in the case of static observer,
-\item onGesture -- signals the end of the gesture and returns a list of recognized gestures with matching probabilities and parameter values.
-\end {itemize}
-
-Methods for a finger differentiation observer:
-\begin {itemize}
-\item onFrame -- returns a list of matched classes with probabilities,
-\item onChange -- signals a change of fingers arrangement.
-\end {itemize}
-
-As in the learning process for recognizing static gestures system uses SVM and for dynamic gestures -- HMM. For finger differentation system uses Support Vector Machine. However, there are other classes than those used for static gestures recogniton.
+After the start of recognition process LeapGesture library notifies the object of \texttt{RecognizedGestureListener} regards the occurrence of gestures recognition events.
 
 \section{Gesture recorder and visualizer}\label{recordvisualSection}
 Recorder and vizualizer module is an additional part of library that allows users for easy management of gestures recordings. The recorder collects data from Leap Motion Controller, converts it into data representation described in Section~\ref and writes it to the LMR file, which is supported by the LeapGesture library. Visualizer enables users to see the recorded gestures stored in LMR format. Data gathered from Leap Motion, used to recognize gestures are very large and the data processed in the library have a specific format. Therefore, it was necessary to create an auxiliary program, that it would facilitate the work with data in the fastest and most user-friendly way.

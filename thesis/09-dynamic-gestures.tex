@@ -121,7 +121,7 @@ In this structure, the recognition process is a process of finding, which of the
  \label{HMMstructure}
 \end{figure}
 
-\subsection{HMM observation from Leap Motion data}
+\subsection{HMM Observation from Leap Motion Data}
 
 One of the problems when designing the system is a problem of correctly preparing the set of observations from the Leap Motion data.
 Most of the proposed solutions in the literature assume that the observations are one-dimensional~\cite{hmmtutorial, hmm}.
@@ -136,20 +136,20 @@ For this task we examined 3 methods:
 \item k-means with additional methods to determine the number of clusters. \cite{kmeans1, kmeans2}.
 \end{itemize}
 
-\subsubsection*{Chinese whipsers}
+\subsubsection*{Chinese Whipsers}
 Chinese whispers algorithm is an efficient randomized graph-clustering algorithm, which is time-linear in the number of edges.
 The algorithm was proposed in work by Biemann~\cite{CW1} and thoroughly examined in Natural Language Processing problems. 
 The main advantage of the algorithm is the ability to independently determine the number of classes. 
 In tests, we used the implementation available in dLib-ml library~\cite{dlib}, which provides multiple implementations of machine learning algorithms.
 
-\subsubsection*{Girvan-Newman clustering}
+\subsubsection*{Girvan-Newman Clustering}
 Girvan-Newman clustering is a hierarchical algorithm used to detect clusters in a data represented as a graph.
 The algorithm progressively removes edges from the original network until it reaches the maximal number of iterations or an error condition is met.
 An adjacency matrix is used to represent the edges between data, where edge value is the similarity between two data points.
 The algorithm iteratively calculates the eigenvalues of a created matrix using the power iteration method. 
 In case of a complete graph, this algorithm is relatively slow.
 
-\subsubsection*{K-means clustering}
+\subsubsection*{K-means Clustering}
 Another proposed approach is k-means clustering algorithm.
 The idea for the algorithm comes from polish mathematician Hugo Steinhaus, but the first practical application has been presented by MacQueen~\cite{kmeans2}.
 The algorithm initially randomly selects $k$ starting points and iteratively performs two steps utilizing the idea of expected-maximization~\cite{expectedmaximization}:
@@ -181,7 +181,7 @@ The $s(i)$ values are used to find the proper number of clusters.
  \label{dynamicgesturesflow}
 \end{figure}
 
-\subsection{Whole processing algorithm}
+\subsection{Total Processing Algorithm}
 The designed processing algorithm is presented in Fig.~\ref{dynamicgesturesflow}.
 The solution consists of two parts: an offline learning and an online recognition.
 In learning part, the raw data is preprocessed and then the feature set is extracted. 
@@ -208,7 +208,7 @@ Therefore, each row of new matrices is normalized to $1.0$.
 When dealing with multiple training examples, the learnt solution may adapt to the training samples, but perform poorly on the testing set. 
 The problem is known as overfitting to the training samples.
 To deal with potential problem, the k-fold cross validation was utilized in a similar approach as in the static gestures presented in Chapter~\ref{staticChapter}.
-To complete the training process, each trained HMMs is combined into one recognition structure.
+To complete the training process, each trained HMM is combined into one recognition structure.
 
 In the recognition, the raw data from Leap Motion is preprocessed, then each frame is labelled accordingly to the classes learnt by the unsupervised clustering algorithm.
 The next step includes providing the set of observations to HMMs and running the Viterbi algorithm.
@@ -217,7 +217,7 @@ Then the maximum probability for each HMM is calculated.
 If the maximum probability is above threshold, the gesture is assumed to be correctly recognized with the label of the HMM with the maximum probability sequence.
 
 
-\section{Evaluation methodology}\label{dynamic:set}
+\section{Evaluation Methodology}\label{dynamic:set}
 
 To evaluate the quality of recognition achieved by proposed processing pipeline, $6$ dynamic gestures were chosen.
 For each of those gestures, we recorded 120 samples (30 samples per each author).
@@ -250,7 +250,7 @@ The second subsection contains experiments involving different feature sets.
 Those subsections are followed by tests involving the impact of number of observation clusters on the total recognition rate of dynamic gestures.
 In subsection four, different learning rates are examined. The last subsection presents the impact of the state count on the recognition rate. 
 
-\subsection{Number of observation clusters} \label{numberOfClasses1}
+\subsection{Choosing Number of Observation Classes with Machine Learning} \label{numberOfClasses1}
 
 The performed experiments started with testing the unsupervised clustering methods to determine the correct number of observations.
 Based on the successful static gesture recognition, each of the hand poses was represented by the vector of values containing:
@@ -305,7 +305,7 @@ The proposed values of clusters for different methods are presented in the Table
 Due to the inconclusive results, the analysis of the correct class number was postponed until the correct feature set is chosen.
 Until stated otherwise, the class number was assumed to be equal to $10$.
 
-\subsection{Testing different feature sets}
+\subsection{Choosing Feature Set}
 The next challenge was to find the feature set describing one gesture in time, that would contain all necessary information about the dynamic nature of the gesture. 
 All performed tests were evaluated on the dynamic 6 set described in Section~\ref{dynamic:set}.
 
@@ -389,7 +389,7 @@ The results obtained by all proposed feature sets are presented in Table~\ref{ta
 	\caption{Results obtained by the HMM approach using different feature sets}
     \begin{tabular}{ccc}
     \hline
-    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline \hline
+    ~                                 & $6$ gestures, CV & $6$ gestures, whole dataset  \\ \hline \hline
     feature set $1$                     & $64.6\%$ & $61.8\%$   \\ \hline
     feature set $2$                     & $69.6\%$ & $67.5\%$   \\ \hline
     feature set $3$                     & $68.5\%$ & $66.1\%$   \\ \hline
@@ -405,7 +405,7 @@ The results obtained by all proposed feature sets are presented in Table~\ref{ta
 The best results were obtained for feature set $8$, but the results obtained by the full static representation (feature set $4$) are not significantly worse.
 For further assessment, the feature set $4$ was chosen as the one that describes each gesture with more information and therefore is believed to work better for gestures that were not included in the experiments.
 
-\subsection{Testing number of observation classes} 
+\subsection{Choosing Number of Observation Classes} 
 
 The next experiments were performed to test what is the best number of observation classes for k-means algorithm. 
 Previous tests to find the correct number of clusters were performed in Subsection~\ref{numberOfClasses1}, but yield inconclusive results.
@@ -418,7 +418,7 @@ The tests were conducted using feature set $4$ and learning rate $\mu=0.05$.
 	\caption{Results obtained by the HMM approach using feature set $4$ and different numbers of class clusters}
     \begin{tabular}{ccc}
     \hline
-    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+    ~                                 & $6$ gestures, CV & $6$ gestures, whole dataset  \\ \hline
 	$k = 4$                  	  & $77.3\%$ & $74.7\%$   \\ \hline
     $k = 5$               	  & $79.6\%$ & $77.6\%$   \\ \hline
     $k = 6$                    & $79.6\%$ & $77.6\%$   \\ \hline
@@ -432,7 +432,7 @@ The results are presented in Table~\ref{tab:dynNumber}.
 The best obtained results are for the number of clusters $k=5$ and $k=6$ for which an increase in the recognition rate when compared to the previously achieved results. 
 The recognition rate in cross-validation was equal to $79.6\%$ and $77.6\%$ on the whole dataset. 
 
-\subsection{Testing learning rate}
+\subsection{Choosing Learning Rate}
 
 The next experiments involved finding the best learning rate. 
 Using predefined learning rate may be dangerous as small value may mean small convergence, while too big step may result in not converging to the locally best solution. 
@@ -454,7 +454,7 @@ In proposed application, the learning rate $\mu = 0.05$ allowed to achieve the b
 	\caption{Results obtained by the HMM approach using feature set $4$, $5$ observation classes and different learning rates}
     \begin{tabular}{ccc}
     \hline
-    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+    ~                                 & $6$ gestures, CV & $6$ gestures, whole dataset  \\ \hline
 	$\mu$ = 0.01                  	  & $77.5\%$ & $76.9\%$   \\ \hline
     $\mu$ = 0.05                      & $80.4\%$ & $79.0\%$   \\ \hline
     $\mu$ = 0.1                      & $79.6\%$ & $77.6\%$   \\ \hline
@@ -463,7 +463,7 @@ In proposed application, the learning rate $\mu = 0.05$ allowed to achieve the b
 \end{center}
 \end{table}
 
-\subsection{Testing number of states in HMM}
+\subsection{Choosing Number of States in HMM}
 
 The only parameter not tested in the already described experiments is the number of state each HMM is composed of. 
 The previously used value was equal to $10$ states. 
@@ -481,7 +481,7 @@ The performed experiments and theoretical computational complexity confirm that 
 	\caption{Results obtained by the HMM approach using feature set $4$, $6$ observation classes and a different number of states}
     \begin{tabular}{ccc}
     \hline
-    ~                                 & $5$ gestures, CV & $5$ gestures, whole dataset  \\ \hline
+    ~                                 & $6$ gestures, CV & $6$ gestures, whole dataset  \\ \hline
 	$K = 5$                  	  & $74.0\%$ & $73.6\%$   \\ \hline
     $K = 10$                     & $79.6\%$ & $77.6\%$   \\ \hline
     $K = 20$                    & $77.5\%$ & $76.5\%$   \\ \hline
